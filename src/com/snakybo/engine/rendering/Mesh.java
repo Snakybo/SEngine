@@ -1,12 +1,25 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+
+import com.snakybo.engine.core.Util;
+import com.snakybo.engine.core.Vector3f;
 
 public class Mesh {
 	private int vbo;
@@ -35,10 +48,9 @@ public class Mesh {
 	}
 	
 	/** Add vertices to the Mesh */
-	private void addVertices(Vertex[] vertices, int[] indices, boolean calcNormals) {
-		if(calcNormals) {
-			calcNormals(vertices, indices);
-		}
+	private void addVertices(Vertex[] vertices, int[] indices, boolean calculateNormals) {
+		if(calculateNormals)
+			calculateNormals(vertices, indices);
 		
 		size = indices.length;
 		
@@ -69,7 +81,7 @@ public class Mesh {
 	}
 	
 	/** Calculate normals */
-	private void calcNormals(Vertex[] vertices, int[] indices) {
+	private void calculateNormals(Vertex[] vertices, int[] indices) {
 		for(int i = 0; i < indices.length; i += 3) {
 			int i0 = indices[i];
 			int i1 = indices[i + 1];
@@ -78,7 +90,7 @@ public class Mesh {
 			Vector3f v1 = vertices[i1].getPos().sub(vertices[i0].getPos());
 			Vector3f v2 = vertices[i2].getPos().sub(vertices[i0].getPos());
 			
-			Vector3f normal = v1.cross(v2).normalized();
+			Vector3f normal = v1.cross(v2).normalize();
 			
 			vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
 			vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
@@ -86,11 +98,11 @@ public class Mesh {
 		}
 		
 		for(int i = 0; i < vertices.length; i++) {
-			vertices[i].setNormal(vertices[i].getNormal().normalized());
+			vertices[i].setNormal(vertices[i].getNormal().normalize());
 		}
 	}
 	
-	/** @return Mesh: Mesh of loaded 3D model */
+	/** Load a 3D model */
 	private Mesh loadMesh(String fileName) {
 		String[] splitArray = fileName.split("\\.");
 		String ext = splitArray[splitArray.length - 1];

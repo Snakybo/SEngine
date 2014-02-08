@@ -1,4 +1,4 @@
-package snakybo.base.engine;
+package com.snakybo.engine.core;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -6,18 +6,20 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
+import com.snakybo.engine.rendering.Vertex;
+
 public class Util {
 
-	/** @return FloatBuffer: FloatBuffer created with specified size */
+	/** Create a float buffer with the specified size */
 	public static FloatBuffer createFloatBuffer(int size) {
 		return BufferUtils.createFloatBuffer(size);
 	}
-	/** @return IntBuffer: IntBuffer created with specified size */
+	/** Create an integer buffer with the specified size */
 	public static IntBuffer createIntBuffer(int size) {
 		return BufferUtils.createIntBuffer(size);
 	}
 	
-	/** @return IntBuffer: Created flipped buffer using integers */
+	/** Create a flipped buffer from integers */
 	public static IntBuffer createFlippedBuffer(int... values) {
 		IntBuffer buffer = createIntBuffer(values.length);
 		buffer.put(values);
@@ -26,7 +28,7 @@ public class Util {
 		return buffer;
 	}
 	
-	/** @return FloatBuffer: Created flipped buffer using floats */
+	/** Create a flipped buffer from vertices */
 	public static FloatBuffer createFlippedBuffer(Vertex[] vertices) {
 		FloatBuffer buffer = createFloatBuffer(vertices.length * Vertex.SIZE);
 		
@@ -46,7 +48,7 @@ public class Util {
 		return buffer;
 	}
 	
-	/** @return FloatBuffer:  Created flipped buffer using a Matrix4f */
+	/** Create a flipped buffer from a matrix 4 */
 	public static FloatBuffer createFlippedBuffer(Matrix4f value) {
 		FloatBuffer buffer = createFloatBuffer(4 * 4);
 		
@@ -59,7 +61,7 @@ public class Util {
 		return buffer;
 	}
 	
-	/** @return String[]: Specified String Array with empty strings removed */
+	/** Remove empty strings from a string array */
 	public static String[] removeEmptyStrings(String[] data) {
 		ArrayList<String> result = new ArrayList<String>();
 		
@@ -73,7 +75,7 @@ public class Util {
 		return res;
 	}
 	
-	/** @return Int[]: Converted Integer Array */
+	/** Convert an integer array to an int array */
 	public static int[] toIntArray(Integer[] data) {
 		int[] result = new int[data.length];
 		

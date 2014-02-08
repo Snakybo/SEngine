@@ -1,4 +1,4 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -22,17 +22,15 @@ public class Texture {
 		this.id = id;
 	}
 	
-	/** Bind texture */
 	public void bind() {
 		glBindTexture(GL_TEXTURE_2D, id);
 	}
 	
-	/** @return Int: ID of texture */
 	public int getID() {
 		return id;
 	}
 	
-	/** @return Int: Texture ID of loaded texture */
+	/** Load a texture */
 	private static int loadTexture(String fileName) {
 		BufferedImage texture = null;
 		

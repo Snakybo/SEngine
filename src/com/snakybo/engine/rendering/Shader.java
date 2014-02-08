@@ -1,4 +1,4 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
 
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
@@ -28,7 +28,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
 
+import com.snakybo.engine.core.Matrix4f;
+import com.snakybo.engine.core.Renderer;
+import com.snakybo.engine.core.Transform;
+import com.snakybo.engine.core.Util;
+import com.snakybo.engine.core.Vector3f;
+
 public class Shader {
+	private Renderer renderingEngine;
+	
 	private int program;
 	private HashMap<String, Integer> uniforms;
 	
@@ -42,58 +50,10 @@ public class Shader {
 		}
 	}
 	
-	/** Bind the created shader */
 	public void bind() {
 		glUseProgram(program);
 	}
 	
-	/** Update uniforms */
-	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) { }
-	
-	/** Add uniform variable */
-	public void addUniform(String uniform) {
-		int uniformLocation = glGetUniformLocation(program, uniform);
-		
-		if(uniformLocation == 0xFFFFFFFF) {
-			System.err.println("Error: Could not find uniform: " + uniform);
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
-		
-		uniforms.put(uniform, uniformLocation);
-	}
-	
-	/** Add a vertex shader to the program */
-	public void addVertexShader(String text) {
-		addProgram(text, GL_VERTEX_SHADER);
-	}
-	
-	/** Add a geometry shader to the program */
-	public void addGeometryShader(String text) {
-		addProgram(text, GL_GEOMETRY_SHADER);
-	}
-	
-	/** Add a fragment shader to the program */
-	public void addFragmentShader(String text) {
-		addProgram(text, GL_FRAGMENT_SHADER);
-	}
-	
-	/** Add a vertex shader to the program */
-	public void addVertexShaderFromFile(String text) {
-		addProgram(loadShader(text), GL_VERTEX_SHADER);
-	}
-	
-	/** Add a geometry shader to the program */
-	public void addGeometryShaderFromFile(String text) {
-		addProgram(loadShader(text), GL_GEOMETRY_SHADER);
-	}
-	
-	/** Add a fragment shader to the program */
-	public void addFragmentShaderFromFile(String text) {
-		addProgram(loadShader(text), GL_FRAGMENT_SHADER);
-	}
-	
-	/** Compile the shader into a working shader */
 	public void compileShader() {
 		glLinkProgram(program);
 		
@@ -110,7 +70,33 @@ public class Shader {
 		}
 	}
 	
-	/** Add shader code to program */
+	public void addUniform(String uniform) {
+		int uniformLocation = glGetUniformLocation(program, uniform);
+		
+		if(uniformLocation == 0xFFFFFFFF) {
+			System.err.println("Error: Could not find uniform: " + uniform);
+			new Exception().printStackTrace();
+			System.exit(1);
+		}
+		
+		uniforms.put(uniform, uniformLocation);
+	}
+	
+	public void updateUniforms(Transform transform, Material material) { }
+	
+	public void addVertexShader(String text) { addProgram(text, GL_VERTEX_SHADER); }
+	public void addGeometryShader(String text) { addProgram(text, GL_GEOMETRY_SHADER); }
+	public void addFragmentShader(String text) { addProgram(text, GL_FRAGMENT_SHADER); }
+	
+	public void addVertexShaderFromFile(String text) { addProgram(loadShader(text), GL_VERTEX_SHADER); }
+	public void addGeometryShaderFromFile(String text) { addProgram(loadShader(text), GL_GEOMETRY_SHADER); }
+	public void addFragmentShaderFromFile(String text) { addProgram(loadShader(text), GL_FRAGMENT_SHADER); }
+	
+	public void setUniformi(String uniformName, int value) { glUniform1i(uniforms.get(uniformName), value); }
+	public void setUniformf(String uniformName, float value) { glUniform1f(uniforms.get(uniformName), value); }
+	public void setUniform(String uniformName, Vector3f value) { glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ()); }
+	public void setUniform(String uniformName, Matrix4f value) { glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value)); }
+	
 	private void addProgram(String text, int type) {
 		int shader = glCreateShader(type);
 		
@@ -130,27 +116,11 @@ public class Shader {
 		glAttachShader(program, shader);
 	}
 	
-	/** Set int as uniform value */
-	public void setUniformi(String uniformName, int value) {
-		glUniform1i(uniforms.get(uniformName), value);
-	}
+	public void setRenderingEngine(Renderer renderingEngine) { this.renderingEngine = renderingEngine; }
 	
-	/** Set float as uniform value */
-	public void setUniformf(String uniformName, float value) {
-		glUniform1f(uniforms.get(uniformName), value);
-	}
+	public Renderer getRenderingEngine() { return renderingEngine; }
 	
-	/** Set Vector3f as uniform value */
-	public void setUniform(String uniformName, Vector3f value) {
-		glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ());
-	}
-	
-	/** Set Matrix4f as uniform value */
-	public void setUniform(String uniformName, Matrix4f value) {
-		glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value));
-	}
-	
-	/** @return String: Source of loaded shader */
+	/** Load a shader file */
 	private static String loadShader(String fileName) {
 		StringBuilder shaderSource = new StringBuilder();
 		BufferedReader shaderReader = null;

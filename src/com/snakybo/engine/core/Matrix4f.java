@@ -1,4 +1,4 @@
-package snakybo.base.engine;
+package com.snakybo.engine.core;
 
 public class Matrix4f {
 	private float[][] m;
@@ -7,7 +7,7 @@ public class Matrix4f {
 		m = new float[4][4];
 	}
 
-	/** Initialize M */
+	/** Initialize the matrix */
 	public Matrix4f initIdentity() {
 		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0;
 		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = 0;
@@ -17,8 +17,8 @@ public class Matrix4f {
 		return this;
 	}
 	
-	/** Initialize translation */
-	public Matrix4f initTranslation(float x, float y, float z) {
+	/** Initialize the matrix for position */
+	public Matrix4f initPosition(float x, float y, float z) {
 		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = x;
 		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = y;
 		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = z;
@@ -27,7 +27,7 @@ public class Matrix4f {
 		return this;
 	}
 	
-	/** Initialize rotation */
+	/** Initialize the matrix for rotation */
 	public Matrix4f initRotation(float x, float y, float z) {
 		Matrix4f rx = new Matrix4f();
 		Matrix4f ry = new Matrix4f();
@@ -57,7 +57,7 @@ public class Matrix4f {
 		return this;
 	}
 	
-	/** Initialize translation */
+	/** Initialize the matrix for scale */
 	public Matrix4f initScale(float x, float y, float z) {
 		m[0][0] = x;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0;
 		m[1][0] = 0;	m[1][1] = y;	m[1][2] = 0;	m[1][3] = 0;
@@ -67,26 +67,39 @@ public class Matrix4f {
 		return this;
 	}
 	
-	/** Initialize projection */
-	public Matrix4f initProjection(float fov, float width, float height, float zNear, float zFar) {
-		float ar = width / height;
-		float tanHalfFOV = (float)Math.tan(Math.toRadians(fov / 2));
+	/** Initialize the matrix for a perspective view */
+	public Matrix4f initPerspective(float fov, float aspect, float zNear, float zFar) {
+		float tanHalfFOV = (float)Math.tan(fov / 2);
 		float zRange = zNear - zFar;
 		
-		m[0][0] = 1.0f / (tanHalfFOV * ar);	m[0][1] = 0;					m[0][2] = 0;						m[0][3] = 0;
-		m[1][0] = 0;						m[1][1] = 1.0f / tanHalfFOV;	m[1][2] = 0;						m[1][3] = 0;
-		m[2][0] = 0;						m[2][1] = 0;					m[2][2] = (-zNear -zFar)/zRange;	m[2][3] = 2 * zFar * zNear / zRange;
-		m[3][0] = 0;						m[3][1] = 0;					m[3][2] = 1;						m[3][3] = 0;
+		m[0][0] = 1.0f / (tanHalfFOV * aspect);	m[0][1] = 0;					m[0][2] = 0;						m[0][3] = 0;
+		m[1][0] = 0;							m[1][1] = 1.0f / tanHalfFOV;	m[1][2] = 0;						m[1][3] = 0;
+		m[2][0] = 0;							m[2][1] = 0;					m[2][2] = (-zNear -zFar)/zRange;	m[2][3] = 2 * zFar * zNear / zRange;
+		m[3][0] = 0;							m[3][1] = 0;					m[3][2] = 1;						m[3][3] = 0;
 		
 		
 		return this;
 	}
 	
-	/** Initialize camera */
-	public Matrix4f initCamera(Vector3f forward, Vector3f up) {
-		Vector3f f = forward.normalized();
+	/** Initialize the matrix for an orthographic view */
+	public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far) {
+		float width = right - left;
+		float height = top - bottom;
+		float depth = far - near;
 		
-		Vector3f r = up.normalized();
+		m[0][0] = 2 / width;	m[0][1] = 0;			m[0][2] = 0;			m[0][3] = -(right + left) / width;
+		m[1][0] = 0;			m[1][1] = 2 / height;	m[1][2] = 0;			m[1][3] = -(top + bottom) / height;
+		m[2][0] = 0;			m[2][1] = 0;			m[2][2] = -2 / depth;	m[2][3] = -(far + near) / depth;
+		m[3][0] = 0;			m[3][1] = 0;			m[3][2] = 0;			m[3][3] = 1;
+		
+		return this;
+	}
+	
+	/** Initialize the matrix for a camera */
+	public Matrix4f initCamera(Vector3f forward, Vector3f up) {
+		Vector3f f = forward.normalize();
+		Vector3f r = up.normalize();
+		
 		r = r.cross(f);
 		
 		Vector3f u = f.cross(r);
@@ -99,7 +112,7 @@ public class Matrix4f {
 		return this;
 	}
 	
-	/** Multiply with the specified Matrix4f */
+	/** Multiply the matrix */
 	public Matrix4f mul(Matrix4f r) {
 		Matrix4f res = new Matrix4f();
 		
@@ -117,17 +130,22 @@ public class Matrix4f {
 		return res;
 	}
 	
+	/** Set the value at the specified coordinates */
+	public void set(int x, int y, float value) {
+		m[x][y] = value;
+	}
+	
 	/** Set M */	
 	public void setM(float[][] m) {
 		this.m = m;
 	}
 	
-	/** Set value at specified indices */
-	public void set(int x, int y, float value) {
-		m[x][y] = value;
+	/** @return The value at the specified coordinates */
+	public float get(int x, int y) {
+		return m[x][y];
 	}
 	
-	/** @return Float[][]: M */
+	/** @return The matrix array */
 	public float[][] getM() {
 		float[][] res = new float[4][4];
 		
@@ -136,10 +154,5 @@ public class Matrix4f {
 				res[i][j] = m[i][j];
 		
 		return res;
-	}
-	
-	/** @return Float: Value at selected indices */
-	public float get(int x, int y) {
-		return m[x][y];
 	}
 }

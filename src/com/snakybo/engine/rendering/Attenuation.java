@@ -1,4 +1,4 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
 
 public class Attenuation {
 	private float constant;
@@ -11,33 +11,11 @@ public class Attenuation {
 		this.exponent = exponent;
 	}
 	
-	/** Set constant */
-	public void setConstant(float constant) {
-		this.constant = constant;
-	}
-	
-	/** Set linear */
-	public void setLinear(float linear) {
-		this.linear = linear;
-	}
-	
-	/** Set exponent */
-	public void setExponent(float exponent) {
-		this.exponent = exponent;
-	}
+	public void setConstant(float constant) { this.constant = constant; }
+	public void setLinear(float linear) { this.linear = linear; }
+	public void setExponent(float exponent) { this.exponent = exponent; }
 
-	/** Get constant */
-	public float getConstant() {
-		return constant;
-	}
-
-	/** Get linear */
-	public float getLinear() {
-		return linear;
-	}
-
-	/** Get exponent */
-	public float getExponent() {
-		return exponent;
-	}
+	public float getConstant() { return constant; }
+	public float getLinear() { return linear; }
+	public float getExponent() { return exponent; }
 }

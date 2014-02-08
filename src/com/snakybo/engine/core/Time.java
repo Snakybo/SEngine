@@ -1,22 +1,8 @@
-package snakybo.base.engine;
+package com.snakybo.engine.core;
 
 public class Time {
-	public static final long SECOND = 1000000000L;
-	
-	private static double delta;
-	
-	/** Set Delta time */
-	public static void setDelta(double delta) {
-		Time.delta = delta;
-	}
-	
-	/** @return Long: System nanotime */
-	public static long getTime() {
-		return System.nanoTime();
-	}
-	
-	/** @return Double: Delta time */
-	public static double getDelta() {
-		return delta;
+	/** @return The time in seconds*/
+	public static double getTime() {
+		return (double)System.nanoTime() / (double)1000000000L;
 	}
 }

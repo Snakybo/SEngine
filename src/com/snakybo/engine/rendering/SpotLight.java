@@ -1,43 +1,23 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
+
+import com.snakybo.engine.core.Vector3f;
 
 public class SpotLight {
 	private PointLight pointLight;
 	private Vector3f direction;
-	private float cutoff;
+	private float cutOff;
 	
-	public SpotLight(PointLight pointLight, Vector3f direction, float cutoff) {
+	public SpotLight(PointLight pointLight, Vector3f direction, float cutOff) {
 		this.pointLight = pointLight;
-		this.direction = direction.normalized();
-		this.cutoff = cutoff;
+		this.direction = direction.normalize();
+		this.cutOff = cutOff;
 	}
 
-	/** Set point light */
-	public void setPointLight(PointLight pointLight) {
-		this.pointLight = pointLight;
-	}
-	
-	/** Set direction */
-	public void setDirection(Vector3f direction) {
-		this.direction = direction.normalized();
-	}
-	
-	/** Set cut off */
-	public void setCutoff(float cutoff) {
-		this.cutoff = cutoff;
-	}
+	public void setPointLight(PointLight pointLight) {this.pointLight = pointLight; }
+	public void setDirection(Vector3f direction) { this.direction = direction.normalize(); }
+	public void setCutoff(float cutoff) { this.cutOff = cutoff; }
 
-	/** Get point light */
-	public PointLight getPointLight() {
-		return pointLight;
-	}
-
-	/** Get direction */
-	public Vector3f getDirection() {
-		return direction;
-	}
-
-	/** Get cut off */
-	public float getCutoff() {
-		return cutoff;
-	}
+	public PointLight getPointLight() { return pointLight; }
+	public Vector3f getDirection() { return direction; }
+	public float getCutoff() { return cutOff; }
 }

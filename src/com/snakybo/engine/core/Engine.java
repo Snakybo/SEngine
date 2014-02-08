@@ -1,22 +1,46 @@
-package snakybo.base.engine;
+package com.snakybo.engine.core;
 
-public class Main {
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
-	public static final String TITLE = "SEngine";
-	public static final double FRAME_CAP = 5000.0;
-	
+import com.snakybo.engine.rendering.Window;
+
+public class Engine {
 	private boolean isRunning;
+	
+	private Renderer renderer;
 	private Game game;
 	
-	public Main() {
-		System.out.println(RenderUtil.getOpenGLVersion());
-		RenderUtil.initGraphics();
-		isRunning = false;
-		game = new Game();
+	private double frameTime;
+	
+	/** Initialize the engine
+	 * @param game Your main game class that extends {@link Game} */
+	public Engine(Game game) {
+		this.game = game;
+		this.isRunning = false;
 	}
 	
-	/** Start engine */
+	/** @see {@link #createWindow(int, int, String, double)} */
+	public void createWindow(int width, int height) {
+		createWindow(width, height, "SEngine game");
+	}
+	
+	/** @see {@link #createWindow(int, int, String, double)} */
+	public void createWindow(int width, int height, String title) {
+		createWindow(width, height, title, 60);
+	}
+	
+	/** Create a window
+	 * @param width The width of the window
+	 * @param height The height of the window 
+	 * @param title The title of the window
+	 * @param frameRate The framerate of the window */
+	public void createWindow(int width, int height, String title, double frameRate) {
+		frameTime = 1.0 / frameRate;
+		
+		Window.createWindow(width, height, title);
+		
+		renderer = new Renderer();
+	}
+	
+	/** Start the engine */
 	public void start() {
 		if(isRunning)
 			return;
@@ -24,7 +48,7 @@ public class Main {
 		loop();
 	}
 	
-	/** Stop engine */
+	/** Stop the engine */
 	public void stop() {
 		if(!isRunning)
 			return;
@@ -32,26 +56,28 @@ public class Main {
 		isRunning = false;
 	}
 	
-	/** Main loop */
+	/** Main update loop of the engine */
 	private void loop() {
 		isRunning = true;
 		
 		int frames = 0;
+		
 		long frameCounter = 0;
 		
-		final double frameTime = 1.0 / FRAME_CAP;
+		game.init();
 		
-		long lastTime = Time.getTime();
+		double lastTime = Time.getTime();
 		double unprocessedTime = 0;
 		
 		while(isRunning) {
 			boolean render = false;
 			
-			long startTime = Time.getTime();
-			long passedTime = startTime - lastTime;
+			double startTime = Time.getTime();
+			double passedTime = startTime - lastTime;
+			
 			lastTime = startTime;
 			
-			unprocessedTime += passedTime / (double)Time.SECOND;
+			unprocessedTime += passedTime += passedTime;
 			frameCounter += passedTime;
 			
 			while(unprocessedTime > frameTime) {
@@ -61,15 +87,14 @@ public class Main {
 				
 				if(Window.isCloseRequested())
 					stop();
-				
-				Time.setDelta(frameTime);
-				
-				game.input();
+
+				game.input((float)frameTime);
+				renderer.input((float)frameTime);
 				Input.update();
 				
-				game.update();
+				game.update((float)frameTime);
 				
-				if(frameCounter >= Time.SECOND) {
+				if(frameCounter >= 1) {
 					System.out.println(frames);
 					frames = 0;
 					frameCounter = 0;
@@ -77,7 +102,8 @@ public class Main {
 			}
 			
 			if(render) {
-				render();
+				renderer.render(game.getRoot());
+				Window.render();
 				frames++;
 			} else {
 				try {
@@ -88,26 +114,11 @@ public class Main {
 			}
 		}
 		
-		cleanUp();
+		destroy();
 	}
 	
-	/** Render */
-	private void render() {
-		RenderUtil.clearScreen();
-		game.render();
-		Window.render();
-	}
-	
-	/** Cleanup */
-	private void cleanUp() {
-		Window.dispose();
-	}
-	
-	public static void main(String[] args) {
-		Window.createWindow(WIDTH, HEIGHT, TITLE);
-		
-		Main game = new Main();
-		
-		game.start();
+	/** Destroy the engine */
+	private void destroy() {
+		Window.destroy();
 	}
 }

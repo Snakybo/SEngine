@@ -1,13 +1,16 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
+
+import com.snakybo.engine.core.Vector3f;
 
 public class Material {
 	private Texture texture;
 	private Vector3f color;
+	
 	private float specularIntensity;
 	private float specularExponent;
 	
 	public Material(Texture texture) {
-		this(texture, new Vector3f(1, 1, 1));
+		this(texture, Vector3f.ONE);
 	}
 	
 	public Material(Texture texture, Vector3f color) {
@@ -21,43 +24,15 @@ public class Material {
 		this.specularExponent = specularExponent;
 	}
 
-	/** Set texture */
-	public void setTexture(Texture texture) {
-		this.texture = texture;
-	}
+	public void setTexture(Texture texture) { this.texture = texture; }
+	public void setColor(Vector3f color) { this.color = color; }
 	
-	/** Set color */
-	public void setColor(Vector3f color) {
-		this.color = color;
-	}
+	public void setSpecularIntensity(float specularIntensity) { this.specularIntensity = specularIntensity; }
+	public void setSpecularExponent(float specularExponent) { this.specularExponent = specularExponent; }
 	
-	/** Set specular intensity */
-	public void setSpecularIntensity(float specularIntensity) {
-		this.specularIntensity = specularIntensity;
-	}
+	public Texture getTexture() { return texture; }
+	public Vector3f getColor() { return color; }
 	
-	/** Set specular exponent */
-	public void setSpecularExponent(float specularExponent) {
-		this.specularExponent = specularExponent;
-	}
-	
-	/** @return Vector3f: Texture */
-	public Texture getTexture() {
-		return texture;
-	}
-
-	/** @return Vector3f: RGB Color */
-	public Vector3f getColor() {
-		return color;
-	}
-	
-	/** @return Float: specular intensity */
-	public float getSpecularIntensity() {
-		return specularIntensity;
-	}
-	
-	/** @return Float: specular exponent */
-	public float getSpecularExponent() {
-		return specularExponent;
-	}
+	public float getSpecularIntensity() { return specularIntensity; }
+	public float getSpecularExponent() { return specularExponent; }
 }

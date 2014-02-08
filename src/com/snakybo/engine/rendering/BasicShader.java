@@ -1,11 +1,10 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
+
+import com.snakybo.engine.core.Matrix4f;
+import com.snakybo.engine.core.Transform;
 
 public class BasicShader extends Shader {
 	private static final BasicShader instance = new BasicShader();
-	
-	public static BasicShader getInstance() {
-		return instance;
-	}
 	
 	private BasicShader() {
 		super();
@@ -19,13 +18,15 @@ public class BasicShader extends Shader {
 	}
 	
 	/** Update uniforms */
-	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material) {
-		if(material.getTexture() != null)
-			material.getTexture().bind();
-		else
-			RenderUtil.unbindTextures();
+	public void updateUniforms(Transform transform, Material material) {
+		Matrix4f worldMatrix = transform.getTransformation();
+		Matrix4f projectedMatrix = getRenderingEngine().getCamera().getProjection().mul(worldMatrix);
+		
+		material.getTexture().bind();
 		
 		setUniform("transform", projectedMatrix);
 		setUniform("color", material.getColor());
 	}
+	
+	public static BasicShader getInstance() { return instance; }
 }

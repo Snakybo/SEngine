@@ -1,29 +1,40 @@
-package snakybo.base.engine;
+package com.snakybo.engine.rendering;
+
+import com.snakybo.engine.core.Input;
+import com.snakybo.engine.core.Input.KeyCode;
+import com.snakybo.engine.core.Matrix4f;
+import com.snakybo.engine.core.Vector2f;
+import com.snakybo.engine.core.Vector3f;
 
 public class Camera {
-	public static final Vector3f yAxis = new Vector3f(0,1,0);
+	public static final Vector3f yAxis = Vector3f.UP;
 	
-	private Vector3f pos;
+	private Vector3f position;
 	private Vector3f forward;
 	private Vector3f up;
+	
+	private Matrix4f projection;
 	
 	private boolean mouseLocked = false;
 	private Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
 	
-	public Camera() {
-		this(new Vector3f(0,0,0), new Vector3f(0,0,1), new Vector3f(0,1,0));
-	}
-	
-	public Camera(Vector3f pos, Vector3f forward, Vector3f up) {
-		this.pos = pos;
-		this.forward = forward.normalized();
-		this.up = up.normalized();
+	/** Create a new camera
+	 * @param fov The field of view
+	 * @param aspect The aspect ratio of the camera
+	 * @param zNear The near clipping plane of the camera
+	 * @param zFar The far clipping plane of the camera */
+	public Camera(float fov, float aspect, float zNear, float zFar) {
+		this.position = Vector3f.ZERO;
+		this.forward = Vector3f.FORWARD;
+		this.up = Vector3f.UP;
+		
+		this.projection = new Matrix4f().initPerspective(fov, aspect, zNear, zFar);
 	}
 	
 	/** Handle Input */
-	public void input() {
+	public void input(float delta) {
 		float sensitivity = 0.5f;
-		float movAmt = (float)(10 * Time.getDelta());
+		float movAmt = (float)(10 * delta);
 		
 		if(Input.getMouseDown(0)) {
 			if(!mouseLocked) {
@@ -36,13 +47,13 @@ public class Camera {
 			}
 		}
 		
-		if(Input.getKey(Input.KEY_W))
+		if(Input.getKey(KeyCode.KEY_W))
 			move(getForward(), movAmt);
-		if(Input.getKey(Input.KEY_S))
+		if(Input.getKey(KeyCode.KEY_S))
 			move(getForward(), -movAmt);
-		if(Input.getKey(Input.KEY_A))
+		if(Input.getKey(KeyCode.KEY_A))
 			move(getLeft(), movAmt);
-		if(Input.getKey(Input.KEY_D))
+		if(Input.getKey(KeyCode.KEY_D))
 			move(getRight(), movAmt);
 		
 		if(mouseLocked) {
@@ -53,83 +64,56 @@ public class Camera {
 			
 			if(rotY)
 				rotateY(deltaPos.getX() * sensitivity);
+			
 			if(rotX)
 				rotateX(-deltaPos.getY() * sensitivity);
 				
 			if(rotY || rotX)
 				Input.setMousePosition(new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2));
 		}
-		
-//		if(Input.getKey(Input.KEY_UP))
-//			rotateX(-rotAmt);
-//		if(Input.getKey(Input.KEY_DOWN))
-//			rotateX(rotAmt);
-//		if(Input.getKey(Input.KEY_LEFT))
-//			rotateY(-rotAmt);
-//		if(Input.getKey(Input.KEY_RIGHT))
-//			rotateY(rotAmt);
 	}
 	
-	/** Move camera */
-	public void move(Vector3f dir, float amt) {
-		pos = pos.add(dir.mul(amt));
+	/** Move the camera in the specified direction
+	 * @param direction The direction to move the camera in
+	 * @param amount The amount of units to move */
+	public void move(Vector3f direction, float amount) {
+		position = position.add(direction.mul(amount));
 	}
 	
-	/** Rotate Y axis */
+	/** Rotate the camera on the Y axis */
 	public void rotateY(float angle) {
-		Vector3f Haxis = yAxis.cross(forward).normalized();
+		Vector3f Haxis = yAxis.cross(forward).normalize();
 		
-		forward = forward.rotate(angle, yAxis).normalized();
+		forward = forward.rotate(angle, yAxis).normalize();
 		
-		up = forward.cross(Haxis).normalized();
+		up = forward.cross(Haxis).normalize();
 	}
 	
-	/** Rotate X axis */
+	/** Rotate the camera on the X axis */
 	public void rotateX(float angle) {
-		Vector3f Haxis = yAxis.cross(forward).normalized();
+		Vector3f Haxis = yAxis.cross(forward).normalize();
 		
-		forward = forward.rotate(angle, Haxis).normalized();
+		forward = forward.rotate(angle, Haxis).normalize();
 		
-		up = forward.cross(Haxis).normalized();
+		up = forward.cross(Haxis).normalize();
 	}
 	
-	/** Set position */
-	public void setPos(Vector3f pos) {
-		this.pos = pos;
-	}
+	public void setPosition(Vector3f position) { this.position = position; }
+	public void setForward(Vector3f forward) { this.forward = forward; }
+	public void setUp(Vector3f up) { this.up = up; }
 	
-	/** Set forward */
-	public void setForward(Vector3f forward) {
-		this.forward = forward;
-	}
+	public Vector3f getPosition() { return position; }	
+	public Vector3f getForward() { return forward; }
+	public Vector3f getUp() { return up; }
 	
-	/** Set up */
-	public void setUp(Vector3f up) {
-		this.up = up;
-	}
+	public Vector3f getLeft() { return forward.cross(up).normalize(); }
+	public Vector3f getRight() { return up.cross(forward).normalize(); }
 	
-	/** @return Vector3f: Pos */
-	public Vector3f getPos() {
-		return pos;
-	}
-	
-	/** @return Vector3f: Forward */
-	public Vector3f getForward() {
-		return forward;
-	}
-	
-	/** @return Vector3f: Up */
-	public Vector3f getUp() {
-		return up;
-	}
-	
-	/** @return Vector3f: Left */
-	public Vector3f getLeft() {
-		return forward.cross(up).normalized();
-	}
-	
-	/** @return Vector3f: Right */
-	public Vector3f getRight() {
-		return up.cross(forward).normalized();
+	/** @return The projection matrix */
+	public Matrix4f getProjection() {
+		Matrix4f cameraRotation = new Matrix4f().initCamera(forward, up);
+		Matrix4f cameraTranslation = new Matrix4f().initPosition(-position.getX(), -position.getY(), -position.getZ());
+		
+		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}
 }
