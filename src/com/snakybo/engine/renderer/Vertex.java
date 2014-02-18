@@ -1,4 +1,4 @@
-package com.snakybo.engine.rendering;
+package com.snakybo.engine.renderer;
 
 import com.snakybo.engine.core.Vector2f;
 import com.snakybo.engine.core.Vector3f;

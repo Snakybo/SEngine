@@ -1,4 +1,4 @@
-package com.snakybo.engine.rendering;
+package com.snakybo.engine.renderer;
 
 import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
@@ -61,7 +61,7 @@ public class PhongShader extends Shader {
 	/** Update uniforms */
 	public void updateUniforms(Transform transform, Material material) {
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderingEngine().getCamera().getProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = getRenderer().getCamera().getProjection().mul(worldMatrix);
 		
 		material.getTexture().bind();
 		
@@ -83,7 +83,7 @@ public class PhongShader extends Shader {
 		setUniformf("specularIntensity", material.getSpecularIntensity());
 		setUniformf("specularExponent", material.getSpecularExponent());
 		
-		setUniform("eyePos", getRenderingEngine().getCamera().getPosition());
+		setUniform("eyePos", getRenderer().getCamera().getPosition());
 	}
 	
 	public void setUniform(String uniformName, BaseLight baseLight) {

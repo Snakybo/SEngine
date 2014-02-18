@@ -1,6 +1,6 @@
 package com.snakybo.engine.core;
 
-import com.snakybo.engine.rendering.Window;
+import com.snakybo.engine.renderer.Window;
 
 public class Engine {
 	private boolean isRunning;

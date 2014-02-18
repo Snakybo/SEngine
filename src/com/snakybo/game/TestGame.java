@@ -4,10 +4,10 @@ import com.snakybo.engine.core.Game;
 import com.snakybo.engine.core.GameObject;
 import com.snakybo.engine.core.Vector2f;
 import com.snakybo.engine.core.Vector3f;
-import com.snakybo.engine.rendering.Material;
-import com.snakybo.engine.rendering.Mesh;
-import com.snakybo.engine.rendering.Texture;
-import com.snakybo.engine.rendering.Vertex;
+import com.snakybo.engine.renderer.Material;
+import com.snakybo.engine.renderer.Mesh;
+import com.snakybo.engine.renderer.Texture;
+import com.snakybo.engine.renderer.Vertex;
 
 /** @author Kevin Krol
  *  @since Jan 30, 2014 */

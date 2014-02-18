@@ -1,4 +1,4 @@
-package com.snakybo.engine.rendering;
+package com.snakybo.engine.renderer;
 
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL20.GL_LINK_STATUS;
 import static org.lwjgl.opengl.GL20.GL_VALIDATE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glBindAttribLocation;
 import static org.lwjgl.opengl.GL20.glCompileShader;
 import static org.lwjgl.opengl.GL20.glCreateProgram;
 import static org.lwjgl.opengl.GL20.glCreateShader;
@@ -35,7 +36,7 @@ import com.snakybo.engine.core.Util;
 import com.snakybo.engine.core.Vector3f;
 
 public class Shader {
-	private Renderer renderingEngine;
+	private Renderer renderer;
 	
 	private int program;
 	private HashMap<String, Integer> uniforms;
@@ -116,9 +117,13 @@ public class Shader {
 		glAttachShader(program, shader);
 	}
 	
-	public void setRenderingEngine(Renderer renderingEngine) { this.renderingEngine = renderingEngine; }
+	public void setAttribLocation(String attribute, int location) {
+		glBindAttribLocation(program, location, attribute);
+	}
 	
-	public Renderer getRenderingEngine() { return renderingEngine; }
+	public void setRenderer(Renderer renderer) { this.renderer = renderer; }
+	
+	public Renderer getRenderer() { return renderer; }
 	
 	/** Load a shader file */
 	private static String loadShader(String fileName) {

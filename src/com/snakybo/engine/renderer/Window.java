@@ -1,4 +1,4 @@
-package com.snakybo.engine.rendering;
+package com.snakybo.engine.renderer;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;

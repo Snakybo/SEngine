@@ -1,6 +1,6 @@
 package com.snakybo.engine.core;
 
-import com.snakybo.engine.rendering.Shader;
+import com.snakybo.engine.renderer.Shader;
 
 /** @author Kevin Krol
  *  @since Jan 31, 2014 */

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.engine.rendering.Vertex;
+import com.snakybo.engine.renderer.Vertex;
 
 public class Util {
 

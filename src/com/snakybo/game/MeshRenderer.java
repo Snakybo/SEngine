@@ -2,9 +2,9 @@ package com.snakybo.game;
 
 import com.snakybo.engine.core.Component;
 import com.snakybo.engine.core.Transform;
-import com.snakybo.engine.rendering.Material;
-import com.snakybo.engine.rendering.Mesh;
-import com.snakybo.engine.rendering.Shader;
+import com.snakybo.engine.renderer.Material;
+import com.snakybo.engine.renderer.Mesh;
+import com.snakybo.engine.renderer.Shader;
 
 /** @author Kevin Krol
  *  @since Feb 1, 2014 */
