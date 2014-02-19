@@ -30,7 +30,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 import com.snakybo.engine.core.Matrix4f;
-import com.snakybo.engine.core.Renderer;
 import com.snakybo.engine.core.Transform;
 import com.snakybo.engine.core.Util;
 import com.snakybo.engine.core.Vector3f;

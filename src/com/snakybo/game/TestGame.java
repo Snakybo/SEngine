@@ -1,5 +1,9 @@
 package com.snakybo.game;
 
+import com.snakybo.engine.components.DirectionalLight;
+import com.snakybo.engine.components.MeshRenderer;
+import com.snakybo.engine.components.PointLight;
+import com.snakybo.engine.components.SpotLight;
 import com.snakybo.engine.core.Game;
 import com.snakybo.engine.core.GameObject;
 import com.snakybo.engine.core.Vector2f;
@@ -40,6 +44,18 @@ public class TestGame extends Game {
 		plane.addComponent(meshRenderer);
 		plane.getTransform().setPosition(0, -1, 5);
 		
+		GameObject directionalLight = new GameObject();
+		directionalLight.addComponent(new DirectionalLight(new Vector3f(0, 0, 1), 0.4f, new Vector3f(1, 1, 1)));
+		
+		GameObject pointLight = new GameObject();
+		pointLight.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, 0, 0, 1, new Vector3f(5, 0, 5), 100));
+		
+		GameObject spotLight = new GameObject();
+		spotLight.addComponent(new SpotLight(new Vector3f(0, 1, 1), 0.4f, 0, 0, 0.1f, new Vector3f(5, 0, 5), 100, new Vector3f(1, 0, 0), 0.7f));
+			
 		getRoot().addChild(plane);
+		getRoot().addChild(directionalLight);
+		getRoot().addChild(pointLight);
+		getRoot().addChild(spotLight);
 	}
 }

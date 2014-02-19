@@ -1,5 +1,7 @@
 package com.snakybo.engine.renderer;
 
+import com.snakybo.engine.components.BaseLight;
+import com.snakybo.engine.components.PointLight;
 import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
 
@@ -49,19 +51,19 @@ public class ForwardPoint extends Shader {
 		setUniformf("specularIntensity", material.getSpecularIntensity());
 		setUniformf("specularExponent", material.getSpecularExponent());
 		setUniform("eyePos", getRenderer().getCamera().getPosition());
-		setUniform("pointLight", getRenderer().getPointLight());
+		setUniformPointLight("pointLight", (PointLight)getRenderer().getActiveLight());
 	}
 	
-	public void setUniform(String uniformName, BaseLight baseLight) {
+	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 	
-	public void setUniform(String uniformName, PointLight pointLight) {
-		setUniform(uniformName + ".base", pointLight.getBaseLight());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
+	public void setUniformPointLight(String uniformName, PointLight pointLight) {
+		setUniformBaseLight(uniformName + ".base", pointLight);
+		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
+		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
+		setUniformf(uniformName + ".atten.exponent", pointLight.getExponent());
 		setUniform(uniformName + ".position", pointLight.getPosition());
 		setUniformf(uniformName + ".range", pointLight.getRange());
 	}

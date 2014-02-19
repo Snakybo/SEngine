@@ -2,6 +2,8 @@ package com.snakybo.engine.core;
 
 import java.util.ArrayList;
 
+import com.snakybo.engine.components.Component;
+import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Shader;
 
 /** @author Kevin Krol
@@ -59,6 +61,14 @@ public class GameObject {
 		
 		for(GameObject child : children)
 			child.render(shader);
+	}
+	
+	public void addToRenderer(Renderer renderer) {
+		for(Component component : components)
+			component.addToRenderer(renderer);
+		
+		for(GameObject child : children)
+			child.addToRenderer(renderer);
 	}
 	
 	/** @return The transformation of the game object */

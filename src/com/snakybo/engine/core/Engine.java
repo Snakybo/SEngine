@@ -1,5 +1,6 @@
 package com.snakybo.engine.core;
 
+import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Window;
 
 public class Engine {
