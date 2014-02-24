@@ -54,6 +54,10 @@ public class Vector2f {
 		return x * r.getX() + y * r.getY();
 	}
 	
+	public float max() {
+		return Math.max(x, y);
+	}
+	
 	/** @return The cross product of two vectors */
 	public float cross(Vector2f r) {
 		return x * r.getX() - y * r.getY();

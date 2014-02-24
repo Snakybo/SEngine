@@ -1,6 +1,5 @@
 package com.snakybo.engine.components;
 
-import com.snakybo.engine.core.Transform;
 import com.snakybo.engine.renderer.Material;
 import com.snakybo.engine.renderer.Mesh;
 import com.snakybo.engine.renderer.Shader;
@@ -17,9 +16,9 @@ public class MeshRenderer extends Component {
 	}
 	
 	@Override
-	public void render(Transform transform, Shader shader) {
+	public void render(Shader shader) {
 		shader.bind();
-		shader.updateUniforms(transform, material);
+		shader.updateUniforms(getTransform(), material);
 		mesh.draw();
 	}
 }

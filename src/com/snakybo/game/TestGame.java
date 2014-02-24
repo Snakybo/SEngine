@@ -48,10 +48,10 @@ public class TestGame extends Game {
 		directionalLight.addComponent(new DirectionalLight(new Vector3f(0, 0, 1), 0.4f, new Vector3f(1, 1, 1)));
 		
 		GameObject pointLight = new GameObject();
-		pointLight.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, 0, 0, 1, new Vector3f(5, 0, 5), 100));
+		pointLight.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, new Vector3f(0, 0, 1)));
 		
 		GameObject spotLight = new GameObject();
-		spotLight.addComponent(new SpotLight(new Vector3f(0, 1, 1), 0.4f, 0, 0, 0.1f, new Vector3f(5, 0, 5), 100, new Vector3f(1, 0, 0), 0.7f));
+		spotLight.addComponent(new SpotLight(new Vector3f(0, 1, 1), 0.4f, new Vector3f(0, 0, 0.1f), new Vector3f(1, 0, 0), 0.7f));
 			
 		getRoot().addChild(plane);
 		getRoot().addChild(directionalLight);

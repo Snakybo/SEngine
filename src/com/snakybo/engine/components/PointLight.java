@@ -4,34 +4,32 @@ import com.snakybo.engine.core.Vector3f;
 import com.snakybo.engine.renderer.ForwardPoint;
 
 public class PointLight extends BaseLight {
-	private Vector3f position;
+	private static final int COLOR_DEPTH = 256;
 	
-	private float constant;
-	private float linear;
-	private float exponent;
+	private Vector3f attenuation;
 	private float range;
 	
-	public PointLight(Vector3f color, float intensity, float constant, float linear, float exponent, Vector3f position, float range) {
+	public PointLight(Vector3f color, float intensity, Vector3f attenuation) {
 		super(color, intensity);
 		
-		this.position = position;
-		this.constant = constant;
-		this.linear = linear;
-		this.exponent = exponent;
-		this.range = range;
+		this.attenuation = attenuation;
+		
+		float a = attenuation.getZ();
+		float b = attenuation.getY();
+		float c = attenuation.getX()- COLOR_DEPTH * getIntensity() * getColor().max();
+		
+		this.range = (float)(-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a);
 		
 		setShader(ForwardPoint.getInstance());
 	}
 	
-	public void setPosition(Vector3f position) { this.position = position; }
-	public void setConstant(float constant) { this.constant = constant; }
-	public void setLinear(float linear) { this.linear = linear; }
-	public void setExponent(float exponent) { this.exponent = exponent; }
+	public void setConstant(float constant) { this.attenuation.setX(constant); }
+	public void setLinear(float linear) { this.attenuation.setY(linear); }
+	public void setExponent(float exponent) { this.attenuation.setZ(exponent); }
 	public void setRange(float range) { this.range = range; }
 	
-	public Vector3f getPosition() { return position; }
-	public float getConstant() { return constant; }
-	public float getLinear() { return linear; }
-	public float getExponent() { return exponent; }
+	public float getConstant() { return attenuation.getX(); }
+	public float getLinear() { return attenuation.getY(); }
+	public float getExponent() { return attenuation.getZ(); }
 	public float getRange() { return range; }
 }

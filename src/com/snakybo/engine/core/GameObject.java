@@ -30,6 +30,8 @@ public class GameObject {
 	/** Add a component to the game object
 	 * @param component The component that extends {@link Component} */
 	public void addComponent(Component component) {
+		component.setGameObject(this);
+		
 		components.add(component);
 	}
 	
@@ -37,7 +39,7 @@ public class GameObject {
 	 * @param delta The delta time */
 	public void input(float delta) {
 		for(Component component : components)
-			component.input(transform, delta);
+			component.input(delta);
 		
 		for(GameObject child : children)
 			child.input(delta);
@@ -47,7 +49,7 @@ public class GameObject {
 	 * @param delta The delta time */
 	public void update(float delta) {
 		for(Component component : components)
-			component.update(transform, delta);
+			component.update(delta);
 		
 		for(GameObject child : children)
 			child.update(delta);
@@ -57,7 +59,7 @@ public class GameObject {
 	 * @param shader The shader the game object has to use */
 	public void render(Shader shader) {
 		for(Component component : components)
-			component.render(transform, shader);
+			component.render(shader);
 		
 		for(GameObject child : children)
 			child.render(shader);

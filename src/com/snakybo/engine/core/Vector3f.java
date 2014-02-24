@@ -65,6 +65,10 @@ public class Vector3f {
 		return x * r.getX() + y * r.getY() + z * r.getZ();
 	}
 	
+	public float max() {
+		return Math.max(x, Math.max(y,  z));
+	}
+	
 	/** @return The cross product of two vectors */
 	public Vector3f cross(Vector3f r) {
 		float _x = y * r.getZ() - z * r.getY();
