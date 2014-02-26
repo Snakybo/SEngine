@@ -29,10 +29,12 @@ public class GameObject {
 	
 	/** Add a component to the game object
 	 * @param component The component that extends {@link Component} */
-	public void addComponent(Component component) {
+	public GameObject addComponent(Component component) {
 		component.setGameObject(this);
 		
 		components.add(component);
+		
+		return this;
 	}
 	
 	/** Handle input for the game object

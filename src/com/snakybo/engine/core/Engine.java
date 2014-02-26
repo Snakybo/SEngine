@@ -90,7 +90,6 @@ public class Engine {
 					stop();
 
 				game.input((float)frameTime);
-				renderer.input((float)frameTime);
 				Input.update();
 				
 				game.update((float)frameTime);

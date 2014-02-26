@@ -26,13 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.engine.components.BaseLight;
+import com.snakybo.engine.components.Camera;
 import com.snakybo.engine.core.GameObject;
 import com.snakybo.engine.core.Vector3f;
 
 /** @author Kevin Krol
  *  @since Feb 8, 2014 */
 public class Renderer {
-	private Camera mainCamera;
+	private Camera camera;
 	
 	private Vector3f ambientLight;
 	
@@ -52,16 +53,9 @@ public class Renderer {
 		
 		glEnable(GL_TEXTURE_2D);
 		
-		mainCamera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.1f, 1000.0f);
-		
 		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
 		
 		lights = new ArrayList<BaseLight>();
-	}
-	
-	//TODO remove this shit
-	public void input(float delta) {
-		mainCamera.input(delta);
 	}
 	
 	/** Render a game object
@@ -98,9 +92,11 @@ public class Renderer {
 		lights.add(light);
 	}
 	
-	public void setCamera(Camera camera) { this.mainCamera = camera; }
+	public void addCamera(Camera camera) {
+		this.camera = camera;
+	}
 	
-	public Camera getCamera() { return mainCamera; }
+	public Camera getCamera() { return camera; }
 	
 	public Vector3f getAmbientLight() { return ambientLight; }
 	public BaseLight getActiveLight() {	return activeLight;	}

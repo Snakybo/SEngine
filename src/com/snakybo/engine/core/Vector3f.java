@@ -28,16 +28,14 @@ public class Vector3f {
 	}
 	
 	/** Rotate the vector on the specified axis */
-	public Vector3f rotate(float angle, Vector3f axis) {
-		float sinHalfAngle = (float)Math.sin(Math.toRadians(angle / 2));
-		float cosHalfAngle = (float)Math.cos(Math.toRadians(angle / 2));
+	public Vector3f rotate(Vector3f axis, float angle) {
+		float sinAngle = (float)Math.sin(-angle);
+		float cosAngle = (float)Math.cos(-angle);
 		
-		float rX = axis.getX() * sinHalfAngle;
-		float rY = axis.getY() * sinHalfAngle;
-		float rZ = axis.getZ() * sinHalfAngle;
-		float rW = cosHalfAngle;
-		
-		Quaternion rotation = new Quaternion(rX, rY, rZ, rW);
+		return cross(axis.mul(sinAngle)).add(mul(cosAngle)).add(axis.mul(dot(axis.mul(1 - cosAngle))));
+	}
+	
+	public Vector3f rotate(Quaternion rotation) {
 		Quaternion conjugate = rotation.conjugate();
 		
 		Quaternion w = rotation.mul(this).mul(conjugate);
@@ -115,6 +113,14 @@ public class Vector3f {
 	
 	public String toString() { return "(" + x + " " + y + " " + z + ")"; }
 	public boolean equals(Vector3f r) { return (x == r.getX()) && (y == r.getY()) && (z == r.getZ()); }
+	
+	public Vector3f set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		
+		return this;
+	}
 	
 	public void setX(float x) {	this.x = x; }
 	public void setY(float y) {	this.y = y; }
