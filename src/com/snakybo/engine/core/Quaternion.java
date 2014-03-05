@@ -21,8 +21,8 @@ public class Quaternion {
 		this.w = w;
 	}
 	
-	/** Initialize the quaternion for a rotation */
-	public Quaternion initRotation(Vector3f axis, float angle) {
+	/** Create a quaternion and initialize it for a rotation rotation */
+	public Quaternion(Vector3f axis, float angle) {
 		float sinHalfAngle = (float)Math.sin(angle / 2);
 		float cosHalfAngle = (float)Math.cos(angle / 2);
 		
@@ -30,8 +30,6 @@ public class Quaternion {
 		this.y = axis.getY() * sinHalfAngle;
 		this.z = axis.getZ() * sinHalfAngle;
 		this.w = cosHalfAngle;
-		
-		return this;
 	}
 
 	/** @return The length of the quaternion */
@@ -49,6 +47,10 @@ public class Quaternion {
 		float length = length();
 		
 		return new Quaternion(x / length, y / length, z / length, w / length);
+	}
+	
+	public Quaternion mul(float r) {
+		return new Quaternion(x * r, y * r, z * r, w * r);
 	}
 	
 	/** Multiply the quaternion
@@ -74,19 +76,35 @@ public class Quaternion {
 	}
 	
 	public Matrix4f toRotationMatrix() {
-		return new Matrix4f().initRotation(forward(), up(), right());
+		Vector3f forward = new Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
+		Vector3f up = new Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
+		Vector3f right = new Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
+		
+		return new Matrix4f().initRotation(forward, up, right);
 	}
 	
-	public Vector3f forward() { return new Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y)); }
-	public Vector3f back() { return new Vector3f(-2.0f * (x * z - w * y), -2.0f * (y * z + w * x), -(1.0f - 2.0f * (x * x + y * y))); }
+	public Vector3f forward() { return new Vector3f(0, 0, 1).rotate(this); }
+	public Vector3f back() { return new Vector3f(0, 0, -1).rotate(this); }
 
-	public Vector3f up() { return new Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x)); }
-	public Vector3f down() { return new Vector3f(-2.0f * (x * y + w * z), -(1.0f - 2.0f * (x * x + z * z)), -2.0f * (y * z - w * x)); }
+	public Vector3f up() { return new Vector3f(0, 1, 0).rotate(this); }
+	public Vector3f down() { return new Vector3f(0, -1, 0).rotate(this); }
 
-	public Vector3f right() { return new Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y)); }
-	public Vector3f left() { return new Vector3f(-(1.0f - 2.0f * (y * y + z * z)), -2.0f * (x * y - w * z), -2.0f * (x * z + w * y)); }
+	public Vector3f right() { return new Vector3f(1, 0, 0).rotate(this); }
+	public Vector3f left() { return new Vector3f(-1, 0, 0).rotate(this); }
 	
 	public String toString() { return "(" + x + " " + y + " " + z + " " + w + ")"; }
+	public boolean equals(Quaternion r) { return (x == r.getX()) && (y == r.getY()) && (z == r.getZ()) && (w == r.getW()); }
+	public Quaternion clone() { return new Quaternion(x, y, z, w); }
+	
+	public Quaternion set(Quaternion r) { return set(r.getX(), r.getY(), r.getZ(), r.getW()); }
+	public Quaternion set(float x, float y, float z, float w) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
+		
+		return this;
+	}
 	
 	public void setX(float x) { this.x = x; }
 	public void setY(float y) {	this.y = y; }

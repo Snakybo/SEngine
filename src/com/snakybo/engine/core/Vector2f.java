@@ -93,6 +93,14 @@ public class Vector2f {
 	public String toString() { return "(" + x + " " + y + ")"; }
 	public boolean equals(Vector2f r) {	return (x == r.getX()) && (y == r.getY()); }
 	
+	public Vector2f set(Vector2f r) { return set(r.getX(), r.getY()); }
+	public Vector2f set(float x, float y) {
+		this.x = x;
+		this.y = y;
+		
+		return this;
+	}
+	
 	public void setX(float x) {	this.x = x; }
 	public void setY(float y) {	this.y = y; }
 	

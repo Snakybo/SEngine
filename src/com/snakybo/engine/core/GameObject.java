@@ -24,6 +24,8 @@ public class GameObject {
 	/** Add a child game object to this game object
 	 * @param child The game object */
 	public void addChild(GameObject child) {
+		child.getTransform().setParent(transform);
+		
 		children.add(child);
 	}
 	
@@ -40,6 +42,8 @@ public class GameObject {
 	/** Handle input for the game object
 	 * @param delta The delta time */
 	public void input(float delta) {
+		transform.update();
+		
 		for(Component component : components)
 			component.input(delta);
 		

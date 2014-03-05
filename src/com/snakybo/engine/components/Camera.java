@@ -3,7 +3,6 @@ package com.snakybo.engine.components;
 import com.snakybo.engine.core.Input;
 import com.snakybo.engine.core.Input.KeyCode;
 import com.snakybo.engine.core.Matrix4f;
-import com.snakybo.engine.core.Quaternion;
 import com.snakybo.engine.core.Vector2f;
 import com.snakybo.engine.core.Vector3f;
 import com.snakybo.engine.renderer.Renderer;
@@ -32,7 +31,7 @@ public class Camera extends Component {
 	/** Handle Input */
 	@Override
 	public void input(float delta) {
-		float sensitivity = -0.5f;
+		float sensitivity = 0.5f;
 		float moveAmount = (float)(10 * delta);
 		
 		if(Input.getMouseDown(0)) {
@@ -47,15 +46,15 @@ public class Camera extends Component {
 		}
 		
 		if(Input.getKey(KeyCode.KEY_W)) {
-			getTransform().setPosition(getTransform().getPosition().add(getTransform().getRotation().forward().mul(moveAmount)));
+			move(getTransform().getRotation().forward(), moveAmount);
 		} else if(Input.getKey(KeyCode.KEY_S)) {
-			getTransform().setPosition(getTransform().getPosition().add(getTransform().getRotation().back().mul(moveAmount)));
+			move(getTransform().getRotation().forward(), -moveAmount);
 		}
 		
 		if(Input.getKey(KeyCode.KEY_A)) {
-			getTransform().setPosition(getTransform().getPosition().add(getTransform().getRotation().left().mul(moveAmount)));
+			move(getTransform().getRotation().left(), moveAmount);
 		} else if(Input.getKey(KeyCode.KEY_D)) {
-			getTransform().setPosition(getTransform().getPosition().add(getTransform().getRotation().right().mul(moveAmount)));
+			move(getTransform().getRotation().right(), moveAmount);
 		}
 		
 		if(mouseLocked) {
@@ -65,10 +64,10 @@ public class Camera extends Component {
 			boolean rotX = deltaPos.getY() != 0;
 			
 			if(rotY)
-				getTransform().setRotation(getTransform().getRotation().mul(new Quaternion().initRotation(Vector3f.UP, (float)Math.toRadians(deltaPos.getX() * sensitivity))).normalize());
+				getTransform().rotate(Vector3f.UP, (float)Math.toRadians(deltaPos.getX() * sensitivity));
 			
 			if(rotX)
-				getTransform().setRotation(getTransform().getRotation().mul(new Quaternion().initRotation(getTransform().getRotation().right(), (float)Math.toRadians(-deltaPos.getY() * sensitivity))).normalize());
+				getTransform().rotate(getTransform().getRotation().right(), (float)Math.toRadians(-deltaPos.getY() * sensitivity));
 				
 			if(rotY || rotX)
 				Input.setMousePosition(new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2));
@@ -84,8 +83,10 @@ public class Camera extends Component {
 	
 	/** @return The projection matrix */
 	public Matrix4f getProjection() {
-		Matrix4f cameraRotation = getTransform().getRotation().toRotationMatrix();
-		Matrix4f cameraTranslation = new Matrix4f().initPosition(-getTransform().getPosition().getX(), -getTransform().getPosition().getY(), -getTransform().getPosition().getZ());
+		Matrix4f cameraRotation = getTransform().getTransformedRotation().conjugate().toRotationMatrix();
+		Vector3f cameraPosition = getTransform().getTransformedPosition().mul(-1);
+		
+		Matrix4f cameraTranslation = new Matrix4f().initPosition(cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ());
 		
 		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}

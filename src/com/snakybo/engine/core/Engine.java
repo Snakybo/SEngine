@@ -78,7 +78,7 @@ public class Engine {
 			
 			lastTime = startTime;
 			
-			unprocessedTime += passedTime += passedTime;
+			unprocessedTime += passedTime;
 			frameCounter += passedTime;
 			
 			while(unprocessedTime > frameTime) {

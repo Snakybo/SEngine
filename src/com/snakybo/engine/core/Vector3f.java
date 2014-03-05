@@ -113,7 +113,9 @@ public class Vector3f {
 	
 	public String toString() { return "(" + x + " " + y + " " + z + ")"; }
 	public boolean equals(Vector3f r) { return (x == r.getX()) && (y == r.getY()) && (z == r.getZ()); }
+	public Vector3f clone() { return new Vector3f(x, y, z); }
 	
+	public Vector3f set(Vector3f r) { return set(r.getX(), r.getY(), r.getZ()); }
 	public Vector3f set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
