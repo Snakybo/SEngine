@@ -3,6 +3,7 @@ package com.snakybo.engine.core;
 import java.io.Serializable;
 import java.util.Arrays;
 
+/** @author Kevin Krol */
 public class Matrix4f implements Serializable {
 	private static final long serialVersionUID = 7665351985974304317L;
 	
@@ -23,31 +24,55 @@ public class Matrix4f implements Serializable {
 	
 	// Initializers //
 	
-	/** Initialize the matrix 
+	/** Initialize the matrix
 	 * @return This matrix */
 	public Matrix4f initIdentity() {
-		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0;
-		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = 0;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = 0;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
+		m[0][0] = 1;
+		m[0][1] = 0;
+		m[0][2] = 0;
+		m[0][3] = 0;
+		m[1][0] = 0;
+		m[1][1] = 1;
+		m[1][2] = 0;
+		m[1][3] = 0;
+		m[2][0] = 0;
+		m[2][1] = 0;
+		m[2][2] = 1;
+		m[2][3] = 0;
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 0;
+		m[3][3] = 1;
 		
 		return this;
 	}
 	
 	/** Initialize the matrix for position
-	 * @param position The position to initialize with 
+	 * @param position The position to initialize with
 	 * @return This matrix */
 	public Matrix4f initPosition(Vector3f position) {
-		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = position.x;
-		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = position.y;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = position.z;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
+		m[0][0] = 1;
+		m[0][1] = 0;
+		m[0][2] = 0;
+		m[0][3] = position.x;
+		m[1][0] = 0;
+		m[1][1] = 1;
+		m[1][2] = 0;
+		m[1][3] = position.y;
+		m[2][0] = 0;
+		m[2][1] = 0;
+		m[2][2] = 1;
+		m[2][3] = position.z;
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 0;
+		m[3][3] = 1;
 		
 		return this;
 	}
 	
 	/** Initialize the matrix for rotation
-	 * @param rotation The rotation to initialize with 
+	 * @param rotation The rotation to initialize with
 	 * @return This matrix */
 	public Matrix4f initRotation(Vector3f rotation) {
 		Matrix4f rx = new Matrix4f();
@@ -58,20 +83,56 @@ public class Matrix4f implements Serializable {
 		final float y = (float)Math.toRadians(rotation.y);
 		final float z = (float)Math.toRadians(rotation.z);
 		
-		rz.m[0][0] = (float)Math.cos(z);	rz.m[0][1] = -(float)Math.sin(z);	rz.m[0][2] = 0;						rz.m[0][3] = 0;
-		rz.m[1][0] = (float)Math.sin(z);	rz.m[1][1] = (float)Math.cos(z);	rz.m[1][2] = 0;						rz.m[1][3] = 0;
-		rz.m[2][0] = 0;						rz.m[2][1] = 0;						rz.m[2][2] = 1;						rz.m[2][3] = 0;
-		rz.m[3][0] = 0;						rz.m[3][1] = 0;						rz.m[3][2] = 0;						rz.m[3][3] = 1;
+		rz.m[0][0] = (float)Math.cos(z);
+		rz.m[0][1] = -(float)Math.sin(z);
+		rz.m[0][2] = 0;
+		rz.m[0][3] = 0;
+		rz.m[1][0] = (float)Math.sin(z);
+		rz.m[1][1] = (float)Math.cos(z);
+		rz.m[1][2] = 0;
+		rz.m[1][3] = 0;
+		rz.m[2][0] = 0;
+		rz.m[2][1] = 0;
+		rz.m[2][2] = 1;
+		rz.m[2][3] = 0;
+		rz.m[3][0] = 0;
+		rz.m[3][1] = 0;
+		rz.m[3][2] = 0;
+		rz.m[3][3] = 1;
 		
-		rx.m[0][0] = 1;						rx.m[0][1] = 0;						rx.m[0][2] = 0;						rx.m[0][3] = 0;
-		rx.m[1][0] = 0;						rx.m[1][1] = (float)Math.cos(x);	rx.m[1][2] = -(float)Math.sin(x);	rx.m[1][3] = 0;
-		rx.m[2][0] = 0;						rx.m[2][1] = (float)Math.sin(x);	rx.m[2][2] = (float)Math.cos(x);	rx.m[2][3] = 0;
-		rx.m[3][0] = 0;						rx.m[3][1] = 0;						rx.m[3][2] = 0;						rx.m[3][3] = 1;
+		rx.m[0][0] = 1;
+		rx.m[0][1] = 0;
+		rx.m[0][2] = 0;
+		rx.m[0][3] = 0;
+		rx.m[1][0] = 0;
+		rx.m[1][1] = (float)Math.cos(x);
+		rx.m[1][2] = -(float)Math.sin(x);
+		rx.m[1][3] = 0;
+		rx.m[2][0] = 0;
+		rx.m[2][1] = (float)Math.sin(x);
+		rx.m[2][2] = (float)Math.cos(x);
+		rx.m[2][3] = 0;
+		rx.m[3][0] = 0;
+		rx.m[3][1] = 0;
+		rx.m[3][2] = 0;
+		rx.m[3][3] = 1;
 		
-		ry.m[0][0] = (float)Math.cos(y);	ry.m[0][1] = 0;						ry.m[0][2] = -(float)Math.sin(y);	ry.m[0][3] = 0;
-		ry.m[1][0] = 0;						ry.m[1][1] = 1;						ry.m[1][2] = 0;						ry.m[1][3] = 0;
-		ry.m[2][0] = (float)Math.sin(y);	ry.m[2][1] = 0;						ry.m[2][2] = (float)Math.cos(y);	ry.m[2][3] = 0;
-		ry.m[3][0] = 0;						ry.m[3][1] = 0;						ry.m[3][2] = 0;						ry.m[3][3] = 1;
+		ry.m[0][0] = (float)Math.cos(y);
+		ry.m[0][1] = 0;
+		ry.m[0][2] = -(float)Math.sin(y);
+		ry.m[0][3] = 0;
+		ry.m[1][0] = 0;
+		ry.m[1][1] = 1;
+		ry.m[1][2] = 0;
+		ry.m[1][3] = 0;
+		ry.m[2][0] = (float)Math.sin(y);
+		ry.m[2][1] = 0;
+		ry.m[2][2] = (float)Math.cos(y);
+		ry.m[2][3] = 0;
+		ry.m[3][0] = 0;
+		ry.m[3][1] = 0;
+		ry.m[3][2] = 0;
+		ry.m[3][3] = 1;
 		
 		m = rz.scale(ry.scale(rx)).getM();
 		
@@ -96,16 +157,28 @@ public class Matrix4f implements Serializable {
 	 * @param right The right side
 	 * @return This matrix */
 	public Matrix4f initRotation(Vector3f forward, Vector3f up, Vector3f right) {
-		m[0][0] = right.x;	m[0][1] = right.y;	m[0][2] = right.z;	m[0][3] = 0;
-		m[1][0] = up.x;	m[1][1] = up.y;	m[1][2] = up.z;	m[1][3] = 0;
-		m[2][0] = forward.x;	m[2][1] = forward.y;	m[2][2] = forward.z;	m[2][3] = 0;
-		m[3][0] = 0;		m[3][1] = 0;		m[3][2] = 0;		m[3][3] = 1;
+		m[0][0] = right.x;
+		m[0][1] = right.y;
+		m[0][2] = right.z;
+		m[0][3] = 0;
+		m[1][0] = up.x;
+		m[1][1] = up.y;
+		m[1][2] = up.z;
+		m[1][3] = 0;
+		m[2][0] = forward.x;
+		m[2][1] = forward.y;
+		m[2][2] = forward.z;
+		m[2][3] = 0;
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 0;
+		m[3][3] = 1;
 		
 		return this;
 	}
 	
 	/** Initialize the matrix for scale
-	 * @param scale The scale to initialize with 
+	 * @param scale The scale to initialize with
 	 * @return This matrix */
 	public Matrix4f initScale(Vector3f scale) {
 		initIdentity();
@@ -127,10 +200,22 @@ public class Matrix4f implements Serializable {
 		float tanHalfFOV = (float)Math.tan(fov / 2);
 		float zRange = zNear - zFar;
 		
-		m[0][0] = 1.0f / (tanHalfFOV * aspect);	m[0][1] = 0;					m[0][2] = 0;						m[0][3] = 0;
-		m[1][0] = 0;							m[1][1] = 1.0f / tanHalfFOV;	m[1][2] = 0;						m[1][3] = 0;
-		m[2][0] = 0;							m[2][1] = 0;					m[2][2] = (-zNear -zFar)/zRange;	m[2][3] = 2 * zFar * zNear / zRange;
-		m[3][0] = 0;							m[3][1] = 0;					m[3][2] = 1;						m[3][3] = 0;
+		m[0][0] = 1.0f / (tanHalfFOV * aspect);
+		m[0][1] = 0;
+		m[0][2] = 0;
+		m[0][3] = 0;
+		m[1][0] = 0;
+		m[1][1] = 1.0f / tanHalfFOV;
+		m[1][2] = 0;
+		m[1][3] = 0;
+		m[2][0] = 0;
+		m[2][1] = 0;
+		m[2][2] = (-zNear - zFar) / zRange;
+		m[2][3] = 2 * zFar * zNear / zRange;
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 1;
+		m[3][3] = 0;
 		
 		
 		return this;
@@ -142,17 +227,30 @@ public class Matrix4f implements Serializable {
 	 * @param bottom The amount of pixels to the bottom
 	 * @param top The amount of pixels to the top
 	 * @param near The near clipping plane
-	 * @param far The far clipping plane 
+	 * @param far The far clipping plane
 	 * @return This matrix */
-	public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far) {
+	public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near,
+			float far) {
 		float width = right - left;
 		float height = top - bottom;
 		float depth = far - near;
 		
-		m[0][0] = 2 / width;	m[0][1] = 0;			m[0][2] = 0;			m[0][3] = -(right + left) / width;
-		m[1][0] = 0;			m[1][1] = 2 / height;	m[1][2] = 0;			m[1][3] = -(top + bottom) / height;
-		m[2][0] = 0;			m[2][1] = 0;			m[2][2] = -2 / depth;	m[2][3] = -(far + near) / depth;
-		m[3][0] = 0;			m[3][1] = 0;			m[3][2] = 0;			m[3][3] = 1;
+		m[0][0] = 2 / width;
+		m[0][1] = 0;
+		m[0][2] = 0;
+		m[0][3] = -(right + left) / width;
+		m[1][0] = 0;
+		m[1][1] = 2 / height;
+		m[1][2] = 0;
+		m[1][3] = -(top + bottom) / height;
+		m[2][0] = 0;
+		m[2][1] = 0;
+		m[2][2] = -2 / depth;
+		m[2][3] = -(far + near) / depth;
+		m[3][0] = 0;
+		m[3][1] = 0;
+		m[3][2] = 0;
+		m[3][3] = 1;
 		
 		return this;
 	}
@@ -161,11 +259,11 @@ public class Matrix4f implements Serializable {
 	
 	/** Transform the matrix
 	 * @param other The vector to transform by
-	 * @return A new vector */	
+	 * @return A new vector */
 	public Vector3f transform(Vector3f other) {
 		return new Vector3f(m[0][0] * other.x + m[0][1] * other.y + m[0][2] * other.z + m[0][3],
-							m[1][0] * other.x + m[1][1] * other.y + m[1][2] * other.z + m[1][3],
-							m[2][0] * other.x + m[2][1] * other.y + m[2][2] * other.z + m[2][3]);
+				m[1][0] * other.x + m[1][1] * other.y + m[1][2] * other.z + m[1][3], m[2][0]
+						* other.x + m[2][1] * other.y + m[2][2] * other.z + m[2][3]);
 	}
 	
 	/** Scale the matrix by another
@@ -176,12 +274,8 @@ public class Matrix4f implements Serializable {
 		
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 4; j++) {
-				res.set(i, j, 
-					m[i][0] * r.get(0, j) +
-					m[i][1] * r.get(1, j) +
-					m[i][2] * r.get(2, j) +
-					m[i][3] * r.get(3, j)
-				);
+				res.set(i, j, m[i][0] * r.get(0, j) + m[i][1] * r.get(1, j) + m[i][2] * r.get(2, j)
+						+ m[i][3] * r.get(3, j));
 			}
 		}
 		

@@ -1,6 +1,18 @@
 package com.snakybo.engine.renderer;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_RGBA8;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,8 +23,9 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
 
+/** @author Kevin Krol */
 public class Texture {
-	public static final Texture DEFAULT = new Texture("default texture.png"); 
+	public static final Texture DEFAULT = new Texture("default texture.png");
 	
 	private int textureId;
 	
@@ -39,7 +52,7 @@ public class Texture {
 	}
 	
 	/** Load a texture file
-	 * @param fileName The name of the texture file 
+	 * @param fileName The name of the texture file
 	 * @return The ID of the texture */
 	private static int loadTexture(String fileName) {
 		BufferedImage texture = null;
@@ -48,17 +61,19 @@ public class Texture {
 			texture = ImageIO.read(new File("./res/textures/" + fileName));
 			
 			int[] pixels = new int[texture.getWidth() * texture.getHeight()];
-			texture.getRGB(0, 0, texture.getWidth(), texture.getHeight(), pixels, 0, texture.getWidth());
+			texture.getRGB(0, 0, texture.getWidth(), texture.getHeight(), pixels, 0,
+					texture.getWidth());
 			
-			ByteBuffer buffer = BufferUtils.createByteBuffer(texture.getWidth() * texture.getHeight() * 4);
+			ByteBuffer buffer =
+					BufferUtils.createByteBuffer(texture.getWidth() * texture.getHeight() * 4);
 			
 			for(int y = 0; y < texture.getHeight(); y++) {
 				for(int x = 0; x < texture.getWidth(); x++) {
 					int pixel = pixels[y * texture.getWidth() + x];
-					buffer.put((byte) ((pixel >> 16) & 0xFF));
-					buffer.put((byte) ((pixel >> 8) & 0xFF));
-					buffer.put((byte) (pixel & 0xFF));
-					buffer.put((byte) ((pixel >> 24) & 0xFF));
+					buffer.put((byte)((pixel >> 16) & 0xFF));
+					buffer.put((byte)((pixel >> 8) & 0xFF));
+					buffer.put((byte)(pixel & 0xFF));
+					buffer.put((byte)((pixel >> 24) & 0xFF));
 				}
 			}
 			
@@ -73,7 +88,8 @@ public class Texture {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture.getWidth(), texture.getHeight(), 0 , GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture.getWidth(), texture.getHeight(), 0,
+					GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 			
 			return textureID;
 		} catch(Exception e) {

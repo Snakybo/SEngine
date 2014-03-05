@@ -6,7 +6,7 @@ import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
 
 /** @author Kevin Krol
- *  @since Feb 12, 2014 */
+ * @since Feb 12, 2014 */
 public class ForwardDirectional extends Shader {
 	private static final ForwardDirectional instance = new ForwardDirectional();
 	
@@ -14,7 +14,7 @@ public class ForwardDirectional extends Shader {
 		addVertexShaderFromFile("forward/directional.vertex.glsl");
 		addFragmentShaderFromFile("forward/directional.fragment.glsl");
 		
-		setAttribLocation("position" , 0);
+		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);
 		setAttribLocation("normal", 2);
 		
@@ -49,7 +49,7 @@ public class ForwardDirectional extends Shader {
 	}
 	
 	/** Set an base light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param baseLight The base light */
 	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
@@ -57,7 +57,7 @@ public class ForwardDirectional extends Shader {
 	}
 	
 	/** Set an directional light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param directionalLight The directional light */
 	public void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight) {
 		setUniformBaseLight(uniformName + ".base", directionalLight);
@@ -65,5 +65,7 @@ public class ForwardDirectional extends Shader {
 	}
 	
 	/** @return The instance of this shader */
-	public static ForwardDirectional getInstance() { return instance; }
+	public static ForwardDirectional getInstance() {
+		return instance;
+	}
 }

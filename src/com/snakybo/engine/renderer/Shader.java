@@ -34,6 +34,7 @@ import com.snakybo.engine.core.Transform;
 import com.snakybo.engine.core.Util;
 import com.snakybo.engine.core.Vector3f;
 
+/** @author Kevin Krol */
 public class Shader {
 	private HashMap<String, Integer> uniforms;
 	private int program;
@@ -43,7 +44,8 @@ public class Shader {
 		uniforms = new HashMap<String, Integer>();
 		
 		if(program == 0) {
-			System.err.println("Shader creation failed: Could not find valid memory location in constructor");
+			System.err
+					.println("Shader creation failed: Could not find valid memory location in constructor");
 			System.exit(1);
 		}
 	}
@@ -89,51 +91,71 @@ public class Shader {
 	 * @param transform The transformation of the object
 	 * @param material The material of the object
 	 * @param renderer The renderer */
-	public void updateUniforms(Transform transform, Material material, Renderer renderer) { }
+	public void updateUniforms(Transform transform, Material material, Renderer renderer) {}
 	
 	/** Add a vertex shader to the shader
 	 * @param text The content of the shader */
-	public void addVertexShader(String text) { addProgram(text, GL_VERTEX_SHADER); }
+	public void addVertexShader(String text) {
+		addProgram(text, GL_VERTEX_SHADER);
+	}
 	
 	/** Add a geometry shader to the shader
 	 * @param text The content of the shader */
-	public void addGeometryShader(String text) { addProgram(text, GL_GEOMETRY_SHADER); }
+	public void addGeometryShader(String text) {
+		addProgram(text, GL_GEOMETRY_SHADER);
+	}
 	
 	/** Add a fragment shader to the shader
 	 * @param text The content of the shader */
-	public void addFragmentShader(String text) { addProgram(text, GL_FRAGMENT_SHADER); }
+	public void addFragmentShader(String text) {
+		addProgram(text, GL_FRAGMENT_SHADER);
+	}
 	
 	/** Load a vertex shader from a file and add it to the shader
 	 * @param name The name of the shader file */
-	public void addVertexShaderFromFile(String name) { addProgram(loadShader(name), GL_VERTEX_SHADER); }
+	public void addVertexShaderFromFile(String name) {
+		addProgram(loadShader(name), GL_VERTEX_SHADER);
+	}
 	
 	/** Load a geometry shader from a file and add it to the shader
 	 * @param name The name of the shader file */
-	public void addGeometryShaderFromFile(String name) { addProgram(loadShader(name), GL_GEOMETRY_SHADER); }
+	public void addGeometryShaderFromFile(String name) {
+		addProgram(loadShader(name), GL_GEOMETRY_SHADER);
+	}
 	
 	/** Load a fragment shader from a file and add it to the shader
 	 * @param name The name of the shader file */
-	public void addFragmentShaderFromFile(String name) { addProgram(loadShader(name), GL_FRAGMENT_SHADER); }
+	public void addFragmentShaderFromFile(String name) {
+		addProgram(loadShader(name), GL_FRAGMENT_SHADER);
+	}
 	
 	/** Set an integer uniform
 	 * @param uniformName The name of the uniform
 	 * @param value The value of the uniform */
-	public void setUniformi(String uniformName, int value) { glUniform1i(uniforms.get(uniformName), value); }
+	public void setUniformi(String uniformName, int value) {
+		glUniform1i(uniforms.get(uniformName), value);
+	}
 	
 	/** Set an float uniform
 	 * @param uniformName The name of the uniform
 	 * @param value The value of the uniform */
-	public void setUniformf(String uniformName, float value) { glUniform1f(uniforms.get(uniformName), value); }
+	public void setUniformf(String uniformName, float value) {
+		glUniform1f(uniforms.get(uniformName), value);
+	}
 	
 	/** Set an vector uniform
 	 * @param uniformName The name of the uniform
 	 * @param value The value of the uniform */
-	public void setUniform(String uniformName, Vector3f value) { glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ()); }
+	public void setUniform(String uniformName, Vector3f value) {
+		glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ());
+	}
 	
 	/** Set an matrix uniform
 	 * @param uniformName The name of the uniform
 	 * @param value The value of the uniform */
-	public void setUniform(String uniformName, Matrix4f value) { glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value)); }
+	public void setUniform(String uniformName, Matrix4f value) {
+		glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value));
+	}
 	
 	/** Add a program to the shader
 	 * @param text The content of the program
@@ -142,7 +164,8 @@ public class Shader {
 		int shader = glCreateShader(type);
 		
 		if(shader == 0) {
-			System.err.println("Shader creation failed: Could not find valid memory location when adding shader");
+			System.err
+					.println("Shader creation failed: Could not find valid memory location when adding shader");
 			System.exit(1);
 		}
 		

@@ -6,7 +6,7 @@ import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
 
 /** @author Kevin Krol
- *  @since Feb 12, 2014 */
+ * @since Feb 12, 2014 */
 public class ForwardPoint extends Shader {
 	private static final ForwardPoint instance = new ForwardPoint();
 	
@@ -16,7 +16,7 @@ public class ForwardPoint extends Shader {
 		addVertexShaderFromFile("forward/point.vertex.glsl");
 		addFragmentShaderFromFile("forward/point.fragment.glsl");
 		
-		setAttribLocation("position" , 0);
+		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);
 		setAttribLocation("normal", 2);
 		
@@ -55,7 +55,7 @@ public class ForwardPoint extends Shader {
 	}
 	
 	/** Set an base light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param baseLight The base light */
 	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
@@ -63,7 +63,7 @@ public class ForwardPoint extends Shader {
 	}
 	
 	/** Set an point light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param pointLight The point light */
 	public void setUniformPointLight(String uniformName, PointLight pointLight) {
 		setUniformBaseLight(uniformName + ".base", pointLight);
@@ -75,5 +75,7 @@ public class ForwardPoint extends Shader {
 	}
 	
 	/** @return The instance of this shader */
-	public static ForwardPoint getInstance() { return instance; }
+	public static ForwardPoint getInstance() {
+		return instance;
+	}
 }

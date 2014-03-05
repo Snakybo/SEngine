@@ -2,11 +2,12 @@ package com.snakybo.engine.core;
 
 import com.snakybo.engine.renderer.Renderer;
 
+/** @author Kevin Krol */
 public abstract class Game {
 	private GameObject root;
 	
 	/** Initialize the game */
-	public void init() { }
+	public void init() {}
 	
 	/** Handle input for the game
 	 * @param delta The delta time */

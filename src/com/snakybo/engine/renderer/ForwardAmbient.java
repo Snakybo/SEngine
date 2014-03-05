@@ -4,7 +4,7 @@ import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
 
 /** @author Kevin Krol
- *  @since Feb 10, 2014 */
+ * @since Feb 10, 2014 */
 public class ForwardAmbient extends Shader {
 	private static final ForwardAmbient instance = new ForwardAmbient();
 	
@@ -12,7 +12,7 @@ public class ForwardAmbient extends Shader {
 		addVertexShaderFromFile("forward/ambient.vertex.glsl");
 		addFragmentShaderFromFile("forward/ambient.fragment.glsl");
 		
-		setAttribLocation("position" , 0);
+		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);
 		
 		compileShader();
@@ -33,5 +33,7 @@ public class ForwardAmbient extends Shader {
 	}
 	
 	/** @return The instance of this shader */
-	public static ForwardAmbient getInstance() { return instance; }
+	public static ForwardAmbient getInstance() {
+		return instance;
+	}
 }

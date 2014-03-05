@@ -3,6 +3,7 @@ package com.snakybo.engine.core;
 import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Window;
 
+/** @author Kevin Krol */
 public class SEngine {
 	private boolean isRunning;
 	

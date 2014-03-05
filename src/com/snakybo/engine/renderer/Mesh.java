@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import com.snakybo.engine.core.Util;
 import com.snakybo.engine.core.Vector3f;
 
+/** @author Kevin Krol */
 public class Mesh {
 	private int vbo;
 	private int ibo;
@@ -129,11 +130,8 @@ public class Mesh {
 				if(tokens.length == 0 || tokens[0].equals("#")) {
 					continue;
 				} else if(tokens[0].equals("v")) {
-					vertices.add(new Vertex(new Vector3f(
-								Float.valueOf(tokens[1]),
-								Float.valueOf(tokens[2]),
-								Float.valueOf(tokens[3])
-							)));
+					vertices.add(new Vertex(new Vector3f(Float.valueOf(tokens[1]), Float
+							.valueOf(tokens[2]), Float.valueOf(tokens[3]))));
 				} else if(tokens[0].equals("f")) {
 					indices.add(Integer.parseInt(tokens[1].split("/")[0]) - 1);
 					indices.add(Integer.parseInt(tokens[2].split("/")[0]) - 1);

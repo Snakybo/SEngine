@@ -116,7 +116,7 @@ public class Transform {
 	public Quaternion getRotation() {
 		return rotation;
 	}
-
+	
 	/** @return The scale of the transformation */
 	public Vector3f getScale() {
 		return scale;
@@ -124,8 +124,7 @@ public class Transform {
 	
 	/** @return The transformation */
 	public Matrix4f getTransformation() {
-		Matrix4f translationMatrix =
-				new Matrix4f().initPosition(position);
+		Matrix4f translationMatrix = new Matrix4f().initPosition(position);
 		Matrix4f rotationMatrix = rotation.toRotationMatrix();
 		Matrix4f scaleMatrix = new Matrix4f().initScale(scale);
 		

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.snakybo.engine.core.Vector3f;
 
+/** @author Kevin Krol */
 public class Material {
 	private Map<String, Texture> texturesHashMap;
 	private Map<String, Vector3f> vector3fHashMap;

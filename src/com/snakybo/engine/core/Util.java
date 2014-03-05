@@ -87,7 +87,7 @@ public class Util {
 	}
 	
 	/** Convert an integer array to an int array
-	 * @param data The integer array 
+	 * @param data The integer array
 	 * @return An int array */
 	public static int[] toIntArray(Integer[] data) {
 		int[] result = new int[data.length];

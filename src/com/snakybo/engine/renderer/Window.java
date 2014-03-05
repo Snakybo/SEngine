@@ -8,8 +8,8 @@ import org.lwjgl.opengl.DisplayMode;
 
 import com.snakybo.engine.core.Vector2f;
 
+/** @author Kevin Krol */
 public class Window {
-
 	/** Create LWJGL Display */
 	public static void createWindow(int width, int height, String title) {
 		Display.setTitle(title);
@@ -18,12 +18,12 @@ public class Window {
 			Display.create();
 			Keyboard.create();
 			Mouse.create();
-		} catch (LWJGLException e) {
+		} catch(LWJGLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/** Render display */	
+	/** Render display */
 	public static void render() {
 		Display.update();
 	}

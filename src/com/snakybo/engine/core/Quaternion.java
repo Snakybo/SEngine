@@ -2,6 +2,7 @@ package com.snakybo.engine.core;
 
 import java.io.Serializable;
 
+/** @author Kevin Krol */
 public class Quaternion implements Serializable {
 	private static final long serialVersionUID = 1006541201686498617L;
 	

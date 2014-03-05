@@ -31,7 +31,7 @@ import com.snakybo.engine.core.GameObject;
 import com.snakybo.engine.core.Vector3f;
 
 /** @author Kevin Krol
- *  @since Feb 8, 2014 */
+ * @since Feb 8, 2014 */
 public class Renderer {
 	private Camera camera;
 	
@@ -99,11 +99,17 @@ public class Renderer {
 	}
 	
 	/** @return The camera */
-	public Camera getCamera() { return camera; }
+	public Camera getCamera() {
+		return camera;
+	}
 	
 	/** @return The ambient light in the scene */
-	public Vector3f getAmbientLight() { return ambientLight; }
+	public Vector3f getAmbientLight() {
+		return ambientLight;
+	}
 	
 	/** @return The currently active light */
-	public BaseLight getActiveLight() {	return activeLight;	}
+	public BaseLight getActiveLight() {
+		return activeLight;
+	}
 }

@@ -2,9 +2,10 @@ package com.snakybo.engine.core;
 
 import java.io.Serializable;
 
+/** @author Kevin Krol */
 public class Vector3f implements Serializable {
 	private static final long serialVersionUID = 3821982106955994484L;
-
+	
 	/** A vector with the values of 0, 1, 0 */
 	public static final Vector3f UP = new Vector3f(0, 1, 0);
 	
@@ -474,7 +475,7 @@ public class Vector3f implements Serializable {
 	public String toString() {
 		return "(" + x + " " + y + " " + z + ")";
 	}
-
+	
 	// Setters //
 	
 	/** Set the values of the vector

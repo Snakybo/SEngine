@@ -91,8 +91,7 @@ public class Camera extends Component {
 				getTransform().getTransformedRotation().conjugate().toRotationMatrix();
 		Vector3f cameraPosition = getTransform().getTransformedPosition().scale(-1);
 		
-		Matrix4f cameraTranslation =
-				new Matrix4f().initPosition(cameraPosition);
+		Matrix4f cameraTranslation = new Matrix4f().initPosition(cameraPosition);
 		
 		return projection.scale(cameraRotation.scale(cameraTranslation));
 	}

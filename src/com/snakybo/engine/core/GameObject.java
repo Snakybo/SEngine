@@ -7,7 +7,7 @@ import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Shader;
 
 /** @author Kevin Krol
- *  @since Jan 31, 2014 */
+ * @since Jan 31, 2014 */
 public class GameObject {
 	private ArrayList<GameObject> children;
 	private ArrayList<Component> components;

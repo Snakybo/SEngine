@@ -7,7 +7,7 @@ import com.snakybo.engine.core.Matrix4f;
 import com.snakybo.engine.core.Transform;
 
 /** @author Kevin Krol
- *  @since Feb 12, 2014 */
+ * @since Feb 12, 2014 */
 public class ForwardSpot extends Shader {
 	private static final ForwardSpot instance = new ForwardSpot();
 	
@@ -15,7 +15,7 @@ public class ForwardSpot extends Shader {
 		addVertexShaderFromFile("forward/spot.vertex.glsl");
 		addFragmentShaderFromFile("forward/spot.fragment.glsl");
 		
-		setAttribLocation("position" , 0);
+		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);
 		setAttribLocation("normal", 2);
 		
@@ -56,7 +56,7 @@ public class ForwardSpot extends Shader {
 	}
 	
 	/** Set an base light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param baseLight The base light */
 	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
@@ -64,7 +64,7 @@ public class ForwardSpot extends Shader {
 	}
 	
 	/** Set an point light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param pointLight The point light */
 	public void setUniformPointLight(String uniformName, PointLight pointLight) {
 		setUniformBaseLight(uniformName + ".base", pointLight);
@@ -76,7 +76,7 @@ public class ForwardSpot extends Shader {
 	}
 	
 	/** Set an spot light uniform
-	 * @param uniformName The name of the uniform 
+	 * @param uniformName The name of the uniform
 	 * @param spotLight The spot light */
 	public void setUniformSpotLight(String uniformName, SpotLight spotLight) {
 		setUniformPointLight(uniformName + ".pointLight", spotLight);
@@ -85,5 +85,7 @@ public class ForwardSpot extends Shader {
 	}
 	
 	/** @return The instance of this shader */
-	public static ForwardSpot getInstance() { return instance; }
+	public static ForwardSpot getInstance() {
+		return instance;
+	}
 }

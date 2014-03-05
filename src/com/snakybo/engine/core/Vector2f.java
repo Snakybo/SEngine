@@ -2,8 +2,7 @@ package com.snakybo.engine.core;
 
 import java.io.Serializable;
 
-/** @author Kevin Krol
- * @since Feb 28, 2014 */
+/** @author Kevin Krol */
 public class Vector2f implements Serializable {
 	private static final long serialVersionUID = 4754519659037348148L;
 	
