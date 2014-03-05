@@ -35,10 +35,8 @@ import com.snakybo.engine.core.Util;
 import com.snakybo.engine.core.Vector3f;
 
 public class Shader {
-	private Renderer renderer;
-	
-	private int program;
 	private HashMap<String, Integer> uniforms;
+	private int program;
 	
 	public Shader() {
 		program = glCreateProgram();
@@ -50,10 +48,12 @@ public class Shader {
 		}
 	}
 	
+	/** Bind the shader */
 	public void bind() {
 		glUseProgram(program);
 	}
 	
+	/** Compile the shader */
 	public void compileShader() {
 		glLinkProgram(program);
 		
@@ -70,33 +70,74 @@ public class Shader {
 		}
 	}
 	
-	public void addUniform(String uniform) {
-		int uniformLocation = glGetUniformLocation(program, uniform);
+	
+	/** Add an uniform to the shader
+	 * @param name The name of the uniform */
+	public void addUniform(String name) {
+		int uniform = glGetUniformLocation(program, name);
 		
-		if(uniformLocation == 0xFFFFFFFF) {
-			System.err.println("Error: Could not find uniform: " + uniform);
+		if(uniform == 0xFFFFFFFF) {
+			System.err.println("Error: Could not find uniform: " + name);
 			new Exception().printStackTrace();
 			System.exit(1);
 		}
 		
-		uniforms.put(uniform, uniformLocation);
+		uniforms.put(name, uniform);
 	}
 	
-	public void updateUniforms(Transform transform, Material material) { }
+	/** Update all the uniforms of the shader
+	 * @param transform The transformation of the object
+	 * @param material The material of the object
+	 * @param renderer The renderer */
+	public void updateUniforms(Transform transform, Material material, Renderer renderer) { }
 	
+	/** Add a vertex shader to the shader
+	 * @param text The content of the shader */
 	public void addVertexShader(String text) { addProgram(text, GL_VERTEX_SHADER); }
+	
+	/** Add a geometry shader to the shader
+	 * @param text The content of the shader */
 	public void addGeometryShader(String text) { addProgram(text, GL_GEOMETRY_SHADER); }
+	
+	/** Add a fragment shader to the shader
+	 * @param text The content of the shader */
 	public void addFragmentShader(String text) { addProgram(text, GL_FRAGMENT_SHADER); }
 	
-	public void addVertexShaderFromFile(String text) { addProgram(loadShader(text), GL_VERTEX_SHADER); }
-	public void addGeometryShaderFromFile(String text) { addProgram(loadShader(text), GL_GEOMETRY_SHADER); }
-	public void addFragmentShaderFromFile(String text) { addProgram(loadShader(text), GL_FRAGMENT_SHADER); }
+	/** Load a vertex shader from a file and add it to the shader
+	 * @param name The name of the shader file */
+	public void addVertexShaderFromFile(String name) { addProgram(loadShader(name), GL_VERTEX_SHADER); }
 	
+	/** Load a geometry shader from a file and add it to the shader
+	 * @param name The name of the shader file */
+	public void addGeometryShaderFromFile(String name) { addProgram(loadShader(name), GL_GEOMETRY_SHADER); }
+	
+	/** Load a fragment shader from a file and add it to the shader
+	 * @param name The name of the shader file */
+	public void addFragmentShaderFromFile(String name) { addProgram(loadShader(name), GL_FRAGMENT_SHADER); }
+	
+	/** Set an integer uniform
+	 * @param uniformName The name of the uniform
+	 * @param value The value of the uniform */
 	public void setUniformi(String uniformName, int value) { glUniform1i(uniforms.get(uniformName), value); }
+	
+	/** Set an float uniform
+	 * @param uniformName The name of the uniform
+	 * @param value The value of the uniform */
 	public void setUniformf(String uniformName, float value) { glUniform1f(uniforms.get(uniformName), value); }
+	
+	/** Set an vector uniform
+	 * @param uniformName The name of the uniform
+	 * @param value The value of the uniform */
 	public void setUniform(String uniformName, Vector3f value) { glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ()); }
+	
+	/** Set an matrix uniform
+	 * @param uniformName The name of the uniform
+	 * @param value The value of the uniform */
 	public void setUniform(String uniformName, Matrix4f value) { glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value)); }
 	
+	/** Add a program to the shader
+	 * @param text The content of the program
+	 * @param type The type of program */
 	private void addProgram(String text, int type) {
 		int shader = glCreateShader(type);
 		
@@ -116,15 +157,16 @@ public class Shader {
 		glAttachShader(program, shader);
 	}
 	
+	/** Set the attribute location
+	 * @param attribute The attribute
+	 * @param location The location */
 	public void setAttribLocation(String attribute, int location) {
 		glBindAttribLocation(program, location, attribute);
 	}
 	
-	public void setRenderer(Renderer renderer) { this.renderer = renderer; }
-	
-	public Renderer getRenderer() { return renderer; }
-	
-	/** Load a shader file */
+	/** Load a shader file
+	 * @param fileName The name of the shader file
+	 * @return The content of the file */
 	private static String loadShader(String fileName) {
 		StringBuilder shaderSource = new StringBuilder();
 		BufferedReader shaderReader = null;
@@ -133,9 +175,8 @@ public class Shader {
 			shaderReader = new BufferedReader(new FileReader("./res/shaders/" + fileName));
 			String line;
 			
-			while((line = shaderReader.readLine()) != null) {
+			while((line = shaderReader.readLine()) != null)
 				shaderSource.append(line).append("\n");
-			}
 			
 			shaderReader.close();
 		} catch(Exception e) {

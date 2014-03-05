@@ -9,10 +9,8 @@ public class ForwardAmbient extends Shader {
 	private static final ForwardAmbient instance = new ForwardAmbient();
 	
 	private ForwardAmbient() {
-		super();
-		
-		addVertexShaderFromFile("forward-ambient-vertex.glsl");
-		addFragmentShaderFromFile("forward-ambient-fragment.glsl");
+		addVertexShaderFromFile("forward/ambient.vertex.glsl");
+		addFragmentShaderFromFile("forward/ambient.fragment.glsl");
 		
 		setAttribLocation("position" , 0);
 		setAttribLocation("texCoord", 1);
@@ -23,16 +21,17 @@ public class ForwardAmbient extends Shader {
 		addUniform("ambientIntensity");
 	}
 	
-	/** Update uniforms */
-	public void updateUniforms(Transform transform, Material material) {
+	/** @see #updateUniforms(Transform, Material, Renderer) */
+	public void updateUniforms(Transform transform, Material material, Renderer renderer) {
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderer().getCamera().getProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = renderer.getCamera().getProjection().scale(worldMatrix);
 		
-		material.getTexture().bind();
+		material.getTexture("diffuse").bind();
 		
 		setUniform("MVP", projectedMatrix);
-		setUniform("ambientIntensity", getRenderer().getAmbientLight());
+		setUniform("ambientIntensity", renderer.getAmbientLight());
 	}
 	
+	/** @return The instance of this shader */
 	public static ForwardAmbient getInstance() { return instance; }
 }

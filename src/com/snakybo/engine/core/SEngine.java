@@ -3,7 +3,7 @@ package com.snakybo.engine.core;
 import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Window;
 
-public class Engine {
+public class SEngine {
 	private boolean isRunning;
 	
 	private Renderer renderer;
@@ -13,7 +13,7 @@ public class Engine {
 	
 	/** Initialize the engine
 	 * @param game Your main game class that extends {@link Game} */
-	public Engine(Game game) {
+	public SEngine(Game game) {
 		this.game = game;
 		this.isRunning = false;
 	}
@@ -30,7 +30,7 @@ public class Engine {
 	
 	/** Create a window
 	 * @param width The width of the window
-	 * @param height The height of the window 
+	 * @param height The height of the window
 	 * @param title The title of the window
 	 * @param frameRate The framerate of the window */
 	public void createWindow(int width, int height, String title, double frameRate) {
@@ -41,7 +41,7 @@ public class Engine {
 		renderer = new Renderer();
 	}
 	
-	/** Start the engine */
+	/** Start the engine, does nothing if the engine is already started */
 	public void start() {
 		if(isRunning)
 			return;
@@ -88,7 +88,7 @@ public class Engine {
 				
 				if(Window.isCloseRequested())
 					stop();
-
+				
 				game.input((float)frameTime);
 				Input.update();
 				
@@ -102,13 +102,13 @@ public class Engine {
 			}
 			
 			if(render) {
-				renderer.render(game.getRoot());
+				game.render(renderer);
 				Window.render();
 				frames++;
 			} else {
 				try {
 					Thread.sleep(1);
-				} catch (InterruptedException e) {
+				} catch(InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

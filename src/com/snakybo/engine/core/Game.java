@@ -1,5 +1,7 @@
 package com.snakybo.engine.core;
 
+import com.snakybo.engine.renderer.Renderer;
+
 public abstract class Game {
 	private GameObject root;
 	
@@ -18,8 +20,20 @@ public abstract class Game {
 		getRoot().update(delta);
 	}
 	
+	/** Render the game
+	 * @param renderer The rendering engine */
+	public void render(Renderer renderer) {
+		renderer.render(getRoot());
+	}
+	
+	/** Add a game object to the game
+	 * @param object The game object to add to the game */
+	public void addObject(GameObject object) {
+		getRoot().addChild(object);
+	}
+	
 	/** @return The root game object */
-	public GameObject getRoot() {
+	private GameObject getRoot() {
 		if(root == null)
 			root = new GameObject();
 		

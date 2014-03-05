@@ -67,9 +67,8 @@ public class Renderer {
 		object.addToRenderer(this);
 		
 		Shader forwardAmbient = ForwardAmbient.getInstance();
-		forwardAmbient.setRenderer(this);
 		
-		object.render(forwardAmbient);
+		object.render(forwardAmbient, this);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
@@ -79,8 +78,7 @@ public class Renderer {
 		for(BaseLight light : lights) {
 			activeLight = light;
 			
-			light.getShader().setRenderer(this);
-			object.render(light.getShader());
+			object.render(light.getShader(), this);
 		}
 		
 		glDepthFunc(GL_LESS);
@@ -88,16 +86,24 @@ public class Renderer {
 		glDisable(GL_BLEND);
 	}
 	
+	/** Add a light to the renderer
+	 * @param light The light */
 	public void addLight(BaseLight light) {
 		lights.add(light);
 	}
 	
+	/** Add a camera to the renderer
+	 * @param camera The camera */
 	public void addCamera(Camera camera) {
 		this.camera = camera;
 	}
 	
+	/** @return The camera */
 	public Camera getCamera() { return camera; }
 	
+	/** @return The ambient light in the scene */
 	public Vector3f getAmbientLight() { return ambientLight; }
+	
+	/** @return The currently active light */
 	public BaseLight getActiveLight() {	return activeLight;	}
 }

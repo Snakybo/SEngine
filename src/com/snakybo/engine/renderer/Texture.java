@@ -12,25 +12,35 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
 
 public class Texture {
-	private int id;
+	public static final Texture DEFAULT = new Texture("default texture.png"); 
 	
+	private int textureId;
+	
+	/** Create a new texture and load it from a file
+	 * @param fileName The name of the texture file */
 	public Texture(String fileName) {
 		this(loadTexture(fileName));
 	}
 	
+	/** Create a new texture based of an existing one
+	 * @param id The Id of the texture */
 	public Texture(int id) {
-		this.id = id;
+		this.textureId = id;
 	}
 	
+	/** Bind the texture */
 	public void bind() {
-		glBindTexture(GL_TEXTURE_2D, id);
+		glBindTexture(GL_TEXTURE_2D, textureId);
 	}
 	
-	public int getID() {
-		return id;
+	/** @return The ID of the texture */
+	public int getTextureId() {
+		return textureId;
 	}
 	
-	/** Load a texture */
+	/** Load a texture file
+	 * @param fileName The name of the texture file 
+	 * @return The ID of the texture */
 	private static int loadTexture(String fileName) {
 		BufferedImage texture = null;
 		

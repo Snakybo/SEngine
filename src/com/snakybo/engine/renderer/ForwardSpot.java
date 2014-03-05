@@ -12,10 +12,8 @@ public class ForwardSpot extends Shader {
 	private static final ForwardSpot instance = new ForwardSpot();
 	
 	private ForwardSpot() {
-		super();
-		
-		addVertexShaderFromFile("forward-spot-vertex.glsl");
-		addFragmentShaderFromFile("forward-spot-fragment.glsl");
+		addVertexShaderFromFile("forward/spot.vertex.glsl");
+		addFragmentShaderFromFile("forward/spot.fragment.glsl");
 		
 		setAttribLocation("position" , 0);
 		setAttribLocation("texCoord", 1);
@@ -27,7 +25,7 @@ public class ForwardSpot extends Shader {
 		addUniform("MVP");
 		
 		addUniform("specularIntensity");
-		addUniform("specularExponent");
+		addUniform("specularPower");
 		addUniform("eyePos");
 		
 		addUniform("spotLight.pointLight.base.color");
@@ -41,27 +39,33 @@ public class ForwardSpot extends Shader {
 		addUniform("spotLight.cutoff");
 	}
 	
-	/** Update uniforms */
-	public void updateUniforms(Transform transform, Material material) {
+	/** @see #updateUniforms(Transform, Material, Renderer) */
+	public void updateUniforms(Transform transform, Material material, Renderer renderer) {
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderer().getCamera().getProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = renderer.getCamera().getProjection().scale(worldMatrix);
 		
-		material.getTexture().bind();
+		material.getTexture("diffuse").bind();
 		
 		setUniform("model", worldMatrix);
 		setUniform("MVP", projectedMatrix);
 		
-		setUniformf("specularIntensity", material.getSpecularIntensity());
-		setUniformf("specularExponent", material.getSpecularExponent());
-		setUniform("eyePos", getRenderer().getCamera().getTransform().getTransformedPosition());
-		setUniformSpotLight("spotLight", (SpotLight)getRenderer().getActiveLight());
+		setUniformf("specularIntensity", material.getFloat("specularIntensity"));
+		setUniformf("specularPower", material.getFloat("specularPower"));
+		setUniform("eyePos", renderer.getCamera().getTransform().getTransformedPosition());
+		setUniformSpotLight("spotLight", (SpotLight)renderer.getActiveLight());
 	}
 	
+	/** Set an base light uniform
+	 * @param uniformName The name of the uniform 
+	 * @param baseLight The base light */
 	public void setUniformBaseLight(String uniformName, BaseLight baseLight) {
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 	
+	/** Set an point light uniform
+	 * @param uniformName The name of the uniform 
+	 * @param pointLight The point light */
 	public void setUniformPointLight(String uniformName, PointLight pointLight) {
 		setUniformBaseLight(uniformName + ".base", pointLight);
 		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
@@ -71,11 +75,15 @@ public class ForwardSpot extends Shader {
 		setUniformf(uniformName + ".range", pointLight.getRange());
 	}
 	
+	/** Set an spot light uniform
+	 * @param uniformName The name of the uniform 
+	 * @param spotLight The spot light */
 	public void setUniformSpotLight(String uniformName, SpotLight spotLight) {
 		setUniformPointLight(uniformName + ".pointLight", spotLight);
 		setUniform(uniformName + ".direction", spotLight.getDirection());
 		setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
 	}
 	
+	/** @return The instance of this shader */
 	public static ForwardSpot getInstance() { return instance; }
 }

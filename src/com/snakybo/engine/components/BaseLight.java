@@ -4,6 +4,7 @@ import com.snakybo.engine.core.Vector3f;
 import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Shader;
 
+/** @author Kevin Krol */
 public class BaseLight extends Component {
 	private Vector3f color;
 	private float intensity;
@@ -20,11 +21,27 @@ public class BaseLight extends Component {
 		renderer.addLight(this);
 	}
 	
-	public void setShader(Shader shader) { this.shader = shader; }
-	public void setColor(Vector3f color) { this.color = color; }
-	public void setIntensity(float intensity) {	this.intensity = intensity;	}
+	public void setShader(Shader shader) {
+		this.shader = shader;
+	}
 	
-	public Shader getShader() { return shader; }
-	public Vector3f getColor() { return color; }
-	public float getIntensity() { return intensity; }
+	public void setColor(Vector3f color) {
+		this.color = color;
+	}
+	
+	public void setIntensity(float intensity) {
+		this.intensity = intensity;
+	}
+	
+	public Shader getShader() {
+		return shader;
+	}
+	
+	public Vector3f getColor() {
+		return color;
+	}
+	
+	public float getIntensity() {
+		return intensity;
+	}
 }

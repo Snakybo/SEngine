@@ -63,14 +63,16 @@ public class GameObject {
 	
 	/** Render the game object
 	 * @param shader The shader the game object has to use */
-	public void render(Shader shader) {
+	public void render(Shader shader, Renderer renderer) {
 		for(Component component : components)
-			component.render(shader);
+			component.render(shader, renderer);
 		
 		for(GameObject child : children)
-			child.render(shader);
+			child.render(shader, renderer);
 	}
 	
+	/** Add the game object to the rendering engine
+	 * @param renderer The active rendering engine */
 	public void addToRenderer(Renderer renderer) {
 		for(Component component : components)
 			component.addToRenderer(renderer);

@@ -8,6 +8,7 @@ import com.snakybo.engine.core.Vector3f;
 import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Window;
 
+/** @author Kevin Krol */
 public class Camera extends Component {
 	private Matrix4f projection;
 	
@@ -28,7 +29,8 @@ public class Camera extends Component {
 		renderer.addCamera(this);
 	}
 	
-	/** Handle Input */
+	/** Handle Input camera input
+	 * @param delta The delta time */
 	@Override
 	public void input(float delta) {
 		float sensitivity = 0.5f;
@@ -45,15 +47,15 @@ public class Camera extends Component {
 			}
 		}
 		
-		if(Input.getKey(KeyCode.KEY_W)) {
-			move(getTransform().getRotation().forward(), moveAmount);
-		} else if(Input.getKey(KeyCode.KEY_S)) {
-			move(getTransform().getRotation().forward(), -moveAmount);
+		if(Input.getKey(KeyCode.W)) {
+			move(getTransform().getRotation().front(), moveAmount);
+		} else if(Input.getKey(KeyCode.S)) {
+			move(getTransform().getRotation().front(), -moveAmount);
 		}
 		
-		if(Input.getKey(KeyCode.KEY_A)) {
+		if(Input.getKey(KeyCode.A)) {
 			move(getTransform().getRotation().left(), moveAmount);
-		} else if(Input.getKey(KeyCode.KEY_D)) {
+		} else if(Input.getKey(KeyCode.D)) {
 			move(getTransform().getRotation().right(), moveAmount);
 		}
 		
@@ -64,11 +66,13 @@ public class Camera extends Component {
 			boolean rotX = deltaPos.getY() != 0;
 			
 			if(rotY)
-				getTransform().rotate(Vector3f.UP, (float)Math.toRadians(deltaPos.getX() * sensitivity));
+				getTransform().rotate(Vector3f.UP,
+						(float)Math.toRadians(deltaPos.getX() * sensitivity));
 			
 			if(rotX)
-				getTransform().rotate(getTransform().getRotation().right(), (float)Math.toRadians(-deltaPos.getY() * sensitivity));
-				
+				getTransform().rotate(getTransform().getRotation().right(),
+						(float)Math.toRadians(-deltaPos.getY() * sensitivity));
+			
 			if(rotY || rotX)
 				Input.setMousePosition(new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2));
 		}
@@ -78,16 +82,18 @@ public class Camera extends Component {
 	 * @param direction The direction to move the camera in
 	 * @param amount The amount of units to move */
 	public void move(Vector3f direction, float amount) {
-		getTransform().setPosition(getTransform().getPosition().add(direction.mul(amount)));
+		getTransform().setPosition(getTransform().getPosition().add(direction.scale(amount)));
 	}
 	
 	/** @return The projection matrix */
 	public Matrix4f getProjection() {
-		Matrix4f cameraRotation = getTransform().getTransformedRotation().conjugate().toRotationMatrix();
-		Vector3f cameraPosition = getTransform().getTransformedPosition().mul(-1);
+		Matrix4f cameraRotation =
+				getTransform().getTransformedRotation().conjugate().toRotationMatrix();
+		Vector3f cameraPosition = getTransform().getTransformedPosition().scale(-1);
 		
-		Matrix4f cameraTranslation = new Matrix4f().initPosition(cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ());
+		Matrix4f cameraTranslation =
+				new Matrix4f().initPosition(cameraPosition);
 		
-		return projection.mul(cameraRotation.mul(cameraTranslation));
+		return projection.scale(cameraRotation.scale(cameraTranslation));
 	}
 }

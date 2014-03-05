@@ -18,7 +18,7 @@ uniform vec3 eyePos;
 uniform sampler2D diffuse;
 
 uniform float specularIntensity;
-uniform float specularExponent;
+uniform float specularPower;
 
 uniform DirectionalLight directionalLight;
 
@@ -35,7 +35,7 @@ vec4 calcLight(BaseLight base, vec3 direction, vec3 normal) {
         vec3 reflectDirection = normalize(reflect(direction, normal));
         
         float specularFactor = dot(directionToEye, reflectDirection);
-        specularFactor = pow(specularFactor, specularExponent);
+        specularFactor = pow(specularFactor, specularPower);
         
         if(specularFactor > 0) {
             specularColor = vec4(base.color, 1.0) * specularIntensity * specularFactor;

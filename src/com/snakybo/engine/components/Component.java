@@ -23,7 +23,7 @@ public abstract class Component {
 	/** Render the component
 	 * @param transform The transformation of the game object
 	 * @param shader The shader the game object is using */
-	public void render(Shader shader) { }
+	public void render(Shader shader, Renderer renderer) { }
 	
 	public void addToRenderer(Renderer renderer) { }
 	

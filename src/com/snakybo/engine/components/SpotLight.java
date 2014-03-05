@@ -3,6 +3,7 @@ package com.snakybo.engine.components;
 import com.snakybo.engine.core.Vector3f;
 import com.snakybo.engine.renderer.ForwardSpot;
 
+/** @author Kevin Krol */
 public class SpotLight extends PointLight {
 	private float cutOff;
 	
@@ -13,9 +14,16 @@ public class SpotLight extends PointLight {
 		
 		setShader(ForwardSpot.getInstance());
 	}
-
-	public void setCutoff(float cutoff) { this.cutOff = cutoff; }
-
-	public Vector3f getDirection() { return getTransform().getTransformedRotation().forward(); }
-	public float getCutoff() { return cutOff; }
+	
+	public void setCutoff(float cutoff) {
+		this.cutOff = cutoff;
+	}
+	
+	public Vector3f getDirection() {
+		return getTransform().getTransformedRotation().front();
+	}
+	
+	public float getCutoff() {
+		return cutOff;
+	}
 }
