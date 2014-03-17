@@ -5,22 +5,7 @@ import java.io.Serializable;
 /** @author Kevin Krol */
 public class Vector3f implements Serializable {
 	private static final long serialVersionUID = 3821982106955994484L;
-	
-	/** A vector with the values of 0, 1, 0 */
-	public static final Vector3f UP = new Vector3f(0, 1, 0);
-	
-	/** A vector with the values of 1, 1, 1 */
-	public static final Vector3f ONE = new Vector3f(1, 1, 1);
-	
-	/** A vector with the values of 0, 0, 0 */
-	public static final Vector3f ZERO = new Vector3f(0, 0, 0);
-	
-	/** A vector with the values of 1, 0, 0 */
-	public static final Vector3f RIGHT = new Vector3f(1, 0, 0);
-	
-	/** A vector with the values of 0, 0, 1 */
-	public static final Vector3f FORWARD = new Vector3f(0, 0, 1);
-	
+		
 	public float x;
 	public float y;
 	public float z;

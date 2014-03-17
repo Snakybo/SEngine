@@ -66,7 +66,7 @@ public class Camera extends Component {
 			boolean rotX = deltaPos.getY() != 0;
 			
 			if(rotY)
-				getTransform().rotate(Vector3f.UP,
+				getTransform().rotate(new Vector3f(0, 1, 0),
 						(float)Math.toRadians(deltaPos.getX() * sensitivity));
 			
 			if(rotX)

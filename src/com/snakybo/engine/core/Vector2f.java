@@ -6,18 +6,6 @@ import java.io.Serializable;
 public class Vector2f implements Serializable {
 	private static final long serialVersionUID = 4754519659037348148L;
 	
-	/** A vector with the values of 0, 1 */
-	public static final Vector2f UP = new Vector2f(0, 1);
-	
-	/** A vector with the values of 1, 1 */
-	public static final Vector2f ONE = new Vector2f(1, 1);
-	
-	/** A vector with the values of 0, 0 */
-	public static final Vector2f ZERO = new Vector2f(0, 0);
-	
-	/** A vector with the values of 1, 0 */
-	public static final Vector2f RIGHT = new Vector2f(1, 0);
-	
 	public float x;
 	public float y;
 	

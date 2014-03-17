@@ -6,9 +6,6 @@ import java.io.Serializable;
 public class Quaternion implements Serializable {
 	private static final long serialVersionUID = 1006541201686498617L;
 	
-	/** A quaternion with the values of 0, 0, 0, 1 */
-	public static final Quaternion IDENTITY = new Quaternion(0, 0, 0, 1);
-	
 	public float x;
 	public float y;
 	public float z;

@@ -15,14 +15,14 @@ public class Vertex {
 	/** Create a new vertex
 	 * @param position The position of the vertex */
 	public Vertex(Vector3f pos) {
-		this(pos, Vector2f.ZERO);
+		this(pos, new Vector2f());
 	}
 	
 	/** Create a new vertex
 	 * @param position The position of the vertex
 	 * @param texCoord The texture coordinates of the vertex */
 	public Vertex(Vector3f pos, Vector2f texCoord) {
-		this(pos, texCoord, Vector3f.ZERO);
+		this(pos, texCoord, new Vector3f());
 	}
 	
 	/** Create a new vertex

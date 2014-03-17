@@ -57,7 +57,7 @@ public class Material {
 		if(result != null)
 			return result;
 		
-		return Vector3f.ZERO;
+		return new Vector3f();
 	}
 	
 	/** @return The float with the given name

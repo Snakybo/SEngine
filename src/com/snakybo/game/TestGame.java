@@ -23,28 +23,36 @@ public class TestGame extends Game {
 	private Mesh mesh2;
 	private Material material;
 	
-	private GameObject testMesh1;
-	
 	public void init() {
-		float fieldDepth = 10.0f;
-		float fieldWidth = 10.0f;
+			addBase();
+		addLights();
+		addTestObjects();
+	}
+	
+	private void addBase() {
+		Vertex[] vertices =	new Vertex[] {
+			new Vertex(new Vector3f(-10.0f, 0.0f, -10.0f), new Vector2f(0, 0)),
+			new Vertex(new Vector3f(-10.0f, 0.0f, 10.0f * 3), new Vector2f(0, 1)),
+			new Vertex(new Vector3f(10.0f * 3, 0.0f, -10.0f), new Vector2f(1, 0)),
+			new Vertex(new Vector3f(10.0f * 3, 0.0f, 10.0f * 3), new Vector2f(1, 1))
+		};
 		
-		Vertex[] vertices =
-				new Vertex[] {
-						new Vertex(new Vector3f(-fieldWidth, 0.0f, -fieldDepth), Vector2f.ZERO),
-						new Vertex(new Vector3f(-fieldWidth, 0.0f, fieldDepth * 3), Vector2f.UP),
-						new Vertex(new Vector3f(fieldWidth * 3, 0.0f, -fieldDepth), Vector2f.RIGHT),
-						new Vertex(new Vector3f(fieldWidth * 3, 0.0f, fieldDepth * 3), Vector2f.ONE)};
+		int indices[] = {
+			0, 1, 2,
+			2, 1, 3
+		};
 		
-		int indices[] = {0, 1, 2, 2, 1, 3};
+		Vertex[] vertices2 = new Vertex[] {
+			new Vertex(new Vector3f(-2, 0.0f, -2), new Vector2f(0, 0)),
+			new Vertex(new Vector3f(-2, 0.0f, 2), new Vector2f(0, 1)),
+			new Vertex(new Vector3f(2, 0.0f, -2), new Vector2f(1, 0)),
+			new Vertex(new Vector3f(2, 0.0f, 2), new Vector2f(1, 1))
+		};
 		
-		Vertex[] vertices2 =
-				new Vertex[] {new Vertex(new Vector3f(-2, 0.0f, -2), Vector2f.ZERO),
-						new Vertex(new Vector3f(-2, 0.0f, 2), Vector2f.UP),
-						new Vertex(new Vector3f(2, 0.0f, -2), Vector2f.RIGHT),
-						new Vertex(new Vector3f(2, 0.0f, 2), Vector2f.ONE)};
-		
-		int indices2[] = {0, 1, 2, 2, 1, 3};
+		int indices2[] = {
+			0, 1, 2,
+			2, 1, 3
+		};
 		
 		mesh = new Mesh(vertices, indices, true);
 		mesh2 = new Mesh(vertices2, indices2, true);
@@ -53,50 +61,45 @@ public class TestGame extends Game {
 		material.addTexture("diffuse", new Texture("test.png"));
 		material.addFloat("specularIntensity", 1);
 		material.addFloat("specularPower", 8);
+	}
+	
+	private void addLights() {
+		GameObject directionalLight = new GameObject().addComponent(new DirectionalLight(new Vector3f(0, 0, 1), 0.4f));
+		GameObject pointLight = new GameObject().addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, new Vector3f(0, 0, 1)));
+		GameObject spotLight = new GameObject().addComponent(new SpotLight(new Vector3f(0, 1, 1), 0.4f, new Vector3f(0, 0, 0.1f), 0.7f));
 		
-		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
+		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float)Math.toRadians(-45)));
 		
-		// Plane
-		GameObject plane = new GameObject();
-		plane.addComponent(meshRenderer);
-		plane.getTransform().setPosition(new Vector3f(0, -1, 5));
-		
-		// Directional light
-		GameObject directionalLight = new GameObject();
-		directionalLight.addComponent(new DirectionalLight(new Vector3f(0, 0, 1), 0.4f));
-		directionalLight.getTransform().setRotation(
-				new Quaternion(new Vector3f(1, 0, 0), (float)Math.toRadians(-45)));
-		
-		// Point light
-		GameObject pointLight = new GameObject();
-		pointLight.addComponent(new PointLight(new Vector3f(0, 1, 0), 0.4f, new Vector3f(0, 0, 1)));
-		
-		// Spot light
-		GameObject spotLight = new GameObject();
-		spotLight.addComponent(new SpotLight(new Vector3f(0, 1, 1), 0.4f, new Vector3f(0, 0, 0.1f),
-				0.7f));
 		spotLight.getTransform().setPosition(new Vector3f(5, 0, 5));
-		spotLight.getTransform().setRotation(
-				new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(90.0f)));
+		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(90.0f)));
 		
-		// Add game objects
-		addObject(plane);
 		addObject(directionalLight);
 		addObject(pointLight);
 		addObject(spotLight);
-		
-		testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
+	}
+	
+	private void addTestObjects() {
+		GameObject plane = new GameObject().addComponent(new MeshRenderer(mesh, material));
+
+		GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
 		GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
+		GameObject monkey3 = new GameObject().addComponent(new MeshRenderer(new Mesh("monkey.obj"), material));
+		
+		plane.getTransform().setPosition(new Vector3f(0, -1, 5));;
 		
 		testMesh1.getTransform().setPosition(new Vector3f(0, 2, 0));
 		testMesh1.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), 0.4f));
 		
 		testMesh2.getTransform().setPosition(new Vector3f(0, 0, 5));
 		
-		testMesh1.addChild(testMesh2);
-		testMesh2.addChild(new GameObject().addComponent(new Camera((float)Math.toRadians(70.0f),
-				(float)Window.getWidth() / (float)Window.getHeight(), 0.1f, 1000.0f)));
+		monkey3.getTransform().getPosition().set(5, 5, 5);
+		monkey3.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(-70.0f)));
 		
+		testMesh1.addChild(testMesh2);
+		testMesh2.addChild(new GameObject().addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.1f, 1000.0f)));
+	
+		addObject(plane);	
 		addObject(testMesh1);
+		addObject(monkey3);
 	}
 }
