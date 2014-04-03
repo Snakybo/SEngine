@@ -1,5 +1,9 @@
 package com.snakybo.engine.core;
 
+import com.snakybo.engine.math.Matrix4f;
+import com.snakybo.engine.math.Quaternion;
+import com.snakybo.engine.math.Vector3f;
+
 /** @author Kevin Krol */
 public class Transform {
 	private Transform parent;

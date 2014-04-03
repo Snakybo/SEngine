@@ -1,34 +1,31 @@
-package com.snakybo.engine.core;
+package com.snakybo.engine.math;
 
 import java.io.Serializable;
 
 /** @author Kevin Krol */
-public class Vector3f implements Serializable {
-	private static final long serialVersionUID = 3821982106955994484L;
-		
+public class Vector2f implements Serializable {
+	private static final long serialVersionUID = 4754519659037348148L;
+	
 	public float x;
 	public float y;
-	public float z;
 	
 	/** Create an empty vector */
-	public Vector3f() {
-		this(0, 0, 0);
+	public Vector2f() {
+		this(0, 0);
 	}
 	
 	/** Create a new vector based on another
 	 * @param other The vector to copy */
-	public Vector3f(Vector3f other) {
-		this(other.x, other.y, other.z);
+	public Vector2f(Vector2f other) {
+		this(other.x, other.y);
 	}
 	
 	/** Create a new vector
 	 * @param x The X value of the vector
-	 * @param y The Y value of the vector
-	 * @param z The Z value of the vector */
-	public Vector3f(float x, float y, float z) {
+	 * @param y The Y value of the vector */
+	public Vector2f(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
 	}
 	
 	// Geometrical operations //
@@ -36,73 +33,66 @@ public class Vector3f implements Serializable {
 	/** Measure the distance between this vector and the other vector
 	 * @param other The point we're measuring to
 	 * @return The distance to the other point */
-	public float distance(Vector3f other) {
-		return (float)(Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y)
-				+ (z - other.z) * (z - other.z)));
+	public float distance(Vector2f other) {
+		return (float)Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 	}
 	
 	/** Measure the squared distance between this vector and the other vector
 	 * @param other The point we're measuring to
 	 * @return The squared distance to the other point */
-	public float distance2(Vector3f other) {
-		return (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y) + (z - other.z)
-				* (z - other.z);
+	public float distance2(Vector2f other) {
+		return (x - other.x) * (x - other.x) + (y - other.y) * (y - other.y);
 	}
 	
 	/** Get the angle between the two vectors
 	 * @param other The vector we're measuring with
 	 * @return The angle between the vectors */
-	public float angle(Vector3f other) {
-		float dls = dot(other) / (length() * other.length());
-		
-		if(dls < -1.0f) {
-			dls = -1.0f;
-		} else if(dls > 1.0f) {
-			dls = 1.0f;
-		}
-		
-		return (float)Math.acos(dls);
+	public float angle(Vector2f other) {
+		return (float)(Math.atan2(other.y - y, other.x - x) / (Math.PI / 180));
 	}
 	
 	/** Dot this vector against another
 	 * @param other The vector to dot against
 	 * @return The dot product of the two vectors */
-	public float dot(Vector3f other) {
-		return x * other.x + y * other.y + z * other.z;
+	public float dot(Vector2f other) {
+		return (x * other.x) + (y * other.y);
 	}
 	
 	/** Check where the two vectors cross
 	 * @param other The vector to cross with
-	 * @return This vector */
-	public Vector3f cross(Vector3f other) {
-		float _x = y * other.z - z * other.y;
-		float _y = z * other.x - x * other.z;
-		float _z = x * other.y - y * other.x;
-		
-		set(_x, _y, _z);
-		
-		return this;
+	 * @return The cross product of the two vectors */
+	public float cross(Vector2f other) {
+		return (x * other.y) - (y * other.x);
 	}
 	
 	/** Rotate this vector by the given angle
 	 * @param angle The angle to rotate the vector by
 	 * @return This vector */
-	public Vector3f rotate(Vector3f axis, float angle) {
-		float sinAngle = (float)Math.sin(-angle);
-		float cosAngle = (float)Math.cos(-angle);
+	public Vector2f rotate(float angle) {
+		double radians = Math.toRadians(angle);
+		double cos = Math.cos(radians);
+		double sin = Math.sin(radians);
 		
-		return cross(axis.scale(sinAngle)).add(scale(cosAngle)).add(
-				axis.scale(dot(axis.scale(1 - cosAngle))));
+		x = (float)((x * cos) - (y * sin));
+		y = (float)((x * sin) + (y * cos));
+		
+		return this;
 	}
 	
-	/** Rotate this vector by the given quaternion
-	 * @param roatation The quaternion to rotate the vector by
+	/** Rotate this vector by 90 degrees in the specified direction
+	 * @param direction The direction to rotate in, where >= 0 is counter clockwise and < 0 is
+	 *        clockwise
 	 * @return This vector */
-	public Vector3f rotate(Quaternion rotation) {
-		Quaternion conjugate = rotation.conjugate();
-		Quaternion w = rotation.scale(this).mul(conjugate);
+	public Vector2f rotate90(int direction) {
+		float x = this.x;
 		
-		set(w.x, w.y, w.z);
+		if(direction >= 0) {
+			x = -y;
+			y = x;
+		} else {
+			this.x = y;
+			y = -x;
+		}
 		
 		return this;
 	}
@@ -111,42 +101,17 @@ public class Vector3f implements Serializable {
 	 * @param other The vector to interpolate with
 	 * @param lerpFactor The lerp factor
 	 * @return This vector */
-	public Vector3f lerp(Vector3f other, float lerpFactor) {
+	public Vector2f lerp(Vector2f other, float lerpFactor) {
 		return other.sub(this).scale(lerpFactor).add(this);
 	}
 	
-	/** Spherically interpolate between the two vectors
-	 * @param other The vector to interpolate with
-	 * @param slerpFactor The slerp factor
-	 * @return This vector */
-	public Vector3f slerp(Vector3f other, float slerpFactor) {
-		final float dot = dot(other);
-		
-		if(dot > 0.9995f || dot < -0.9995f)
-			return lerp(other, slerpFactor);
-		
-		final float theta0 = (float)Math.acos(dot);
-		final float theta = theta0 * slerpFactor;
-		
-		final float sT = (float)Math.sin(theta);
-		final float tX = other.x - x * dot;
-		final float tY = other.y - y * dot;
-		final float tZ = other.z - z * dot;
-		
-		final float l2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-		final float d1 = sT * ((l2 < 0.0001f) ? 1f : 1f / (float)Math.sqrt(12));
-		
-		return scale((float)Math.cos(theta)).add(new Vector3f(tX * d1, tY * d1, tZ * d1))
-				.normalize();
-	}
-	
 	/** @return Wheter or not the two vectors have the same direction */
-	public boolean hasSameDirection(Vector3f other) {
+	public boolean hasSameDirection(Vector2f other) {
 		return dot(other) > 0;
 	}
 	
 	/** @return Wheter or not the two vectors have the opposite direction */
-	public boolean hasOppositeDirection(Vector3f other) {
+	public boolean hasOppositeDirection(Vector2f other) {
 		return dot(other) < 0;
 	}
 	
@@ -154,23 +119,22 @@ public class Vector3f implements Serializable {
 	
 	/** @return The length of this vector */
 	public float length() {
-		return (float)Math.sqrt(x * x + y * y + z * z);
+		return (float)Math.sqrt(x * x + y * y);
 	}
 	
 	/** @return The squared length of this vector */
 	public float length2() {
-		return (x * x) + (y * y) + (z * z);
+		return (x * x) + (y * y);
 	}
 	
 	/** Normalize the vector
 	 * @return This vector */
-	public Vector3f normalize() {
+	public Vector2f normalize() {
 		final float length = length();
 		
 		if(length != 0) {
 			x /= length;
 			y /= length;
-			z /= length;
 		}
 		
 		return this;
@@ -179,7 +143,7 @@ public class Vector3f implements Serializable {
 	/** Limit this vector's length to the given value
 	 * @param limit The max length
 	 * @return This vector */
-	public Vector3f limit(float limit) {
+	public Vector2f limit(float limit) {
 		if(length2() > limit * limit) {
 			normalize();
 			scale(limit);
@@ -192,7 +156,7 @@ public class Vector3f implements Serializable {
 	 * @param min The min length of the vector
 	 * @param max The max length of the vector
 	 * @return This vector */
-	public Vector3f clamp(float min, float max) {
+	public Vector2f clamp(float min, float max) {
 		final float length = length2();
 		
 		if(length == 0)
@@ -208,72 +172,69 @@ public class Vector3f implements Serializable {
 	}
 	
 	/** @return A copy of this vector negated */
-	public Vector3f negate() {
-		return new Vector3f(-x, -y, -z);
+	public Vector2f negate() {
+		return new Vector2f(-x, -y);
 	}
 	
 	/** Negate this vector without creating a new copy
 	 * @return This vector */
-	public Vector3f negateSelf() {
+	public Vector2f negateLocal() {
 		x = -x;
 		y = -y;
-		z = -z;
 		
 		return this;
 	}
 	
 	/** Create a new vector based on the absolute values of this vector
 	 * @return The new vector */
-	public Vector3f abs() {
-		return new Vector3f(Math.abs(x), Math.abs(y), Math.abs(z));
+	public Vector2f abs() {
+		return new Vector2f(Math.abs(x), Math.abs(y));
 	}
 	
 	/** Get the absolute values of this vector without creating a new vector
 	 * @return This vector */
-	public Vector3f absSelf() {
+	public Vector2f absLocal() {
 		x = Math.abs(x);
 		y = Math.abs(y);
-		z = Math.abs(z);
 		
 		return this;
 	}
 	
 	/** @return The greatest value of the vector */
 	public float max() {
-		return Math.max(x, Math.max(y, z));
+		return Math.max(x, y);
 	}
 	
 	/** @return The smallest value of the vector */
 	public float min() {
-		return Math.min(x, Math.min(y, z));
+		return Math.min(x, y);
 	}
 	
 	/** @param other The vector to base the new vector's values on
 	 * @return A new vector based on the largest values from this vector and the other vector */
-	public Vector3f max(Vector3f other) {
-		return new Vector3f(Math.max(x, other.x), Math.max(y, other.y), Math.max(z, other.z));
+	public Vector2f max(Vector2f other) {
+		return new Vector2f(Math.max(x, other.x), Math.max(y, other.y));
 	}
 	
 	/** @param other The vector to base the new vector's values on
 	 * @return A new vector based on the smallest values from this vector and the other vector */
-	public Vector3f min(Vector3f other) {
-		return new Vector3f(Math.min(x, other.x), Math.min(y, other.y), Math.min(z, other.z));
+	public Vector2f min(Vector2f other) {
+		return new Vector2f(Math.min(x, other.x), Math.min(y, other.y));
 	}
 	
 	/** Create a new vector based on this one with the specified value added to it
 	 * @param value The value to adjust the vector by
 	 * @return A new vector */
-	public Vector3f add(float value) {
-		return new Vector3f(x + value, y + value, z + value);
+	public Vector2f add(float value) {
+		return new Vector2f(x + value, y + value);
 	}
 	
 	/** Adjust this vector by a given value
 	 * @param value The value to adjust the vector by
 	 * @return This vector */
-	public Vector3f addSelf(float value) {
+	public Vector2f addSelf(float value) {
 		x += value;
 		y += value;
-		z += value;
 		
 		return this;
 	}
@@ -281,17 +242,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one with the specified vector added to it
 	 * @param value The value to adjust the vector by
 	 * @return A new vector */
-	public Vector3f add(Vector3f other) {
-		return new Vector3f(x + other.x, y + other.y, z + other.z);
+	public Vector2f add(Vector2f other) {
+		return new Vector2f(x + other.x, y + other.y);
 	}
 	
 	/** Add a vector to this vector
 	 * @param other The vector to add
 	 * @return This vector */
-	public Vector3f addSelf(Vector3f other) {
+	public Vector2f addSelf(Vector2f other) {
 		x += other.x;
 		y += other.y;
-		z += other.z;
 		
 		return this;
 	}
@@ -299,17 +259,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one with the specified value substracted from it
 	 * @param value The value to adjust the vector by
 	 * @return A new vector */
-	public Vector3f sub(float value) {
-		return new Vector3f(x - value, y - value, z - value);
+	public Vector2f sub(float value) {
+		return new Vector2f(x - value, y - value);
 	}
 	
 	/** Adjust this vector by a given value
 	 * @param value The value to adjust the vector by
 	 * @return This vector */
-	public Vector3f subSelf(float value) {
+	public Vector2f subSelf(float value) {
 		x -= value;
 		y -= value;
-		z -= value;
 		
 		return this;
 	}
@@ -317,17 +276,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one with the specified vector substracted from it
 	 * @param value The value to adjust the vector by
 	 * @return A new vector */
-	public Vector3f sub(Vector3f other) {
-		return new Vector3f(x - other.x, y - other.y, z - other.z);
+	public Vector2f sub(Vector2f other) {
+		return new Vector2f(x - other.x, y - other.y);
 	}
 	
 	/** Adjust this vector by a given vector
 	 * @param other The vector to substract
 	 * @return This vector */
-	public Vector3f subSelf(Vector3f other) {
+	public Vector2f subSelf(Vector2f other) {
 		x -= other.x;
 		y -= other.y;
-		z -= other.z;
 		
 		return this;
 	}
@@ -335,17 +293,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one multiplied with the specified value
 	 * @param value The value to scale by
 	 * @return A new vector */
-	public Vector3f scale(float value) {
-		return new Vector3f(x * value, y * value, z * value);
+	public Vector2f scale(float value) {
+		return new Vector2f(x * value, y * value);
 	}
 	
 	/** Scale this vector by the given value
 	 * @param value The value to scale by
 	 * @return This vector */
-	public Vector3f scaleSelf(float value) {
+	public Vector2f scaleSelf(float value) {
 		x *= value;
 		y *= value;
-		z *= value;
 		
 		return this;
 	}
@@ -353,17 +310,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one multiplied with the specified vector
 	 * @param value The value to scale by
 	 * @return A new vector */
-	public Vector3f scale(Vector3f other) {
-		return new Vector3f(x * other.x, y * other.y, z * other.z);
+	public Vector2f scale(Vector2f other) {
+		return new Vector2f(x * other.x, y * other.y);
 	}
 	
 	/** Scale this vector with another vector
 	 * @param other The vector to multiply with
 	 * @return This vector */
-	public Vector3f scaleSelf(Vector3f other) {
+	public Vector2f scaleSelf(Vector2f other) {
 		x *= other.x;
 		y *= other.y;
-		z *= other.z;
 		
 		return this;
 	}
@@ -371,17 +327,16 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one divided by the specified value
 	 * @param value The value to divide with
 	 * @return A new vector */
-	public Vector3f div(float value) {
-		return new Vector3f(x / value, y / value, z / value);
+	public Vector2f div(float value) {
+		return new Vector2f(x / value, y / value);
 	}
 	
 	/** Divide this vector by the given value
 	 * @param value The value to divide with
 	 * @return This vector */
-	public Vector3f divSelf(float value) {
+	public Vector2f divSelf(float value) {
 		x /= value;
 		y /= value;
-		z /= value;
 		
 		return this;
 	}
@@ -389,37 +344,36 @@ public class Vector3f implements Serializable {
 	/** Create a new vector based on this one divided by the specified value
 	 * @param value The value to divide with
 	 * @return A new vector */
-	public Vector3f div(Vector3f other) {
-		return new Vector3f(x / other.x, y / other.y, z / other.z);
+	public Vector2f div(Vector2f other) {
+		return new Vector2f(x / other.x, y / other.y);
 	}
 	
 	/** Divide this vector by the given vector
 	 * @param other The vector to divide by
 	 * @return This vector */
-	public Vector3f divSelf(Vector3f other) {
+	public Vector2f divSelf(Vector2f other) {
 		x /= other.x;
 		y /= other.y;
-		z /= other.z;
 		
 		return this;
 	}
 	
 	/** @return Wheter or not the vector is zero */
 	public boolean isZero() {
-		return (x == 0) && (y == 0) && (z == 0);
+		return (x == 0) && (y == 0);
 	}
 	
 	/** @return Wheter or not the vector is one */
 	public boolean isOne() {
-		return (x == 1) && (y == 1) && (z == 1);
+		return (x == 1) && (y == 1);
 	}
 	
 	// General operations //
 	
 	/** Clone this vector
 	 * @return A copy of this vector */
-	public Vector3f clone() {
-		return new Vector3f(this);
+	public Vector2f clone() {
+		return new Vector2f(this);
 	}
 	
 	/** @see Object#equals(Object) */
@@ -431,14 +385,13 @@ public class Vector3f implements Serializable {
 		if(obj == this)
 			return true;
 		
-		if(!(obj instanceof Vector3f))
+		if(!(obj instanceof Vector2f))
 			return false;
 		
-		Vector3f object = (Vector3f)obj;
+		Vector2f object = (Vector2f)obj;
 		
 		return (Float.floatToIntBits(x) == Float.floatToIntBits(object.x))
-				&& (Float.floatToIntBits(y) == Float.floatToIntBits(object.y))
-				&& (Float.floatToIntBits(z) == Float.floatToIntBits(object.z));
+				&& (Float.floatToIntBits(y) == Float.floatToIntBits(object.y));
 	}
 	
 	/** @see Object#hashCode() */
@@ -450,7 +403,6 @@ public class Vector3f implements Serializable {
 		
 		result = prime * result + Float.floatToIntBits(x);
 		result = prime * result + Float.floatToIntBits(y);
-		result = prime * result + Float.floatToIntBits(z);
 		
 		return result;
 	}
@@ -458,7 +410,7 @@ public class Vector3f implements Serializable {
 	/** @see Object#toString() */
 	@Override
 	public String toString() {
-		return "(" + x + " " + y + " " + z + ")";
+		return "(" + x + " " + y + ")";
 	}
 	
 	// Setters //
@@ -466,12 +418,10 @@ public class Vector3f implements Serializable {
 	/** Set the values of the vector
 	 * @param x The new X value of the vector
 	 * @param y The new Y value of the vector
-	 * @param z The new Z value of the vector
 	 * @return This vector */
-	public Vector3f set(float x, float y, float z) {
+	public Vector2f set(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
 		
 		return this;
 	}
@@ -479,14 +429,14 @@ public class Vector3f implements Serializable {
 	/** Set the values of the vector using another vector
 	 * @param other The vector to copy the values of
 	 * @return This vector */
-	public Vector3f set(Vector3f other) {
-		return set(other.x, other.y, other.z);
+	public Vector2f set(Vector2f other) {
+		return set(other.x, other.y);
 	}
 	
 	/** Set the X value of the vector
 	 * @param x The new X value of the vector
 	 * @return This vector */
-	public Vector3f setX(float x) {
+	public Vector2f setX(float x) {
 		this.x = x;
 		
 		return this;
@@ -495,17 +445,8 @@ public class Vector3f implements Serializable {
 	/** Set the Y value of the vector
 	 * @param y The new Y value of the vector
 	 * @return This vector */
-	public Vector3f setY(float y) {
+	public Vector2f setY(float y) {
 		this.y = y;
-		
-		return this;
-	}
-	
-	/** Set the Z value of the vector
-	 * @param z The new Z value of the vector
-	 * @return This vector */
-	public Vector3f setZ(float z) {
-		this.z = z;
 		
 		return this;
 	}
@@ -513,38 +454,8 @@ public class Vector3f implements Serializable {
 	// Getters //
 	
 	/** @return A vector with the same direction as this vector */
-	public Vector3f getNormal() {
-		return new Vector3f(this).normalize();
-	}
-	
-	/** @return The X and Y values of this vector */
-	public Vector2f getXY() {
-		return new Vector2f(x, y);
-	}
-	
-	/** @return The Y and Z values of this vector */
-	public Vector2f getYZ() {
-		return new Vector2f(y, z);
-	}
-	
-	/** @return The Z and X values of this vector */
-	public Vector2f getZX() {
-		return new Vector2f(z, x);
-	}
-	
-	/** @return The Y and X values of this vector */
-	public Vector2f getYX() {
-		return new Vector2f(y, x);
-	}
-	
-	/** @return The Z and Y values of this vector */
-	public Vector2f getZY() {
-		return new Vector2f(z, y);
-	}
-	
-	/** @return The X and Z values of this vector */
-	public Vector2f getXZ() {
-		return new Vector2f(x, z);
+	public Vector2f getNormal() {
+		return new Vector2f(this).normalize();
 	}
 	
 	/** @return The X value of the vector */
@@ -555,10 +466,5 @@ public class Vector3f implements Serializable {
 	/** @return The Y value of the vector */
 	public float getY() {
 		return y;
-	}
-	
-	/** @return The Z value of the vector */
-	public float getZ() {
-		return z;
 	}
 }

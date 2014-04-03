@@ -6,7 +6,7 @@ import com.snakybo.engine.renderer.Renderer;
 public abstract class Game {
 	private GameObject root;
 	
-	/** Initialize the game */
+	/** Called when the game is first initialized */
 	public void init() {}
 	
 	/** Handle input for the game

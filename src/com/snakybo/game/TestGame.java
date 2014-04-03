@@ -1,15 +1,15 @@
 package com.snakybo.game;
 
 import com.snakybo.engine.components.Camera;
-import com.snakybo.engine.components.DirectionalLight;
 import com.snakybo.engine.components.MeshRenderer;
-import com.snakybo.engine.components.PointLight;
-import com.snakybo.engine.components.SpotLight;
+import com.snakybo.engine.components.light.DirectionalLight;
+import com.snakybo.engine.components.light.PointLight;
+import com.snakybo.engine.components.light.SpotLight;
 import com.snakybo.engine.core.Game;
 import com.snakybo.engine.core.GameObject;
-import com.snakybo.engine.core.Quaternion;
-import com.snakybo.engine.core.Vector2f;
-import com.snakybo.engine.core.Vector3f;
+import com.snakybo.engine.math.Quaternion;
+import com.snakybo.engine.math.Vector2f;
+import com.snakybo.engine.math.Vector3f;
 import com.snakybo.engine.renderer.Material;
 import com.snakybo.engine.renderer.Mesh;
 import com.snakybo.engine.renderer.Texture;
@@ -22,6 +22,7 @@ public class TestGame extends Game {
 	private Mesh mesh;
 	private Mesh mesh2;
 	private Material material;
+	private Material material2;
 	
 	public void init() {
 			addBase();
@@ -57,10 +58,15 @@ public class TestGame extends Game {
 		mesh = new Mesh(vertices, indices, true);
 		mesh2 = new Mesh(vertices2, indices2, true);
 		material = new Material();
+		material2 = new Material();
 		
 		material.addTexture("diffuse", new Texture("test.png"));
 		material.addFloat("specularIntensity", 1);
 		material.addFloat("specularPower", 8);
+		
+		material2.addTexture("diffuse", new Texture("bricks.jpg"));
+		material2.addFloat("specularIntensity", 1);
+		material2.addFloat("specularPower", 8);
 	}
 	
 	private void addLights() {
@@ -79,11 +85,11 @@ public class TestGame extends Game {
 	}
 	
 	private void addTestObjects() {
-		GameObject plane = new GameObject().addComponent(new MeshRenderer(mesh, material));
+		GameObject plane = new GameObject().addComponent(new MeshRenderer(mesh, material2));
 
-		GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
-		GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material));
-		GameObject monkey3 = new GameObject().addComponent(new MeshRenderer(new Mesh("monkey.obj"), material));
+		GameObject testMesh1 = new GameObject().addComponent(new MeshRenderer(mesh2, material2));
+		GameObject testMesh2 = new GameObject().addComponent(new MeshRenderer(mesh2, material2));
+		GameObject monkey3 = new GameObject().addComponent(new MeshRenderer(new Mesh("monkey.obj"), material2));
 		
 		plane.getTransform().setPosition(new Vector3f(0, -1, 5));;
 		
@@ -101,5 +107,7 @@ public class TestGame extends Game {
 		addObject(plane);	
 		addObject(testMesh1);
 		addObject(monkey3);
+		
+		addObject(new GameObject().addComponent(new MeshRenderer(new Mesh("monkey.obj"), material2)));
 	}
 }

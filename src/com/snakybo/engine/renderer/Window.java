@@ -6,7 +6,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import com.snakybo.engine.core.Vector2f;
+import com.snakybo.engine.math.Vector2f;
 
 /** @author Kevin Krol */
 public class Window {
@@ -56,7 +56,7 @@ public class Window {
 	}
 	
 	/** @return The center of the display */
-	public Vector2f getCenter() {
+	public static Vector2f getCenter() {
 		return new Vector2f(getWidth() / 2, getHeight() / 2);
 	}
 }

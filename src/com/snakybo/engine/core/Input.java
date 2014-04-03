@@ -3,6 +3,8 @@ package com.snakybo.engine.core;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.snakybo.engine.math.Vector2f;
+
 /** @author Kevin Krol */
 public class Input {
 	public static final int NUMKEYCODES = 256;

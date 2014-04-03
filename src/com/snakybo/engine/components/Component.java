@@ -10,27 +10,30 @@ import com.snakybo.engine.renderer.Shader;
 public abstract class Component {
 	private GameObject gameObject;
 	
-	/** Handle input for the component
-	 * @param transform The transformation of the game object
+	/** Use this method to handle input in your component
 	 * @param delta The delta time */
 	public void input(float delta) {}
 	
-	/** Update the component
-	 * @param transform The transformation of the game object
+	/** Use this method to update your component
 	 * @param delta The delta time */
 	public void update(float delta) {}
 	
-	/** Render the component
-	 * @param transform The transformation of the game object
-	 * @param shader The shader the game object is using */
+	/** Use this method to render your component
+	 * @param shader The shader the game object is using
+	 * @param renderer The rendering engine */
 	public void render(Shader shader, Renderer renderer) {}
 	
+	// IMPROVEME: Change this for something more generic
+	/** Add the component to the renderer */
 	public void addToRenderer(Renderer renderer) {}
 	
+	// IMPROVEME: Remove the ability to externally change the game object
+	/** Set the game object of the component */
 	public void setGameObject(GameObject gameObject) {
 		this.gameObject = gameObject;
 	}
 	
+	/** @return The transform of the game object */
 	public Transform getTransform() {
 		return gameObject.getTransform();
 	}

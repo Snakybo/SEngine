@@ -1,11 +1,13 @@
 package com.snakybo.engine.core;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
+import com.snakybo.engine.math.Matrix4f;
 import com.snakybo.engine.renderer.Vertex;
 
 /** @author Kevin Krol */
@@ -20,6 +22,12 @@ public class Util {
 	 * @param size The size of the buffer */
 	public static IntBuffer createIntBuffer(int size) {
 		return BufferUtils.createIntBuffer(size);
+	}
+	
+	/** @return A byte buffer with the specified size
+	 * @param size The size of the buffer */
+	public static ByteBuffer createByteBuffer(int size) {
+		return BufferUtils.createByteBuffer(size);
 	}
 	
 	/** Create a flipped buffer from integers

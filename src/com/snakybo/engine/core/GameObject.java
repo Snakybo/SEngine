@@ -14,6 +14,7 @@ public class GameObject {
 	
 	private Transform transform;
 	
+	/** Create a new game object */
 	public GameObject() {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();

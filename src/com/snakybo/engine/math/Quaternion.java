@@ -1,4 +1,4 @@
-package com.snakybo.engine.core;
+package com.snakybo.engine.math;
 
 import java.io.Serializable;
 

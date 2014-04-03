@@ -2,9 +2,9 @@ package com.snakybo.engine.components;
 
 import com.snakybo.engine.core.Input;
 import com.snakybo.engine.core.Input.KeyCode;
-import com.snakybo.engine.core.Matrix4f;
-import com.snakybo.engine.core.Vector2f;
-import com.snakybo.engine.core.Vector3f;
+import com.snakybo.engine.math.Matrix4f;
+import com.snakybo.engine.math.Vector2f;
+import com.snakybo.engine.math.Vector3f;
 import com.snakybo.engine.renderer.Renderer;
 import com.snakybo.engine.renderer.Window;
 
@@ -12,8 +12,7 @@ import com.snakybo.engine.renderer.Window;
 public class Camera extends Component {
 	private Matrix4f projection;
 	
-	private boolean mouseLocked = false;
-	private Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
+	private boolean mouseLocked;
 	
 	/** Create a new camera
 	 * @param fov The field of view
@@ -22,6 +21,7 @@ public class Camera extends Component {
 	 * @param zFar The far clipping plane of the camera */
 	public Camera(float fov, float aspect, float zNear, float zFar) {
 		this.projection = new Matrix4f().initPerspective(fov, aspect, zNear, zFar);
+		this.mouseLocked = false;
 	}
 	
 	@Override
@@ -29,8 +29,6 @@ public class Camera extends Component {
 		renderer.addCamera(this);
 	}
 	
-	/** Handle Input camera input
-	 * @param delta The delta time */
 	@Override
 	public void input(float delta) {
 		float sensitivity = 0.5f;
@@ -38,7 +36,7 @@ public class Camera extends Component {
 		
 		if(Input.getMouseDown(0)) {
 			if(!mouseLocked) {
-				Input.setMousePosition(centerPosition);
+				Input.setMousePosition(Window.getCenter());
 				Input.setCursor(false);
 				mouseLocked = true;
 			} else {
@@ -60,7 +58,7 @@ public class Camera extends Component {
 		}
 		
 		if(mouseLocked) {
-			Vector2f deltaPos = Input.getMousePosition().sub(centerPosition);
+			Vector2f deltaPos = Input.getMousePosition().sub(Window.getCenter());
 			
 			boolean rotY = deltaPos.getX() != 0;
 			boolean rotX = deltaPos.getY() != 0;

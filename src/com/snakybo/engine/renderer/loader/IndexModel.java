@@ -3,8 +3,8 @@ package com.snakybo.engine.renderer.loader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.snakybo.engine.core.Vector2f;
-import com.snakybo.engine.core.Vector3f;
+import com.snakybo.engine.math.Vector2f;
+import com.snakybo.engine.math.Vector3f;
 
 /** @author Kevin Krol
  * @since Mar 12, 2014 */

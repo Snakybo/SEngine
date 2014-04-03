@@ -23,23 +23,29 @@ import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.snakybo.engine.components.BaseLight;
 import com.snakybo.engine.components.Camera;
+import com.snakybo.engine.components.light.BaseLight;
 import com.snakybo.engine.core.GameObject;
-import com.snakybo.engine.core.Vector3f;
+import com.snakybo.engine.core.Transform;
+import com.snakybo.engine.math.Vector3f;
+import com.snakybo.engine.renderer.resourcemanagement.MappedValues;
 
 /** @author Kevin Krol
  * @since Feb 8, 2014 */
-public class Renderer {
-	private Camera camera;
-	
-	private Vector3f ambientLight;
+public class Renderer extends MappedValues {
+	private Map<String, Integer> samplerMap;
 	
 	private List<BaseLight> lights;
 	
+	private Camera camera;
+	
 	private BaseLight activeLight;
+	
+	private Shader forwardAmbient;
 	
 	public Renderer() {
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -53,9 +59,16 @@ public class Renderer {
 		
 		glEnable(GL_TEXTURE_2D);
 		
-		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
-		
 		lights = new ArrayList<BaseLight>();
+		
+		samplerMap = new HashMap<String, Integer>();
+		
+		samplerMap.put("diffuse", 0);
+		samplerMap.put("normal", 1);
+		
+		addVector3f("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
+		
+		forwardAmbient = new Shader("forward/ambient");
 	}
 	
 	/** Render a game object
@@ -65,9 +78,6 @@ public class Renderer {
 		
 		lights.clear();
 		object.addToRenderer(this);
-		
-		Shader forwardAmbient = ForwardAmbient.getInstance();
-		
 		object.render(forwardAmbient, this);
 		
 		glEnable(GL_BLEND);
@@ -84,6 +94,10 @@ public class Renderer {
 		glDepthFunc(GL_LESS);
 		glDepthMask(true);
 		glDisable(GL_BLEND);
+	}
+	
+	public void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName, String uniformType) {
+		throw new IllegalArgumentException(uniformType + " is not a supported type in the Renderer");
 	}
 	
 	/** Add a light to the renderer
@@ -103,13 +117,12 @@ public class Renderer {
 		return camera;
 	}
 	
-	/** @return The ambient light in the scene */
-	public Vector3f getAmbientLight() {
-		return ambientLight;
-	}
-	
 	/** @return The currently active light */
 	public BaseLight getActiveLight() {
 		return activeLight;
+	}
+	
+	public int getSamplerSlot(String samplerName) {
+		return samplerMap.get(samplerName);
 	}
 }

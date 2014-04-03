@@ -1,7 +1,7 @@
 package com.snakybo.engine.renderer;
 
-import com.snakybo.engine.core.Vector2f;
-import com.snakybo.engine.core.Vector3f;
+import com.snakybo.engine.math.Vector2f;
+import com.snakybo.engine.math.Vector3f;
 
 /** @author Kevin Krol */
 public class Vertex {
