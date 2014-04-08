@@ -14,14 +14,14 @@ struct Attenuation {
     float exponent;
 };
 
-struct DirectionalLight 
-    BaseLight base;
+struct DirectionalLight {
+    BaseLight baseLight;
     vec3 direction;
 };
 
 struct PointLight {
-    BaseLight base;
-    Attenuation atten;
+    BaseLight baseLight;
+    Attenuation attenuation;
     vec3 position;
     float range;
 };
@@ -32,14 +32,14 @@ struct SpotLight {
     float cutoff;
 };
 
-vec4 CalcLight(BaseLight base, vec3 direction, vec3 normal, vec3 worldPos) {
+vec4 CalcLight(BaseLight baseLight, vec3 direction, vec3 normal, vec3 worldPos) {
     float diffuseFactor = dot(normal, -direction);
     
-    vec4 diffuseColor = vec4(0,0,0,0);
-    vec4 specularColor = vec4(0,0,0,0);
+    vec4 diffuseColor = vec4(0, 0, 0, 0);
+    vec4 specularColor = vec4(0, 0, 0, 0);
     
     if(diffuseFactor > 0) {
-        diffuseColor = vec4(base.color, 1.0) * base.intensity * diffuseFactor;
+        diffuseColor = vec4(baseLight.color, 1.0) * baseLight.intensity * diffuseFactor;
         
         vec3 directionToEye = normalize(C_eyePos - worldPos);
         vec3 halfDirection = normalize(directionToEye - direction);
@@ -47,9 +47,8 @@ vec4 CalcLight(BaseLight base, vec3 direction, vec3 normal, vec3 worldPos) {
         float specularFactor = dot(halfDirection, normal);
         specularFactor = pow(specularFactor, specularPower);
         
-        if(specularFactor > 0)
-        {
-            specularColor = vec4(base.color, 1.0) * specularIntensity * specularFactor;
+        if(specularFactor > 0) {
+            specularColor = vec4(baseLight.color, 1.0) * specularIntensity * specularFactor;
         }
     }
     
@@ -61,18 +60,18 @@ vec4 CalcPointLight(PointLight pointLight, vec3 normal, vec3 worldPos) {
     float distanceToPoint = length(lightDirection);
     
     if(distanceToPoint > pointLight.range)
-        return vec4(0,0,0,0);
+        return vec4(0, 0, 0, 0);
     
     lightDirection = normalize(lightDirection);
     
-    vec4 color = CalcLight(pointLight.base, lightDirection, normal, worldPos);
+    vec4 color = CalcLight(pointLight.baseLight, lightDirection, normal, worldPos);
     
-    float attenuation = pointLight.atten.constant +
-                         pointLight.atten.linear * distanceToPoint +
-                         pointLight.atten.exponent * distanceToPoint * distanceToPoint +
-                         0.0001;
+    float calculatedAttenuation = pointLight.attenuation.constant +
+                      			  pointLight.attenuation.linear * distanceToPoint +
+                         		  pointLight.attenuation.exponent * distanceToPoint * distanceToPoint +
+                        		  0.0001;
                          
-    return color / attenuation;
+    return color / calculatedAttenuation;
 }
 
 vec4 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 worldPos) {
@@ -90,5 +89,5 @@ vec4 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 worldPos) {
 }
 
 vec4 CalcDirectionalLight(DirectionalLight directionalLight, vec3 normal, vec3 worldPos) {
-    return CalcLight(directionalLight.base, -directionalLight.direction, normal, worldPos);
+    return CalcLight(directionalLight.baseLight, -directionalLight.direction, normal, worldPos);
 }

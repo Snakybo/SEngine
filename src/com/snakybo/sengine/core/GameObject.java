@@ -22,11 +22,14 @@ public class GameObject {
 	private CoreEngine engine;
 	
 	/** Constructor for the game object */
-	public GameObject() {
+	public GameObject(Component... componentsToAdd) {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();
 		transform = new Transform();
 		engine = null;
+		
+		for(Component component : componentsToAdd)
+			addComponent(component);
 	}
 	
 	/** Add a child to the game object

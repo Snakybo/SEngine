@@ -319,14 +319,14 @@ public class Shader {
 		glLinkProgram(resource.getProgram());
 		
 		if(glGetProgrami(resource.getProgram(), GL_LINK_STATUS) == 0) {
-			System.err.println(glGetProgramInfoLog(resource.getProgram(), 1024));
+			System.err.println("Error in shader " + fileName + ":\n" + glGetProgramInfoLog(resource.getProgram(), 1024));
 			System.exit(1);
 		}
 		
 		glValidateProgram(resource.getProgram());
 		
 		if(glGetProgrami(resource.getProgram(), GL_VALIDATE_STATUS) == 0) {
-			System.err.println(glGetProgramInfoLog(resource.getProgram(), 1024));
+			System.err.println("Error in shader " + fileName + ":\n" + glGetProgramInfoLog(resource.getProgram(), 1024));
 			System.exit(1);
 		}
 	}
@@ -338,7 +338,7 @@ public class Shader {
 		int shader = glCreateShader(type);
 		
 		if(shader == 0) {
-			System.err.println("Shader creation failed: Could not find valid memory location when adding shader");
+			System.err.println("Error in shader " + fileName + ":\n" + "Shader creation failed: Could not find valid memory location when adding shader");
 			System.exit(1);
 		}
 		
@@ -346,7 +346,7 @@ public class Shader {
 		glCompileShader(shader);
 		
 		if(glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
-			System.err.println(glGetShaderInfoLog(shader, 1024));
+			System.err.println("Error in shader " + fileName + ":\n" + glGetShaderInfoLog(shader, 1024));
 			System.exit(1);
 		}
 		
@@ -393,7 +393,7 @@ public class Shader {
 	 * @param uniformName The name of the uniform
 	 * @param directionalLight The directional light */
 	public void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight) {
-		setUniformBaseLight(uniformName + ".base", directionalLight);
+		setUniformBaseLight(uniformName + ".baseLight", directionalLight);
 		setUniform(uniformName + ".direction", directionalLight.getDirection());
 	}
 	
@@ -401,10 +401,10 @@ public class Shader {
 	 * @param uniformName The name of the uniform
 	 * @param pointLight The point light */
 	public void setUniformPointLight(String uniformName, PointLight pointLight) {
-		setUniformBaseLight(uniformName + ".base", pointLight);
-		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
+		setUniformBaseLight(uniformName + ".baseLight", pointLight);
+		setUniformf(uniformName + ".attenuation.constant", pointLight.getAttenuation().getConstant());
+		setUniformf(uniformName + ".attenuation.linear", pointLight.getAttenuation().getLinear());
+		setUniformf(uniformName + ".attenuation.exponent", pointLight.getAttenuation().getExponent());
 		setUniform(uniformName + ".position", pointLight.getTransform().getPosition());
 		setUniformf(uniformName + ".range", pointLight.getRange());
 	}
