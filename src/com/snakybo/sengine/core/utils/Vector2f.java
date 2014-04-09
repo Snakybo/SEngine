@@ -1,4 +1,4 @@
-package com.snakybo.sengine.core;
+package com.snakybo.sengine.core.utils;
 
 /** Vector 2 math class
  * 

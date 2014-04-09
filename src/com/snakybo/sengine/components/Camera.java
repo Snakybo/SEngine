@@ -1,8 +1,8 @@
 package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.CoreEngine;
-import com.snakybo.sengine.core.Matrix4f;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Matrix4f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Camera component extends {@link Component}
  * 

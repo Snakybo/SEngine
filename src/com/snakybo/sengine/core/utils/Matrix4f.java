@@ -1,4 +1,4 @@
-package com.snakybo.sengine.core;
+package com.snakybo.sengine.core.utils;
 
 import java.util.Arrays;
 

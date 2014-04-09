@@ -1,7 +1,7 @@
 package com.snakybo.sengine.rendering;
 
-import com.snakybo.sengine.core.Vector2f;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector2f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Vertex class
  * 

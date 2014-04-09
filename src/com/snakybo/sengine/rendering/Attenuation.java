@@ -1,6 +1,6 @@
 package com.snakybo.sengine.rendering;
 
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Attenuation class extends {@link Vector3f}
  * 

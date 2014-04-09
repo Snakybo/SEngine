@@ -6,7 +6,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import com.snakybo.sengine.core.Vector2f;
+import com.snakybo.sengine.core.utils.Vector2f;
 
 /** Window class
  * 

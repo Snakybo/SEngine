@@ -1,5 +1,9 @@
 package com.snakybo.sengine.core;
 
+import com.snakybo.sengine.core.utils.Matrix4f;
+import com.snakybo.sengine.core.utils.Quaternion;
+import com.snakybo.sengine.core.utils.Vector3f;
+
 /** Transform
  * 
  * Handles an objects transformation
@@ -79,7 +83,7 @@ public class Transform {
 	}
 	
 	/** @return Whether or not the transformation has changed */
-	public boolean hasChanged() {
+	private boolean hasChanged() {
 		if(parent != null && parent.hasChanged())
 			return true;
 		

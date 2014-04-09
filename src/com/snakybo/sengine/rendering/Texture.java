@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import com.snakybo.sengine.core.Util;
+import com.snakybo.sengine.core.utils.Buffer;
 import com.snakybo.sengine.rendering.resourceManagement.TextureResource;
 
 /** Texture class
@@ -84,10 +84,10 @@ public class Texture {
 	 * @return A texture resource */
 	private static TextureResource loadTexture(String fileName) {
 		try {
-			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));
-			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
+			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));	
+			ByteBuffer buffer = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 			
-			ByteBuffer buffer = Util.createByteBuffer(image.getHeight() * image.getWidth() * 4);
+			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 			boolean hasAlpha = image.getColorModel().hasAlpha();
 			
 			for(int y = 0; y < image.getHeight(); y++) {

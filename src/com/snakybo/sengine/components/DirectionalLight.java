@@ -1,6 +1,6 @@
 package com.snakybo.sengine.components;
 
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.Shader;
 
 /** Directional light component extends {@link BaseLight}

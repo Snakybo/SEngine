@@ -1,5 +1,6 @@
 package com.snakybo.sengine.core;
 
+import com.snakybo.sengine.core.utils.Time;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 

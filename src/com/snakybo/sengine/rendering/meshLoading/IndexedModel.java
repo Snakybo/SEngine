@@ -2,8 +2,8 @@ package com.snakybo.sengine.rendering.meshLoading;
 
 import java.util.ArrayList;
 
-import com.snakybo.sengine.core.Vector2f;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector2f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Indexed model
  * 

@@ -31,7 +31,7 @@ import com.snakybo.sengine.components.BaseLight;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.GameObject;
 import com.snakybo.sengine.core.Transform;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.resourceManagement.MappedValues;
 
 /** The rendering engine extends {@link MappedValues}

@@ -1,6 +1,6 @@
 package com.snakybo.sengine.rendering.resourceManagement;
 
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 import java.util.HashMap;
 

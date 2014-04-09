@@ -3,6 +3,8 @@ package com.snakybo.sengine.core;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.snakybo.sengine.core.utils.Vector2f;
+
 /** Input clas
  * 
  * <p>

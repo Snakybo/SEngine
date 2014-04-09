@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.snakybo.sengine.core.Util;
-import com.snakybo.sengine.core.Vector2f;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Utils;
+import com.snakybo.sengine.core.utils.Vector2f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** OBJ Model
  * 
@@ -43,7 +43,7 @@ public class OBJModel {
 			
 			while((line = meshReader.readLine()) != null) {
 				String[] tokens = line.split(" ");
-				tokens = Util.removeEmptyStrings(tokens);
+				tokens = Utils.removeEmptyStrings(tokens);
 				
 				if(tokens.length == 0 || tokens[0].equals("#"))
 					continue;

@@ -18,8 +18,9 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.GL15;
 
-import com.snakybo.sengine.core.Util;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Buffer;
+import com.snakybo.sengine.core.utils.Utils;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.meshLoading.IndexedModel;
 import com.snakybo.sengine.rendering.meshLoading.OBJModel;
 import com.snakybo.sengine.rendering.resourceManagement.MeshResource;
@@ -105,10 +106,10 @@ public class Mesh {
 		resource = new MeshResource(indices.length);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
-		GL15.glBufferData(GL_ARRAY_BUFFER, Util.createFlippedBuffer(vertices), GL_STATIC_DRAW);
+		GL15.glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(vertices), GL_STATIC_DRAW);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.createFlippedBuffer(indices), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBuffer(indices), GL_STATIC_DRAW);
 	}
 	
 	/** Calculate the normals of the mesh
@@ -162,7 +163,7 @@ public class Mesh {
 		Integer[] indexData = new Integer[model.getIndices().size()];
 		model.getIndices().toArray(indexData);
 		
-		addVertices(vertexData, Util.toIntArray(indexData), false);
+		addVertices(vertexData, Utils.toIntArray(indexData), false);
 		
 		return null;
 	}

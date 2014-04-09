@@ -1,8 +1,8 @@
 package com.snakybo.game;
 
 import com.snakybo.sengine.components.Component;
-import com.snakybo.sengine.core.Quaternion;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Quaternion;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Shader;
 

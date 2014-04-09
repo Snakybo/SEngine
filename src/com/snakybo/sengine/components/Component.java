@@ -6,7 +6,7 @@ import com.snakybo.sengine.core.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Shader;
 
-/** Base component class
+/** Component base class
  * 
  * <p>
  * Every component in the game should extend this class

@@ -2,7 +2,7 @@ package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.Input.KeyCode;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Free move component extends {@link Component}
  * 

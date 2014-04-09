@@ -32,10 +32,10 @@ import com.snakybo.sengine.components.BaseLight;
 import com.snakybo.sengine.components.DirectionalLight;
 import com.snakybo.sengine.components.PointLight;
 import com.snakybo.sengine.components.SpotLight;
-import com.snakybo.sengine.core.Matrix4f;
 import com.snakybo.sengine.core.Transform;
-import com.snakybo.sengine.core.Util;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Buffer;
+import com.snakybo.sengine.core.utils.Matrix4f;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.resourceManagement.ShaderResource;
 
 /** Shader
@@ -378,7 +378,7 @@ public class Shader {
 	 * @param uniformName The name of the uniform
 	 * @param value The matrix to set as uniform */
 	public void setUniform(String uniformName, Matrix4f value) {
-		glUniformMatrix4(resource.getUniforms().get(uniformName), true, Util.createFlippedBuffer(value));
+		glUniformMatrix4(resource.getUniforms().get(uniformName), true, Buffer.createFlippedBuffer(value));
 	}
 	
 	/** Set a base light uniform

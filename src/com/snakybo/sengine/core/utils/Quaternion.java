@@ -1,4 +1,5 @@
-package com.snakybo.sengine.core;
+package com.snakybo.sengine.core.utils;
+
 
 /** Quaternion math class
  * 

@@ -9,9 +9,9 @@ import com.snakybo.sengine.components.PointLight;
 import com.snakybo.sengine.components.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.GameObject;
-import com.snakybo.sengine.core.Quaternion;
-import com.snakybo.sengine.core.Vector2f;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Quaternion;
+import com.snakybo.sengine.core.utils.Vector2f;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.Attenuation;
 import com.snakybo.sengine.rendering.Material;
 import com.snakybo.sengine.rendering.Mesh;
@@ -60,7 +60,7 @@ public class TestGame extends Game {
 		GameObject planeGo1 = new GameObject(new MeshRenderer(plane1, brickMaterial));
 		GameObject planeGo2 = new GameObject(new MeshRenderer(plane2, brickMaterial));
 		GameObject planeGo3 = new GameObject(new MeshRenderer(plane2, brickMaterial));
-		GameObject monkeyGo1 = new GameObject(new LookAtComponent()).addComponent(new MeshRenderer(monkey, brickMaterial));
+		GameObject monkeyGo1 = new GameObject(new LookAtComponent(), new MeshRenderer(monkey, brickMaterial));
 		GameObject monkeyGo2 = new GameObject(new MeshRenderer(new Mesh("monkey3.obj"), testMaterial));
 		
 		GameObject directionalLight = new GameObject(new DirectionalLight(new Vector3f(0.93f, 0.93f, 0.93f), 0.2f));

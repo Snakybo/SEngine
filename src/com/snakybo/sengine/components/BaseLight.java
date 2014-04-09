@@ -1,7 +1,7 @@
 package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.CoreEngine;
-import com.snakybo.sengine.core.Vector3f;
+import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.Shader;
 
 /** Base light component extends {@link Component}
