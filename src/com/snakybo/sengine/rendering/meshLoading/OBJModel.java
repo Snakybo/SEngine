@@ -75,6 +75,7 @@ public class OBJModel {
 	public IndexedModel toIndexedModel() {
 		IndexedModel result = new IndexedModel();
 		IndexedModel normalModel = new IndexedModel();
+		
 		HashMap<OBJIndex, Integer> resultIndexMap = new HashMap<OBJIndex, Integer>();
 		HashMap<Integer, Integer> normalIndexMap = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
@@ -104,8 +105,11 @@ public class OBJModel {
 				
 				result.getPositions().add(currentPosition);
 				result.getTexCoords().add(currentTexCoord);
+				
 				if(hasNormals)
 					result.getNormals().add(currentNormal);
+				
+				result.getTangents().add(new Vector3f(0, 0, 0));
 			}
 			
 			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertexIndex);
@@ -117,6 +121,7 @@ public class OBJModel {
 				normalModel.getPositions().add(currentPosition);
 				normalModel.getTexCoords().add(currentTexCoord);
 				normalModel.getNormals().add(currentNormal);
+				normalModel.getTangents().add(new Vector3f(0, 0, 0));
 			}
 			
 			result.getIndices().add(modelVertexIndex);
@@ -130,6 +135,11 @@ public class OBJModel {
 			for(int i = 0; i < result.getPositions().size(); i++)
 				result.getNormals().add(normalModel.getNormals().get(indexMap.get(i)));
 		}
+		
+		normalModel.calcTangents();
+		
+		for(int i = 0; i < result.getPositions().size(); i++)
+			result.getTangents().add(normalModel.getTangents().get(indexMap.get(i)));
 		
 		return result;
 	}

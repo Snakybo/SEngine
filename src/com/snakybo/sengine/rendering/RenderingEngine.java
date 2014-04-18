@@ -52,7 +52,9 @@ public class RenderingEngine extends MappedValues {
 		
 		lights = new ArrayList<BaseLight>();
 		samplerMap = new HashMap<String, Integer>();
+		
 		samplerMap.put("diffuse", 0);
+		samplerMap.put("normalMap", 1);
 		
 		addVector3f("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 		

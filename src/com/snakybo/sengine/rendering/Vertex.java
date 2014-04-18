@@ -8,11 +8,12 @@ import com.snakybo.sengine.core.utils.Vector3f;
  * @author Kevin Krol
  * @since Apr 5, 2014 */
 public class Vertex {
-	public static final int SIZE = 8;
+	public static final int SIZE = 11;
 	
 	private Vector3f position;
 	private Vector2f texCoord;
 	private Vector3f normal;
+	private Vector3f tangent;
 	
 	/** Constructor for the vertex
 	 * @param position The position of the vertex */
@@ -32,9 +33,19 @@ public class Vertex {
 	 * @param texCoord The texture coordinates of the vertex
 	 * @param normal The normal coordinates of the vertex */
 	public Vertex(Vector3f position, Vector2f texCoord, Vector3f normal) {
+		this(position, texCoord, normal, new Vector3f(0, 0, 0));
+	}
+	
+	/** Constructor for the vertex
+	 * @param position The position of the vertex
+	 * @param texCoord The texture coordinates of the vertex
+	 * @param normal The normal coordinates of the vertex
+	 * @param tangent The tangent of the vertex */
+	public Vertex(Vector3f position, Vector2f texCoord, Vector3f normal, Vector3f tangent) {
 		this.position = position;
 		this.texCoord = texCoord;
 		this.normal = normal;
+		this.tangent = tangent;
 	}
 	
 	/** Set the position of the vertex
@@ -55,6 +66,12 @@ public class Vertex {
 		this.normal = normal;
 	}
 	
+	/** Set the tangent of the vertex
+	 * @param tangent The new tangent position */
+	public void setTangent(Vector3f tangent) {
+		this.normal = tangent;
+	}
+	
 	/** @return The position of the vertex */
 	public Vector3f getPosition() {
 		return position;
@@ -68,5 +85,10 @@ public class Vertex {
 	/** @return The normal position of the vertex */
 	public Vector3f getNormal() {
 		return normal;
+	}
+	
+	/** @return The tangent of the vertex */
+	public Vector3f getTangent() {
+		return tangent;
 	}
 }

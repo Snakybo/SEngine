@@ -21,7 +21,8 @@ public class GameObject {
 	private Transform transform;
 	private CoreEngine engine;
 	
-	/** Constructor for the game object */
+	/** Constructor for the game object
+	 * @param componentsToAdd A list of components to add to the game object */
 	public GameObject(Component... componentsToAdd) {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();

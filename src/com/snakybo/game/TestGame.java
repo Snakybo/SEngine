@@ -9,6 +9,8 @@ import com.snakybo.sengine.components.PointLight;
 import com.snakybo.sengine.components.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.GameObject;
+import com.snakybo.sengine.core.Input;
+import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.utils.Quaternion;
 import com.snakybo.sengine.core.utils.Vector2f;
 import com.snakybo.sengine.core.utils.Vector3f;
@@ -20,80 +22,168 @@ import com.snakybo.sengine.rendering.Vertex;
 import com.snakybo.sengine.rendering.Window;
 
 public class TestGame extends Game {
+	private Material tiles;
+	private Material fireTiles;
+	
+	private PointLight pointLight;
+	private SpotLight spotLight;
+	
 	@Override
 	public void init() {
 		super.init();
 		
-		Vertex[] vertices = new Vertex[] {
-			new Vertex(new Vector3f(-10.0f, 0.0f, -10.0f), new Vector2f(0.0f, 0.0f)),
-			new Vertex(new Vector3f(-10.0f, 0.0f, 10.0f * 3), new Vector2f(0.0f, 1.0f)),
-			new Vertex(new Vector3f(10.0f * 3, 0.0f, -10.0f), new Vector2f(1.0f, 0.0f)),
-			new Vertex(new Vector3f(10.0f * 3, 0.0f, 10.0f * 3), new Vector2f(1.0f, 1.0f))
-		};
+		// Material:
+		// 	- [diffuse]
+		//	- [normalMap]
+		//	- [specularIntensity]
+		//	- [specularPower]
 		
-		Vertex[] vertices2 = new Vertex[] {
-			new Vertex(new Vector3f(-10.0f / 10, 0.0f, -10.0f / 10), new Vector2f(0.0f, 0.0f)),
-			new Vertex(new Vector3f(-10.0f / 10, 0.0f, 10.0f / 10 * 3), new Vector2f(0.0f, 1.0f)),
-			new Vertex(new Vector3f(10.0f / 10 * 3, 0.0f, -10.0f / 10), new Vector2f(1.0f, 0.0f)),
-			new Vertex(new Vector3f(10.0f / 10 * 3, 0.0f, 10.0f / 10 * 3), new Vector2f(1.0f, 1.0f))
+		tiles = new Material(new Texture("tegels.png"), new Texture("tegels_normal.jpg"));
+		fireTiles = new Material(new Texture("fire_dungeon.jpg"), new Texture("fire_dungeon_normal.jpg"));
+		
+		addPlanes();
+		addMonkeys();
+		addLights();
+		
+		// GameObject:
+		//	- component1
+		//	- component2
+		//	- ...
+		
+		// Camera:
+		//	- Field of view
+		//	- Aspect ratio
+		//	- Near clipping plane
+		//	- Far clipping plane
+		
+		Camera camera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
+		
+		addObject(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera));
+	}
+	
+	@Override
+	public void input(float delta) {
+		super.input(delta);
+		
+		Vector3f newAttenuation = new Vector3f(0, 0, 0);
+		
+		if(Input.getKey(KeyCode.U)) {
+			newAttenuation = newAttenuation.add(new Vector3f(0.01f, 0, 0));
+		} else if(Input.getKey(KeyCode.J)) {
+			newAttenuation = newAttenuation.sub(new Vector3f(0.01f, 0, 0));
+		}
+		
+		if(Input.getKey(KeyCode.I)) {
+			newAttenuation = newAttenuation.add(new Vector3f(0, 0.01f, 0));
+		} else if(Input.getKey(KeyCode.K)) {
+			newAttenuation = newAttenuation.sub(new Vector3f(0, 0.01f, 0));
+		}
+		
+		if(Input.getKey(KeyCode.O)) {
+			newAttenuation = newAttenuation.add(new Vector3f(0, 0, 0.01f));
+		} else if(Input.getKey(KeyCode.L)) {
+			newAttenuation = newAttenuation.sub(new Vector3f(0, 0, 0.01f));
+		}
+		
+		if(!newAttenuation.equals(new Vector3f(0, 0, 0))) {
+			pointLight.getAttenuation().set(pointLight.getAttenuation().add(newAttenuation));
+			
+			System.out.println("Attenuation: " + pointLight.getAttenuation());
+		}
+	}
+	
+	private void addPlanes() {
+		Vertex[] vertices = new Vertex[] {
+			new Vertex(new Vector3f(-1, 0, -1), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-1, 0, 1), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f(1, 0, -1), new Vector2f(1.0f, 0.0f)),
+			new Vertex(new Vector3f(1, 0, 1), new Vector2f(1.0f, 1.0f))
 		};
 		
 		int indices[] = {0, 1, 2, 2, 1, 3};
-		int indices2[] = {0, 1, 2, 2, 1, 3};
 		
+		for(int y = 0; y < 10; y++) {
+			for(int x = 0; x < 10; x++) {
+				GameObject plane = new GameObject(new MeshRenderer(new Mesh(vertices, indices, true), fireTiles));
+				
+				plane.getTransform().getLocalPosition().set(x * 2, -1, y * 2);
+				
+				addObject(plane);
+			}
+		}
 		
-		Mesh plane1 = new Mesh(vertices, indices, true);
-		Mesh plane2 = new Mesh(vertices2, indices2, true);
-		Mesh monkey = new Mesh("monkey3.obj");
+		for(int i = 0; i < 2; i++) {
+			GameObject plane;
+			
+			for(int x = -1; x < 11; x++) {				
+				plane = new GameObject(new MeshRenderer(new Mesh(vertices, indices, true), tiles));
+				
+				plane.getTransform().getLocalPosition().set(x * 2, -1, (i * 22) - 2);
+				
+				addObject(plane);
+			}
+			
+			for(int y = 0; y < 10; y++) {
+				plane = new GameObject(new MeshRenderer(new Mesh(vertices, indices, true), tiles));
+				
+				plane.getTransform().getLocalPosition().set((i * 22) - 2, -1, y * 2);
+				
+				addObject(plane);
+			}
+		}
+	}
+	
+	private void addMonkeys() {
+		GameObject monkey1 = new GameObject(new LookAtComponent(), new MeshRenderer(new Mesh("monkey.obj"), tiles));
+		GameObject monkey2 = new GameObject(new MeshRenderer(new Mesh("monkey.obj"), new Material()));
 		
-		Material brickMaterial = new Material();
-		Material testMaterial = new Material();
+		monkey1.getTransform().getLocalPosition().set(5, 5, 5);
+		monkey1.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(-70.0f)));
 		
-		brickMaterial.addTexture("diffuse", new Texture("bricks.jpg"));
-		brickMaterial.addFloat("specularIntensity", 1);
-		brickMaterial.addFloat("specularPower", 8);
+		monkey2.getTransform().getLocalPosition().set(-3, 7, 4);
 		
-		testMaterial.addTexture("diffuse", new Texture("test.png"));
-		testMaterial.addFloat("specularIntensity", 1);
-		testMaterial.addFloat("specularPower", 8);
+		addObject(monkey1);
+		addObject(monkey2);
+	}
+	
+	private void addLights() {
+		// Directional Light:
+		//	- color
+		//	- intensity
 		
-		GameObject planeGo1 = new GameObject(new MeshRenderer(plane1, brickMaterial));
-		GameObject planeGo2 = new GameObject(new MeshRenderer(plane2, brickMaterial));
-		GameObject planeGo3 = new GameObject(new MeshRenderer(plane2, brickMaterial));
-		GameObject monkeyGo1 = new GameObject(new LookAtComponent(), new MeshRenderer(monkey, brickMaterial));
-		GameObject monkeyGo2 = new GameObject(new MeshRenderer(new Mesh("monkey3.obj"), testMaterial));
+		// Point Light:
+		//	- color
+		//	- intensity
+		//	- attenuation
+		//		- constant
+		//		- linear
+		//		- exponent
 		
-		GameObject directionalLight = new GameObject(new DirectionalLight(new Vector3f(0.93f, 0.93f, 0.93f), 0.2f));
-		GameObject pointLight = new GameObject(new PointLight(new Vector3f(0, 1, 0.5f), 0.4f, new Attenuation(0, 0, 1)));
-		GameObject spotLight = new GameObject(new SpotLight(new Vector3f(0.5f, 1, 1), 0.4f, new Attenuation(0, 0, 0.1f), 0.7f));
+		// Spot Light:
+		//	- color
+		//	- intensity
+		//	- attenuation
+		//		- constant
+		//		- linear
+		//		- exponent
+		//	- cuttoff
 		
-		planeGo1.getTransform().getLocalPosition().set(0, -1, 5);
+		DirectionalLight directionalLight = new DirectionalLight(new Vector3f(0.93f, 0.93f, 0.93f), 0.2f);
 		
-		planeGo2.getTransform().getLocalPosition().set(0, 2, 0);
-		planeGo2.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), 0.4f));
+		pointLight = new PointLight(new Vector3f(0, 1, 0.5f), 0.4f, new Attenuation(0, 0, 1));
+		spotLight = new SpotLight(new Vector3f(1, 1, 0), 1, new Attenuation(0, 0, 0.05f), 0.7f);
 		
-		planeGo3.getTransform().getLocalPosition().set(0, 0, 5);
+		GameObject directionalLightGo = new GameObject(directionalLight);
+		GameObject pointLightGo = new GameObject(pointLight);
+		GameObject spotLightGo = new GameObject(spotLight);
 		
-		monkeyGo1.getTransform().getLocalPosition().set(5, 5, 5);
-		monkeyGo1.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(-70.0f)));
+		directionalLightGo.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float)Math.toRadians(-45)));
 		
-		monkeyGo2.getTransform().getLocalPosition().set(-3, 7, 4);
+		spotLightGo.getTransform().getLocalPosition().set(5, 0, 5);
+		spotLightGo.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(90.0f)));
 		
-		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), (float)Math.toRadians(-45)));
-		
-		spotLight.getTransform().getLocalPosition().set(5, 0, 5);
-		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(90.0f)));
-		
-		planeGo2.addChild(planeGo3);
-		planeGo3.addChild(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(),0.01f, 1000.0f)));
-		
-		addObject(planeGo1);
-		addObject(planeGo2);
-		addObject(monkeyGo1);
-		addObject(monkeyGo2);
-		
-		addObject(directionalLight);
-		addObject(pointLight);
-		addObject(spotLight);
+		addObject(directionalLightGo);
+		addObject(pointLightGo);
+		addObject(spotLightGo);
 	}
 }

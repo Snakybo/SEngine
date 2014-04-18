@@ -60,11 +60,17 @@ public class Buffer {
 			buffer.put(vertices[i].getPosition().getX());
 			buffer.put(vertices[i].getPosition().getY());
 			buffer.put(vertices[i].getPosition().getZ());
+			
 			buffer.put(vertices[i].getTexCoord().getX());
 			buffer.put(vertices[i].getTexCoord().getY());
+			
 			buffer.put(vertices[i].getNormal().getX());
 			buffer.put(vertices[i].getNormal().getY());
 			buffer.put(vertices[i].getNormal().getZ());
+			
+			buffer.put(vertices[i].getTangent().getX());
+			buffer.put(vertices[i].getTangent().getY());
+			buffer.put(vertices[i].getTangent().getZ());
 		}
 		
 		buffer.flip();
