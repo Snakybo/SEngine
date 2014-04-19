@@ -22,6 +22,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 import com.snakybo.sengine.core.utils.Buffer;
@@ -84,7 +85,12 @@ public class Texture {
 	 * @return A texture resource */
 	private static TextureResource loadTexture(String fileName) {
 		try {
-			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));	
+			File imageFile = new File("./res/textures/" + fileName);
+			
+			if(!imageFile.exists() || imageFile.isDirectory())
+				throw new IIOException("The file '" + fileName + "' doesn't exist or is a dictionary");
+			
+			BufferedImage image = ImageIO.read(imageFile);	
 			ByteBuffer buffer = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 			
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());

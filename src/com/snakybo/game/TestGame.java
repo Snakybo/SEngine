@@ -38,8 +38,18 @@ public class TestGame extends Game {
 		//	- [specularIntensity]
 		//	- [specularPower]
 		
-		tiles = new Material(new Texture("tegels.png"), new Texture("tegels_normal.jpg"));
-		fireTiles = new Material(new Texture("fire_dungeon.jpg"), new Texture("fire_dungeon_normal.jpg"));
+		tiles = new Material();
+		fireTiles = new Material();
+		
+		tiles.addTexture("diffuse", new Texture("tegels.png"));
+		tiles.addTexture("normalMap", new Texture("tegels_normal.jpg"));
+		tiles.addFloat("specularIntensity", 1);
+		tiles.addFloat("specularPower", 8);
+		
+		fireTiles.addTexture("diffuse", new Texture("fire_dungeon.jpg"));
+		fireTiles.addTexture("normalMap", new Texture("fire_dungeon_normal.jpg"));
+		fireTiles.addFloat("specularIntensity", 1);
+		fireTiles.addFloat("specularPower", 8);
 		
 		addPlanes();
 		addMonkeys();
@@ -58,7 +68,7 @@ public class TestGame extends Game {
 		
 		Camera camera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
 		
-		addObject(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera));
+		addChild(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera));
 	}
 	
 	@Override
@@ -108,7 +118,7 @@ public class TestGame extends Game {
 				
 				plane.getTransform().getLocalPosition().set(x * 2, -1, y * 2);
 				
-				addObject(plane);
+				addChild(plane);
 			}
 		}
 		
@@ -120,7 +130,7 @@ public class TestGame extends Game {
 				
 				plane.getTransform().getLocalPosition().set(x * 2, -1, (i * 22) - 2);
 				
-				addObject(plane);
+				addChild(plane);
 			}
 			
 			for(int y = 0; y < 10; y++) {
@@ -128,7 +138,7 @@ public class TestGame extends Game {
 				
 				plane.getTransform().getLocalPosition().set((i * 22) - 2, -1, y * 2);
 				
-				addObject(plane);
+				addChild(plane);
 			}
 		}
 	}
@@ -142,8 +152,8 @@ public class TestGame extends Game {
 		
 		monkey2.getTransform().getLocalPosition().set(-3, 7, 4);
 		
-		addObject(monkey1);
-		addObject(monkey2);
+		addChild(monkey1);
+		addChild(monkey2);
 	}
 	
 	private void addLights() {
@@ -182,8 +192,8 @@ public class TestGame extends Game {
 		spotLightGo.getTransform().getLocalPosition().set(5, 0, 5);
 		spotLightGo.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), (float)Math.toRadians(90.0f)));
 		
-		addObject(directionalLightGo);
-		addObject(pointLightGo);
-		addObject(spotLightGo);
+		addChild(directionalLightGo);
+		addChild(pointLightGo);
+		addChild(spotLightGo);
 	}
 }

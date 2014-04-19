@@ -1,6 +1,5 @@
 #version 120
 
-varying vec3 normal0;
 varying vec2 texCoord0;
 
 uniform vec3 R_ambient;

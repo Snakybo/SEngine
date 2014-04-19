@@ -15,37 +15,32 @@ public abstract class Game {
 	/** Handle input in the game
 	 * @param delta The current delta time */
 	public void input(float delta) {
-		getRootObject().inputAll(delta);
+		root.inputAll(delta);
 	}
 	
 	/** Update the game each frame
 	 * @param delta The current delta time */
 	public void update(float delta) {
-		getRootObject().updateAll(delta);
+		root.updateAll(delta);
 	}
 	
 	/** Render the game each frame
 	 * @param renderingEngine The rendering engine */
 	public void render(RenderingEngine renderingEngine) {
-		renderingEngine.render(getRootObject());
+		renderingEngine.render(root);
 	}
 	
 	/** Add an game object to the scene engine */
-	public void addObject(GameObject gameObject) {
-		getRootObject().addChild(gameObject);
-	}
-	
-	/** Get the root game object and create one if it doesnt exist */
-	private GameObject getRootObject() {
-		if(root == null)
-			root = new GameObject();
-		
-		return root;
+	public void addChild(GameObject gameObject) {
+		root.addChild(gameObject);
 	}
 	
 	/** Set the core engine of the game
 	 * @param engine The core engine */
 	public void setEngine(CoreEngine engine) {
-		getRootObject().setEngine(engine);
+		if(root == null)
+			root = new GameObject();
+		
+		root.setEngine(engine);
 	}
 }

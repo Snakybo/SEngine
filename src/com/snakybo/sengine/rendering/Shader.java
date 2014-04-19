@@ -24,9 +24,12 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.imageio.IIOException;
 
 import com.snakybo.sengine.components.BaseLight;
 import com.snakybo.sengine.components.DirectionalLight;
@@ -427,7 +430,12 @@ public class Shader {
 		final String INCLUDE_DIRECTIVE = "#include";
 		
 		try {
-			shaderReader = new BufferedReader(new FileReader("./res/shaders/" + fileName));
+			File shaderFile = new File("./res/shaders/" + fileName);
+			
+			if(!shaderFile.exists() || shaderFile.isDirectory())
+				throw new IIOException("The shader '" + fileName + "' doesn't exist or is a dictionary");
+			
+			shaderReader = new BufferedReader(new FileReader(shaderFile));
 			String line;
 			
 			while((line = shaderReader.readLine()) != null) {

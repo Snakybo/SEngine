@@ -13,27 +13,12 @@ public class Material extends MappedValues {
 	
 	/** Constructor for the material */
 	public Material() {
-		this(new Texture("test.png"));
-	}
-	
-	public Material(Texture diffuse) {
-		this(diffuse, new Texture("default_normal.jpg"));
-	}
-	
-	public Material(Texture diffuse, Texture normalMap) {
-		this(diffuse, normalMap, 1, 8);
-	}
-	
-	public Material(Texture diffuse, Texture normalMap, float specularIntensity, float specularPower) {
 		super();
 		
 		textureHashMap = new HashMap<String, Texture>();
 		
-		addTexture("diffuse", diffuse);
-		addTexture("normalMap", normalMap);
-		
-		addFloat("specularIntensity", specularIntensity);
-		addFloat("specularPower", specularPower);
+		addTexture("diffuse", new Texture("test.png"));
+		addTexture("normalMap", new Texture("default_normal.jpg"));
 	}
 	
 	/** Add a texture to the material
