@@ -2,7 +2,6 @@ package com.snakybo.sengine.core;
 
 import java.util.ArrayList;
 
-import com.snakybo.sengine.components.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Shader;
 

@@ -1,5 +1,6 @@
 package com.snakybo.sengine.components;
 
+import com.snakybo.sengine.core.Component;
 import com.snakybo.sengine.core.CoreEngine;
 import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.Shader;
@@ -24,7 +25,7 @@ public class BaseLight extends Component {
 	}
 	
 	@Override
-	public void addToEngine(CoreEngine engine) {
+	protected void addToEngine(CoreEngine engine) {
 		engine.getRenderingEngine().addLight(this);
 	}
 	

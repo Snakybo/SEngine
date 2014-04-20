@@ -1,8 +1,8 @@
 package com.snakybo.sengine.components;
 
+import com.snakybo.sengine.core.Component;
 import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.Input.KeyCode;
-import com.snakybo.sengine.core.utils.Vector3f;
 
 /** Free move component extends {@link Component}
  * 
@@ -41,26 +41,19 @@ public class FreeMove extends Component {
 	}
 	
 	@Override
-	public void input(float delta) {
-		float movAmt = speed * delta;
+	protected void input(float delta) {
+		float moveAmt = speed * delta;
 		
 		if(Input.getKey(keyForward))
-			move(getTransform().getLocalRotation().getForward(), movAmt);
+			getTransform().translate(getTransform().getLocalRotation().getForward().mul(moveAmt));
 		
 		if(Input.getKey(keyBack))
-			move(getTransform().getLocalRotation().getForward(), -movAmt);
+			getTransform().translate(getTransform().getLocalRotation().getBack().mul(moveAmt));
 		
 		if(Input.getKey(keyLeft))
-			move(getTransform().getLocalRotation().getLeft(), movAmt);
+			getTransform().translate(getTransform().getLocalRotation().getLeft().mul(moveAmt));
 		
 		if(Input.getKey(keyRight))
-			move(getTransform().getLocalRotation().getRight(), movAmt);
-	}
-	
-	/** Move the game object to the specified position
-	 * @param direction The direction to move in
-	 * @param amount The amount of units to move */
-	private void move(Vector3f direction, float amount) {
-		getTransform().setPosition(getTransform().getLocalPosition().add(direction.mul(amount)));
+			getTransform().translate(getTransform().getLocalRotation().getRight().mul(moveAmt));
 	}
 }

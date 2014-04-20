@@ -7,9 +7,11 @@ import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.components.PointLight;
 import com.snakybo.sengine.components.SpotLight;
+import com.snakybo.sengine.core.CoreEngine;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.GameObject;
 import com.snakybo.sengine.core.Input;
+import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.utils.Quaternion;
 import com.snakybo.sengine.core.utils.Vector2f;
@@ -29,8 +31,10 @@ public class TestGame extends Game {
 	private SpotLight spotLight;
 	
 	@Override
-	public void init() {
-		super.init();
+	protected void init(CoreEngine coreEngine) {
+		super.init(coreEngine);
+		
+		coreEngine.getRenderingEngine().setAmbientLight(new Vector3f(0.25f, 0.25f, 0.25f));
 		
 		// Material:
 		// 	- [diffuse]
@@ -66,13 +70,13 @@ public class TestGame extends Game {
 		//	- Near clipping plane
 		//	- Far clipping plane
 		
-		Camera camera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
+		Camera camera = Camera.initPerspectiveCamera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
 		
 		addChild(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera));
 	}
 	
 	@Override
-	public void input(float delta) {
+	protected void input(float delta) {
 		super.input(delta);
 		
 		Vector3f newAttenuation = new Vector3f(0, 0, 0);
@@ -102,6 +106,11 @@ public class TestGame extends Game {
 		}
 	}
 	
+	@Override
+	protected void update(float delta) {
+		System.out.println(Time.getFps());
+	}
+	
 	private void addPlanes() {
 		Vertex[] vertices = new Vertex[] {
 			new Vertex(new Vector3f(-1, 0, -1), new Vector2f(0.0f, 0.0f)),
@@ -111,7 +120,7 @@ public class TestGame extends Game {
 		};
 		
 		int indices[] = {0, 1, 2, 2, 1, 3};
-		
+					
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {
 				GameObject plane = new GameObject(new MeshRenderer(new Mesh(vertices, indices, true), fireTiles));

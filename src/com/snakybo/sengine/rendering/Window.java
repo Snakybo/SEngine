@@ -52,6 +52,11 @@ public class Window {
 		return Display.isCloseRequested();
 	}
 	
+	/** @return Whether or not the window has been created */
+	public static boolean isCreated() {
+		return Display.isCreated();
+	}
+	
 	/** Set the title of the display
 	 * @param title The new title */
 	public void setTitle(String title) {
@@ -74,7 +79,7 @@ public class Window {
 	}
 	
 	/** @return The center position of the window */
-	public Vector2f getCenter() {
+	public static Vector2f getCenter() {
 		return new Vector2f(getWidth() / 2, getHeight() / 2);
 	}
 }

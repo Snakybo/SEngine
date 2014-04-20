@@ -37,6 +37,7 @@ public class Vector3f {
 			return false;
 		
 		Vector3f other = (Vector3f)obj;
+		
 		if(Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
 			return false;
 		
@@ -227,6 +228,7 @@ public class Vector3f {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
 		return this;
 	}
 	

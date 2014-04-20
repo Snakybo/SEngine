@@ -1,6 +1,5 @@
 package com.snakybo.sengine.core;
 
-import com.snakybo.sengine.core.utils.Time;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 
@@ -45,6 +44,9 @@ public class CoreEngine {
 		if(isRunning)
 			return;
 		
+		if(!Window.isCreated())
+			throw new NullPointerException("You have to create a window prior to starting the engine");
+		
 		loop();
 	}
 	
@@ -57,16 +59,16 @@ public class CoreEngine {
 	}
 	
 	/** Main loop for the engine */
-	private void loop() {
+	private void loop() {		
 		isRunning = true;
 		
-		int frames = 0;
-		long frameCounter = 0;
-		
-		game.init();
+		game.init(this);
 		
 		double lastTime = Time.getTime();
 		double unprocessedTime = 0;
+		double frameCounter = 0;
+		
+		int frames = 0;
 		
 		while(isRunning) {
 			boolean render = false;
@@ -93,11 +95,12 @@ public class CoreEngine {
 				game.update((float)frameTime);
 				
 				if(frameCounter >= 1.0) {
-					System.out.println(frames);
+					Time.fps = frames;
 					frames = 0;
 					frameCounter = 0;
 				}
 			}
+			
 			if(render) {
 				game.render(renderingEngine);
 				Window.render();

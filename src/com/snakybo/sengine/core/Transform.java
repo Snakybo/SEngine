@@ -44,6 +44,12 @@ public class Transform {
 		}
 	}
 	
+	/** Translate the transform
+	 * @param direction The direction to translate to */
+	public void translate(Vector3f direction) {
+		position = position.add(direction);
+	}
+	
 	/** Rotate the transform
 	 * @param axis The axis to rotate on
 	 * @param angle The angle to rotate */

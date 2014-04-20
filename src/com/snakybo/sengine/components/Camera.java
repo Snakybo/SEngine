@@ -1,5 +1,6 @@
 package com.snakybo.sengine.components;
 
+import com.snakybo.sengine.core.Component;
 import com.snakybo.sengine.core.CoreEngine;
 import com.snakybo.sengine.core.utils.Matrix4f;
 import com.snakybo.sengine.core.utils.Vector3f;
@@ -11,13 +12,20 @@ import com.snakybo.sengine.core.utils.Vector3f;
 public class Camera extends Component {
 	private Matrix4f projection;
 	
-	/** Constructor for the camera
+	/** Initialize a perspective camera
 	 * @param fov The field of view
 	 * @param aspect The aspect ratio
 	 * @param zNear The near clipping plane
-	 * @param zFar The far clipping plane */
-	public Camera(float fov, float aspect, float zNear, float zFar) {
-		this.projection = new Matrix4f().initPerspective(fov, aspect, zNear, zFar);
+	 * @param zFar The far clipping plane
+	 * @return A new perspective camera */
+	public static Camera initPerspectiveCamera(float fov, float aspectRatio, float zNear, float zFar) {
+		return new Camera(new Matrix4f().initPerspective(fov, aspectRatio, zNear, zFar));
+	}
+	
+	/** Constructor for the camera
+	 * @param projection The projection of the camera */
+	public Camera(Matrix4f projection) {
+		this.projection = projection;
 	}
 	
 	/** Get the view projcetion of the camera represented as a matrix 4 */
@@ -32,7 +40,7 @@ public class Camera extends Component {
 	}
 	
 	@Override
-	public void addToEngine(CoreEngine engine) {
+	protected void addToEngine(CoreEngine engine) {
 		engine.getRenderingEngine().addCamera(this);
 	}
 }

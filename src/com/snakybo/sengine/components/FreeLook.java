@@ -1,5 +1,6 @@
 package com.snakybo.sengine.components;
 
+import com.snakybo.sengine.core.Component;
 import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.Input.MouseButton;
@@ -39,7 +40,7 @@ public class FreeLook extends Component {
 	}
 	
 	@Override
-	public void input(float delta) {
+	protected void input(float delta) {
 		Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
 		
 		if(Input.getKey(unlockMouseKey)) {

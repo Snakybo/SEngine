@@ -1,8 +1,5 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.core;
 
-import com.snakybo.sengine.core.CoreEngine;
-import com.snakybo.sengine.core.GameObject;
-import com.snakybo.sengine.core.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Shader;
 
@@ -19,20 +16,20 @@ public abstract class Component {
 	
 	/** Handle component input
 	 * @param delta The current delta time */
-	public void input(float delta) {}
+	protected void input(float delta) {}
 	
 	/** Update the component every frame
 	 * @param delta The current delta time */
-	public void update(float delta) {}
+	protected void update(float delta) {}
 	
 	/** Render the component every frame
 	 * @param shader The active shader
 	 * @param renderingEngine The rendering engine */
-	public void render(Shader shader, RenderingEngine renderingEngine) {}
+	protected void render(Shader shader, RenderingEngine renderingEngine) {}
 	
 	/** Add the component to the engine
 	 * @param engine The core engine */
-	public void addToEngine(CoreEngine engine) {}
+	protected void addToEngine(CoreEngine engine) {}
 	
 	/** Set the parent game object of the component */
 	public void setParent(GameObject parent) {

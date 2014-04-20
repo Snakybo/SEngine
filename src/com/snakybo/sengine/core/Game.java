@@ -10,23 +10,23 @@ public abstract class Game {
 	private GameObject root;
 	
 	/** Initialize the game */
-	public void init() {}
+	protected void init(CoreEngine coreEngine) {}
 	
 	/** Handle input in the game
 	 * @param delta The current delta time */
-	public void input(float delta) {
+	protected void input(float delta) {
 		root.inputAll(delta);
 	}
 	
 	/** Update the game each frame
 	 * @param delta The current delta time */
-	public void update(float delta) {
+	protected void update(float delta) {
 		root.updateAll(delta);
 	}
 	
 	/** Render the game each frame
 	 * @param renderingEngine The rendering engine */
-	public void render(RenderingEngine renderingEngine) {
+	protected void render(RenderingEngine renderingEngine) {
 		renderingEngine.render(root);
 	}
 	

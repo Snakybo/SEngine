@@ -123,6 +123,11 @@ public class RenderingEngine extends MappedValues {
 		this.mainCamera = mainCamera;
 	}
 	
+	/** Set the ambient light */
+	public void setAmbientLight(Vector3f ambient) {
+		addVector3f("ambient", ambient);
+	}
+	
 	/** @return The OpenGL version of the user's system */
 	public static String getOpenGLVersion() {
 		return glGetString(GL_VERSION);
