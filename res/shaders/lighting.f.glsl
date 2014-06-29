@@ -5,4 +5,4 @@ varying mat3 tbnMatrix;
 uniform sampler2D diffuse;
 uniform sampler2D normalMap;
 
-#include "lighting.h.glsl"
+#include "lighting.glsl"

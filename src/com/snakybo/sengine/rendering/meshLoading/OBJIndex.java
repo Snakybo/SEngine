@@ -1,11 +1,5 @@
 package com.snakybo.sengine.rendering.meshLoading;
 
-/** OBJ Index 
- * 
- * Used for .obj model loading
- * 
- * @author Kevin Krol
- * @since Apr 5, 2014 */
 public class OBJIndex {
 	public int vertexIndex;
 	public int texCoordIndex;
@@ -13,38 +7,23 @@ public class OBJIndex {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
-			return true;
+		OBJIndex index = (OBJIndex)obj;
 		
-		if(obj == null)
-			return false;
-		
-		if(!(obj instanceof OBJIndex))
-			return false;
-		
-		OBJIndex other = (OBJIndex)obj;
-		
-		if(normalIndex != other.normalIndex) 
-			return false;
-		
-		if(texCoordIndex != other.texCoordIndex) 
-			return false;
-		
-		if(vertexIndex != other.vertexIndex) 
-			return false;
-		
-		return true;
+		return vertexIndex == index.vertexIndex
+				&& texCoordIndex == index.texCoordIndex
+				&& normalIndex == index.normalIndex;
 	}
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final int BASE = 17;
+		final int MULTIPLIER = 31;
 		
-		int result = 1;
+		int result = BASE;
 		
-		result = prime * result + normalIndex;
-		result = prime * result + texCoordIndex;
-		result = prime * result + vertexIndex;
+		result = MULTIPLIER * result + vertexIndex;
+		result = MULTIPLIER * result + texCoordIndex;
+		result = MULTIPLIER * result + normalIndex;
 		
 		return result;
 	}

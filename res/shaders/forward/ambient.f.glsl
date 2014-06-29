@@ -3,7 +3,6 @@
 varying vec2 texCoord0;
 
 uniform vec3 R_ambient;
-
 uniform sampler2D diffuse;
 
 void main() {

@@ -12,11 +12,12 @@ public class LookAtComponent extends Component {
 	@Override
 	public void update(float delta) {
 		if(renderingEngine != null) {
-			Quaternion newRot =
-					getTransform().getLookAtRotation(renderingEngine.getMainCamera().getTransform().getPosition(),
-							new Vector3f(0, 1, 0));
+			Quaternion newRotation =
+				getTransform().getLookAtRotation(
+					renderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0)
+				);
 			
-			getTransform().setRotation(getTransform().getLocalRotation().nlerp(newRot, delta * 5.0f, true));
+			getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, delta * 5.0f, true));
 		}
 	}
 	

@@ -9,29 +9,19 @@ import com.snakybo.sengine.core.utils.Utils;
 import com.snakybo.sengine.core.utils.Vector2f;
 import com.snakybo.sengine.core.utils.Vector3f;
 
-/** OBJ Model
- * 
- * Used for .obj model loading
- * 
- * @author Kevin Krol
- * @since Apr 5, 2014 */
 public class OBJModel {
 	private ArrayList<Vector3f> positions;
 	private ArrayList<Vector2f> texCoords;
 	private ArrayList<Vector3f> normals;
 	private ArrayList<OBJIndex> indices;
-	
 	private boolean hasTexCoords;
 	private boolean hasNormals;
 	
-	/** Constructor for the OBJ Model
-	 * @param fileName The .obj model to load */
 	public OBJModel(String fileName) {
 		positions = new ArrayList<Vector3f>();
 		texCoords = new ArrayList<Vector2f>();
 		normals = new ArrayList<Vector3f>();
 		indices = new ArrayList<OBJIndex>();
-		
 		hasTexCoords = false;
 		hasNormals = false;
 		
@@ -71,11 +61,9 @@ public class OBJModel {
 		}
 	}
 	
-	/** Convert the OBJ Model to an indexed model */
 	public IndexedModel toIndexedModel() {
 		IndexedModel result = new IndexedModel();
 		IndexedModel normalModel = new IndexedModel();
-		
 		HashMap<OBJIndex, Integer> resultIndexMap = new HashMap<OBJIndex, Integer>();
 		HashMap<Integer, Integer> normalIndexMap = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
@@ -87,15 +75,17 @@ public class OBJModel {
 			Vector2f currentTexCoord;
 			Vector3f currentNormal;
 			
-			if(hasTexCoords)
+			if(hasTexCoords) {
 				currentTexCoord = texCoords.get(currentIndex.texCoordIndex);
-			else
+			} else {
 				currentTexCoord = new Vector2f(0, 0);
+			}
 			
-			if(hasNormals)
+			if(hasNormals) {
 				currentNormal = normals.get(currentIndex.normalIndex);
-			else
+			} else {
 				currentNormal = new Vector3f(0, 0, 0);
+			}
 			
 			Integer modelVertexIndex = resultIndexMap.get(currentIndex);
 			
@@ -105,10 +95,8 @@ public class OBJModel {
 				
 				result.getPositions().add(currentPosition);
 				result.getTexCoords().add(currentTexCoord);
-				
 				if(hasNormals)
 					result.getNormals().add(currentNormal);
-				
 				result.getTangents().add(new Vector3f(0, 0, 0));
 			}
 			
@@ -144,9 +132,6 @@ public class OBJModel {
 		return result;
 	}
 	
-	/** Parse the OBJ index
-	 * @param token The token of the obj model
-	 * @return An OBJ index */
 	private OBJIndex parseOBJIndex(String token) {
 		String[] values = token.split("/");
 		

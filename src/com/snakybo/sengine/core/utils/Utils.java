@@ -2,18 +2,9 @@ package com.snakybo.sengine.core.utils;
 
 import java.util.ArrayList;
 
-/** Uilities class
- * 
- * <p>
- * A set of useful utilities
- * </p>
- * 
- * @author Kevin Krol
- * @since Apr 4, 2014 */
-public class Utils {	
-	/** Remove empty strings from an array
-	 * @param data The string array
-	 * @return The data array without empty strings */
+/** @author Kevin
+ * @since Jun 29, 2014 */
+public class Utils {
 	public static String[] removeEmptyStrings(String[] data) {
 		ArrayList<String> result = new ArrayList<String>();
 		
@@ -27,9 +18,6 @@ public class Utils {
 		return res;
 	}
 	
-	/** Convert an interger array to an int array
-	 * @param data The integer array
-	 * @return An int array with the data */
 	public static int[] toIntArray(Integer[] data) {
 		int[] result = new int[data.length];
 		

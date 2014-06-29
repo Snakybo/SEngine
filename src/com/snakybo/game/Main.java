@@ -1,11 +1,12 @@
 package com.snakybo.game;
 
-import com.snakybo.sengine.core.CoreEngine;
+import com.snakybo.sengine.core.SEngine;
 
 public class Main {
 	public static void main(String[] args) {
-		CoreEngine engine = new CoreEngine(new TestGame());
-		engine.createWindow(1280, 720, "SEngine Test Game", 60);
+		SEngine engine = new SEngine(1280, 720, 60, new TestGame());
+		
+		engine.createWindow("SEngine Test Game");
 		engine.start();
 	}
 }

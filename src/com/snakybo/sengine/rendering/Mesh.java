@@ -25,21 +25,13 @@ import com.snakybo.sengine.rendering.meshLoading.IndexedModel;
 import com.snakybo.sengine.rendering.meshLoading.OBJModel;
 import com.snakybo.sengine.rendering.resourceManagement.MeshResource;
 
-/** Mesh class
- * 
- * @author Kevin Krol
- * @since Apr 4, 2014 */
 public class Mesh {
 	private static HashMap<String, MeshResource> loadedModels = new HashMap<String, MeshResource>();
-	
 	private MeshResource resource;
 	private String fileName;
 	
-	/** Constructor for the mesh
-	 * @param fileName The mesh to load */
 	public Mesh(String fileName) {
 		this.fileName = fileName;
-		
 		MeshResource oldResource = loadedModels.get(fileName);
 		
 		if(oldResource != null) {
@@ -51,59 +43,21 @@ public class Mesh {
 		}
 	}
 	
-	/** Constructor for the mesh
-	 * @param vertices The vertices of the mesh
-	 * @param indices The indices of the mesh */
 	public Mesh(Vertex[] vertices, int[] indices) {
 		this(vertices, indices, false);
 	}
 	
-	/** Constructor for the mesh
-	 * @param vertices The vertices of the mesh
-	 * @param indices The indices of the mesh
-	 * @param calcNormal Whether or not to calculate the normals of the mesh */
 	public Mesh(Vertex[] vertices, int[] indices, boolean calcNormals) {
 		fileName = "";
-		
 		addVertices(vertices, indices, calcNormals);
 	}
 	
 	@Override
 	protected void finalize() {
-		if(resource.removeReference() && !fileName.isEmpty()) {
+		if(resource.removeReference() && !fileName.isEmpty())
 			loadedModels.remove(fileName);
-		}
 	}
 	
-	/** Draw the mesh */
-	public void draw() {
-		// FIXME: glEnableVertexAttribArray(3) and glDisable.. break the lighting and the normal map
-		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-//		glEnableVertexAttribArray(3);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12);
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20);
-		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 32);
-//		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 44);
-		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
-		glDrawElements(GL_TRIANGLES, resource.getSize(), GL_UNSIGNED_INT, 0);
-		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-//		glDisableVertexAttribArray(3);
-	}
-	
-	/** Add vertices to the mesh
-	 * @param vertices The vertices to add
-	 * @param indices The indices to add
-	 * @param calcNormals Whether or not to calculate the normals of the mesh */
 	private void addVertices(Vertex[] vertices, int[] indices, boolean calcNormals) {
 		if(calcNormals) {
 			calcNormals(vertices, indices);
@@ -118,9 +72,28 @@ public class Mesh {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBuffer(indices), GL_STATIC_DRAW);
 	}
 	
-	/** Calculate the normals of the mesh
-	 * @param vertices The vertices of the mesh
-	 * @param indices The indices of the mesh */
+	public void draw() {
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 32);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 44);
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
+		glDrawElements(GL_TRIANGLES, resource.getSize(), GL_UNSIGNED_INT, 0);
+		
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+	}
+	
 	private void calcNormals(Vertex[] vertices, int[] indices) {
 		for(int i = 0; i < indices.length; i += 3) {
 			int i0 = indices[i];
@@ -130,7 +103,7 @@ public class Mesh {
 			Vector3f v1 = vertices[i1].getPosition().sub(vertices[i0].getPosition());
 			Vector3f v2 = vertices[i2].getPosition().sub(vertices[i0].getPosition());
 			
-			Vector3f normal = v1.cross(v2).normalize();
+			Vector3f normal = v1.cross(v2).normalized();
 			
 			vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
 			vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
@@ -138,18 +111,15 @@ public class Mesh {
 		}
 		
 		for(int i = 0; i < vertices.length; i++)
-			vertices[i].setNormal(vertices[i].getNormal().normalize());
+			vertices[i].setNormal(vertices[i].getNormal().normalized());
 	}
 	
-	/** Load a mesh file
-	 * @param fileName The name of the file
-	 * @return A mesh created from the file */
 	private Mesh loadMesh(String fileName) {
 		String[] splitArray = fileName.split("\\.");
 		String ext = splitArray[splitArray.length - 1];
 		
 		if(!ext.equals("obj")) {
-			System.err.println("Error: File format not supported for mesh data: " + ext);
+			System.err.println("Error: '" + ext + "' file format not supported for mesh data.");
 			new Exception().printStackTrace();
 			System.exit(1);
 		}
@@ -160,8 +130,10 @@ public class Mesh {
 		
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 		
-		for(int i = 0; i < model.getPositions().size(); i++)
-			vertices.add(new Vertex(model.getPositions().get(i), model.getTexCoords().get(i), model.getNormals().get(i), model.getTangents().get(i)));
+		for(int i = 0; i < model.getPositions().size(); i++) {
+			vertices.add(new Vertex(model.getPositions().get(i), model.getTexCoords().get(i),
+					model.getNormals().get(i), model.getTangents().get(i)));
+		}
 		
 		Vertex[] vertexData = new Vertex[vertices.size()];
 		vertices.toArray(vertexData);
@@ -171,6 +143,6 @@ public class Mesh {
 		
 		addVertices(vertexData, Utils.toIntArray(indexData), false);
 		
-		return null;
+		return this;
 	}
 }

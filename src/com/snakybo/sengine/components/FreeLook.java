@@ -2,45 +2,28 @@ package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.Component;
 import com.snakybo.sengine.core.Input;
-import com.snakybo.sengine.core.Input.KeyCode;
-import com.snakybo.sengine.core.Input.MouseButton;
 import com.snakybo.sengine.core.utils.Vector2f;
 import com.snakybo.sengine.core.utils.Vector3f;
 import com.snakybo.sengine.rendering.Window;
 
-/** Free look component extends {@link Component}
- * 
- * <p>
- * Allows the parent game object to rotate freely using the mouse
- * </p>
- * 
- * @author Kevin Krol
- * @since Apr 4, 2014 */
 public class FreeLook extends Component {
 	private static final Vector3f yAxis = new Vector3f(0, 1, 0);
 	
 	private boolean mouseLocked = false;
-	
 	private float sensitivity;
-	
 	private int unlockMouseKey;
 	
-	/** Constructor for the free look component
-	 * @param sensitivity The mouse sensitivity */
 	public FreeLook(float sensitivity) {
-		this(sensitivity, KeyCode.ESCAPE);
+		this(sensitivity, Input.KEY_ESCAPE);
 	}
 	
-	/** Constructor for the free look component
-	 * @param sensitivity The mouse sensitivity
-	 * @param unlockMouseKey The key the unlocks the mouse cursor */
 	public FreeLook(float sensitivity, int unlockMouseKey) {
 		this.sensitivity = sensitivity;
 		this.unlockMouseKey = unlockMouseKey;
 	}
 	
 	@Override
-	protected void input(float delta) {
+	public void input(float delta) {
 		Vector2f centerPosition = new Vector2f(Window.getWidth() / 2, Window.getHeight() / 2);
 		
 		if(Input.getKey(unlockMouseKey)) {
@@ -48,7 +31,7 @@ public class FreeLook extends Component {
 			mouseLocked = false;
 		}
 		
-		if(Input.getMouseDown(MouseButton.LEFT)) {
+		if(Input.getMouseDown(0)) {
 			Input.setMousePosition(centerPosition);
 			Input.setCursor(false);
 			mouseLocked = true;
@@ -62,9 +45,8 @@ public class FreeLook extends Component {
 			
 			if(rotY)
 				getTransform().rotate(yAxis, (float)Math.toRadians(deltaPos.getX() * sensitivity));
-			
 			if(rotX)
-				getTransform().rotate(getTransform().getLocalRotation().getRight(),
+				getTransform().rotate(getTransform().getRotation().getRight(),
 						(float)Math.toRadians(-deltaPos.getY() * sensitivity));
 			
 			if(rotY || rotX)
