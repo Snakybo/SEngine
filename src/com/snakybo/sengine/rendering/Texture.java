@@ -1,24 +1,17 @@
 package com.snakybo.sengine.rendering;
 
+import static org.lwjgl.opengl.GL11.GL_CLAMP;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_REPEAT;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_RGBA8;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameterf;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
@@ -28,11 +21,28 @@ import com.snakybo.sengine.core.utils.Buffer;
 import com.snakybo.sengine.rendering.resourceManagement.TextureResource;
 
 public class Texture {
+	public static final int TEXTURE_TYPE_2D = GL_TEXTURE_2D;
+	
+	public static final int FILTER_LINEAR = GL_LINEAR;
+	public static final int FILTER_NEAREST = GL_NEAREST;
+	
+	public static final int WRAP_CLAMP = GL_CLAMP;
+	public static final int WRAP_REPEAT = GL_REPEAT;
+	
 	private static HashMap<String, TextureResource> loadedTextures = new HashMap<String, TextureResource>();
+	
 	private TextureResource resource;
 	private String fileName;
 	
 	public Texture(String fileName) {
+		this(fileName, TEXTURE_TYPE_2D, FILTER_LINEAR, WRAP_REPEAT);
+	}
+	
+	public Texture(String fileName, int textureType, int textureFilters, int textureWraps) {
+		this(fileName, textureType, textureFilters, textureWraps, new int[] {GL_NONE});
+	}
+	
+	public Texture(String fileName, int textureType, int textureFilters, int textureWraps, int[] attachments) {
 		this.fileName = fileName;
 		
 		TextureResource oldResource = loadedTextures.get(fileName);
@@ -41,7 +51,7 @@ public class Texture {
 			resource = oldResource;
 			resource.addReference();
 		} else {
-			resource = loadTexture(fileName);
+			loadTexture(fileName, textureType, textureFilters, textureWraps, attachments);
 			loadedTextures.put(fileName, resource);
 		}
 	}
@@ -59,14 +69,14 @@ public class Texture {
 	public void bind(int samplerSlot) {
 		assert (samplerSlot >= 0 && samplerSlot <= 31);
 		glActiveTexture(GL_TEXTURE0 + samplerSlot);
-		glBindTexture(GL_TEXTURE_2D, resource.getId());
+		resource.bind(0);
 	}
 	
-	public int getID() {
-		return resource.getId();
+	public void bindAsRenderTarget() {
+		resource.bindAsRenderTarget();
 	}
 	
-	private static TextureResource loadTexture(String fileName) {
+	private void loadTexture(String fileName, int textureType, int filters, int wraps, int[] attachments) {
 		try {
 			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
@@ -90,24 +100,10 @@ public class Texture {
 			
 			buffer.flip();
 			
-			TextureResource resource = new TextureResource();
-			glBindTexture(GL_TEXTURE_2D, resource.getId());
-			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-					buffer);
-			
-			return resource;
-		} catch(Exception e) {
+			resource = new TextureResource(buffer, textureType, filters, wraps, attachments, image.getHeight(), image.getHeight(), 1);
+		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		return null;
 	}
 }

@@ -1,5 +1,9 @@
 package com.snakybo.sengine.rendering;
 
+import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL30.GL_DRAW_FRAMEBUFFER;
+import static org.lwjgl.opengl.GL30.glBindFramebuffer;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -31,6 +35,11 @@ public class Window {
 		Display.destroy();
 		Keyboard.destroy();
 		Mouse.destroy();
+	}
+	
+	public static void bindAsRenderTarget() {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glViewport(0, 0, getWidth(), getHeight());
 	}
 	
 	public static boolean isCloseRequested() {

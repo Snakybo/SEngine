@@ -2,8 +2,6 @@ package com.snakybo.sengine.core.utils;
 
 import java.util.ArrayList;
 
-/** @author Kevin
- * @since Jun 29, 2014 */
 public class Utils {
 	public static String[] removeEmptyStrings(String[] data) {
 		ArrayList<String> result = new ArrayList<String>();

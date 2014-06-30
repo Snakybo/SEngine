@@ -22,30 +22,41 @@ public class TestGame extends Game {
 		Mesh planeMesh = new Mesh("plane.obj");
 		Mesh monkeyMesh = new Mesh("monkey.obj");
 		
+		Texture bricks = new Texture("bricks.jpg");
+		
 		Material bricksMaterial = new Material();
-		bricksMaterial.addTexture("diffuse", new Texture("bricks.jpg"));
-		bricksMaterial.addTexture("normalMap", new Texture("bricks_normal.jpg"));
-		bricksMaterial.addFloat("specularIntensity", 1);
-		bricksMaterial.addFloat("specularPower", 8);
+		bricksMaterial.addDiffuseTexture(bricks);
+		bricksMaterial.addNormalMap(new Texture("bricks_normal.jpg"));
+		bricksMaterial.addDispMap(new Texture("bricks_disp.png"), 0.04f, -0.5f);
+		bricksMaterial.addSpecular(0.5f, 4);
 		
 		Material bricks2Material = new Material();
-		bricks2Material.addTexture("diffuse", new Texture("bricks2.jpg"));
-		bricks2Material.addTexture("normalMap", new Texture("bricks2_normal.jpg"));
-		bricks2Material.addFloat("specularIntensity", 1);
-		bricks2Material.addFloat("specularPower", 8);
+		bricks2Material.addDiffuseTexture(new Texture("bricks2.jpg"));
+		bricks2Material.addNormalMap(new Texture("bricks2_normal.jpg"));
+		bricks2Material.addDispMap(new Texture("bricks2_disp.jpg"), 0.04f, -1.0f);
+		
+		Material bricks3Material = new Material();
+		bricks3Material.addDiffuseTexture(new Texture("bricks.jpg"));
+		//bricks3Material.addNormalMap(new Texture("bricks_normal.jpg"));
+		bricks3Material.addSpecular(0.5f, 4);
 		
 		MeshRenderer bricksRenderer = new MeshRenderer(planeMesh, bricksMaterial);
-		MeshRenderer bricks2Renderer = new MeshRenderer(monkeyMesh, bricksMaterial);
+		MeshRenderer bricks2Renderer = new MeshRenderer(monkeyMesh, bricks2Material);
+		MeshRenderer bricks3Renderer = new MeshRenderer(planeMesh, bricks3Material);
 		
 		GameObject planeObject = new GameObject();
 		planeObject.addComponent(bricksRenderer);
 		planeObject.getTransform().getPosition().set(0, -1, 5);
 		
+		GameObject plane2Object = new GameObject();
+		plane2Object.addComponent(bricks3Renderer);
+		plane2Object.getTransform().getPosition().set(17, -1, 5);
+		
 		GameObject directionalLight = 
 			new GameObject().addComponent(
 				new DirectionalLight(
 					new Vector3f(1, 1, 1),
-					0.01f
+					0.1f
 				)
 			);
 		
@@ -101,6 +112,7 @@ public class TestGame extends Game {
 		
 		addObject(cameraObject);
 		addObject(planeObject);
+		addObject(plane2Object);
 		addObject(monkeyObject);
 		addObject(monkey2Object);
 		addObject(directionalLight);

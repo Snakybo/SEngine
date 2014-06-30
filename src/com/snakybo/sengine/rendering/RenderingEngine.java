@@ -36,7 +36,9 @@ import com.snakybo.sengine.rendering.resourceManagement.MappedValues;
 
 public class RenderingEngine extends MappedValues {
 	private HashMap<String, Integer> samplerMap;
+	
 	private ArrayList<BaseLight> lights;
+	
 	private BaseLight activeLight;
 	
 	private Shader forwardAmbient;
@@ -44,12 +46,17 @@ public class RenderingEngine extends MappedValues {
 	
 	public RenderingEngine() {
 		super();
+		
+		Window.bindAsRenderTarget();
+		
 		lights = new ArrayList<BaseLight>();
 		samplerMap = new HashMap<String, Integer>();
+		
 		samplerMap.put("diffuse", 0);
 		samplerMap.put("normalMap", 1);
+		samplerMap.put("dispMap", 2);
 		
-		addVector3f("ambient", new Vector3f(0.6f, 0.6f, 0.6f));
+		addVector3f("ambient", new Vector3f(0.2f, 0.2f, 0.2f));
 		
 		forwardAmbient = new Shader("forward/ambient");
 		
