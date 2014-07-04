@@ -1,0 +1,8 @@
+Mesh plane.obj
+
+Material Diffuse bricks.jpg
+Material NormalMap bricks_normal.jpg
+Material DispMap bricks_disp.png 0.04 -0.5
+Material Specular 0.5 4
+
+Transform Position 0.0 -1.0 5.0

@@ -8,8 +8,12 @@ import com.snakybo.sengine.core.utils.Vector3f;
 public class Camera extends Component {
 	private Matrix4f projection;
 	
-	public Camera(float fov, float aspect, float zNear, float zFar) {
-		this.projection = new Matrix4f().initPerspective(fov, aspect, zNear, zFar);
+	public static Camera initPerspectiveCamera(float fov, float aspect, float zNear, float zFar) {
+		return new Camera(new Matrix4f().initPerspective(fov, aspect, zNear, zFar));
+	}
+	
+	public Camera(Matrix4f projection) {
+		this.projection = projection;
 	}
 	
 	public Matrix4f getViewProjection() {

@@ -13,11 +13,16 @@ public class GameObject {
 	private Transform transform;
 	private SEngine engine;
 	
-	public GameObject() {
+	public GameObject(Component... args) {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();
 		transform = new Transform();
 		engine = null;
+		
+		for(int i = 0; i < args.length; i++) {
+			components.add(args[i]);
+			args[i].setParent(this);
+		}
 	}
 	
 	public void addChild(GameObject child) {
