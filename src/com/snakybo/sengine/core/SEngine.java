@@ -6,36 +6,31 @@ import com.snakybo.sengine.rendering.Window;
 
 public class SEngine {
 	private RenderingEngine renderingEngine;
+	private Window window;
 	private Game game;
 	
 	private double frameTime;
 	
-	private int width;
-	private int height;
-	
 	private boolean isRunning;
 	
-	public SEngine(int width, int height, double framerate, Game game) {
+	public SEngine(Game game) {
 		this.isRunning = false;
 		
 		this.game = game;
-		this.width = width;
-		this.height = height;
-		
-		this.frameTime = 1.0 / framerate;
 		
 		game.setEngine(this);
 	}
 	
-	public void createWindow(String title) {
-		Window.createWindow(width, height, title);
-		this.renderingEngine = new RenderingEngine();
-	}
-	
-	public void start() {
+	public void start(Window window, double frameRate) {
 		if(isRunning)
 			return;
 		
+		this.window = window;
+		
+		frameTime = 1.0 / frameRate;
+		renderingEngine = new RenderingEngine();
+		
+		window.bindAsRenderTarget();		
 		run();
 	}
 	
@@ -72,7 +67,7 @@ public class SEngine {
 				
 				unprocessedTime -= frameTime;
 				
-				if(Window.isCloseRequested())
+				if(window.isCloseRequested())
 					stop();
 				
 				game.input((float)frameTime);
@@ -88,7 +83,7 @@ public class SEngine {
 			}
 			if(render) {
 				game.render(renderingEngine);
-				Window.render();
+				window.render();
 				frames++;
 			} else {
 				try {
@@ -99,14 +94,18 @@ public class SEngine {
 			}
 		}
 		
-		cleanUp();
+		destroy();
 	}
 	
-	private void cleanUp() {
-		Window.dispose();
+	private void destroy() {
+		window.destroy();
 	}
 	
 	public RenderingEngine getRenderingEngine() {
 		return renderingEngine;
+	}
+	
+	public Window getWindow() {
+		return window;
 	}
 }

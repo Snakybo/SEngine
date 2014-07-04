@@ -35,6 +35,7 @@ public class Texture {
 	public static final int FILTER_NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST;
 	public static final int FILTER_NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR;
 	
+	public static final int WRAP_NONE = 0;
 	public static final int WRAP_CLAMP = GL_CLAMP;
 	public static final int WRAP_REPEAT = GL_REPEAT;
 	
@@ -42,6 +43,11 @@ public class Texture {
 	
 	private TextureResource resource;
 	private String fileName;
+	
+	public Texture(ByteBuffer buffer, int textureType, int filters, int wraps, int[] attachments, int width, int height, int textureCount) {
+		fileName = "";
+		resource = new TextureResource(buffer, textureType, filters, wraps, attachments, width, height, textureCount);
+	}
 	
 	public Texture(String fileName) {
 		this(fileName, TEXTURE_TYPE_2D, FILTER_LINEAR_MIPMAP_LINEAR, WRAP_REPEAT);
@@ -109,7 +115,7 @@ public class Texture {
 			
 			buffer.flip();
 			
-			resource = new TextureResource(buffer, textureType, filters, wraps, attachments, image.getHeight(), image.getHeight(), 1);
+			resource = new TextureResource(buffer, textureType, filters, wraps, attachments, image.getWidth(), image.getHeight(), 1);
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(1);

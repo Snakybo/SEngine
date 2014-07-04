@@ -76,6 +76,18 @@ public class GameObject {
 			component.render(shader, renderingEngine);
 	}
 	
+	public void setEngine(SEngine engine) {
+		if(this.engine != engine) {
+			this.engine = engine;
+			
+			for(Component component : components)
+				component.addToEngine(engine);
+			
+			for(GameObject child : children)
+				child.setEngine(engine);
+		}
+	}
+	
 	public ArrayList<GameObject> getAllAttached() {
 		ArrayList<GameObject> result = new ArrayList<GameObject>();
 		
@@ -88,17 +100,5 @@ public class GameObject {
 	
 	public Transform getTransform() {
 		return transform;
-	}
-	
-	public void setEngine(SEngine engine) {
-		if(this.engine != engine) {
-			this.engine = engine;
-			
-			for(Component component : components)
-				component.addToEngine(engine);
-			
-			for(GameObject child : children)
-				child.setEngine(engine);
-		}
 	}
 }

@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LESS;
+import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_VERSION;
@@ -47,8 +48,6 @@ public class RenderingEngine extends MappedValues {
 	public RenderingEngine() {
 		super();
 		
-		Window.bindAsRenderTarget();
-		
 		lights = new ArrayList<BaseLight>();
 		samplerMap = new HashMap<String, Integer>();
 		
@@ -56,7 +55,7 @@ public class RenderingEngine extends MappedValues {
 		samplerMap.put("normalMap", 1);
 		samplerMap.put("dispMap", 2);
 		
-		addVector3f("ambient", new Vector3f(0.8f, 0.8f, 0.8f));
+		setVector3f("ambient", new Vector3f(0.8f, 0.8f, 0.8f));
 		
 		forwardAmbient = new Shader("forward/ambient");
 		
@@ -64,12 +63,13 @@ public class RenderingEngine extends MappedValues {
 		
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
+		
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
-		
 		glEnable(GL_DEPTH_CLAMP);
-		
 		glEnable(GL_TEXTURE_2D);
+		
+		setTexture("displayTexture", new Texture(null, Texture.TEXTURE_TYPE_2D, Texture.FILTER_NEAREST, Texture.WRAP_NONE, new int[] {GL_NONE}, Window.getWidth(), Window.getHeight(), 1));
 	}
 	
 	public void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName,
@@ -78,6 +78,8 @@ public class RenderingEngine extends MappedValues {
 	}
 	
 	public void render(GameObject object) {
+		getTexture("displayTexture").bindAsRenderTarget();
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		object.renderAll(forwardAmbient, this);
