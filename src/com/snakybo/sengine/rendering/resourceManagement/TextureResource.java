@@ -1,6 +1,12 @@
 package com.snakybo.sengine.rendering.resourceManagement;
 
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
+import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_NEAREST_MIPMAP_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_NEAREST_MIPMAP_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_RGBA8;
@@ -11,6 +17,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glGetFloat;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameterf;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
@@ -31,6 +38,7 @@ import static org.lwjgl.opengl.GL30.glFramebufferRenderbuffer;
 import static org.lwjgl.opengl.GL30.glFramebufferTexture2D;
 import static org.lwjgl.opengl.GL30.glGenFramebuffers;
 import static org.lwjgl.opengl.GL30.glGenRenderbuffers;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.lwjgl.opengl.GL30.glRenderbufferStorage;
 
 import java.nio.ByteBuffer;
@@ -103,13 +111,24 @@ public class TextureResource {
 				
 				glBindTexture(textureType, textureIds[i]);
 				
-				glTexParameteri(textureType, GL_TEXTURE_WRAP_S, wraps);
-				glTexParameteri(textureType, GL_TEXTURE_WRAP_T, wraps);
+				if(wraps != 0) {
+					glTexParameteri(textureType, GL_TEXTURE_WRAP_S, wraps);
+					glTexParameteri(textureType, GL_TEXTURE_WRAP_T, wraps);
+				}
 				
 				glTexParameterf(textureType, GL_TEXTURE_MIN_FILTER, filters);
 				glTexParameterf(textureType, GL_TEXTURE_MAG_FILTER, filters);
 				
 				glTexImage2D(textureType, 0, GL_RGBA8, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+				
+				if(filters == GL_NEAREST_MIPMAP_NEAREST ||
+						filters == GL_NEAREST_MIPMAP_LINEAR ||
+						filters == GL_LINEAR_MIPMAP_NEAREST ||
+						filters == GL_LINEAR_MIPMAP_LINEAR) {
+					glGenerateMipmap(textureType);
+					
+					glTexParameterf(textureType, GL_TEXTURE_MAX_ANISOTROPY_EXT, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT));
+				}
 			}
 		}
 		

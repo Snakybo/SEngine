@@ -2,7 +2,11 @@ package com.snakybo.sengine.rendering;
 
 import static org.lwjgl.opengl.GL11.GL_CLAMP;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_NEAREST_MIPMAP_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_NEAREST_MIPMAP_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_REPEAT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -26,6 +30,11 @@ public class Texture {
 	public static final int FILTER_LINEAR = GL_LINEAR;
 	public static final int FILTER_NEAREST = GL_NEAREST;
 	
+	public static final int FILTER_LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST;
+	public static final int FILTER_LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR;
+	public static final int FILTER_NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST;
+	public static final int FILTER_NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR;
+	
 	public static final int WRAP_CLAMP = GL_CLAMP;
 	public static final int WRAP_REPEAT = GL_REPEAT;
 	
@@ -35,7 +44,7 @@ public class Texture {
 	private String fileName;
 	
 	public Texture(String fileName) {
-		this(fileName, TEXTURE_TYPE_2D, FILTER_LINEAR, WRAP_REPEAT);
+		this(fileName, TEXTURE_TYPE_2D, FILTER_LINEAR_MIPMAP_LINEAR, WRAP_REPEAT);
 	}
 	
 	public Texture(String fileName, int textureType, int textureFilters, int textureWraps) {
