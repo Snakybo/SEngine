@@ -10,7 +10,7 @@ A work in progress 3D game engine made in Java using OpenGL.
 - Displacement maps
 - [Model loader](#model-loader)
 - [Automatic resource management](#automatic-resource-management)
-- [Automatic shader uniform updating](#automatic-uniform-updating)
+- [Automatic shader uniform updating](#automatic-shader-uniform-updating)
 - [Prefab system](#prefab-system)
 - [Anti-Aliasing](#anti-aliasing)
 
