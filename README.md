@@ -35,7 +35,7 @@ The engine supports different kinds of lighting, including:
 - Spot light
 
 It's fairly easy to create your own light.
-Every light extends the base class ```BaseLight```, which holds information about the ```color```, ```shader```, and ```intensity``` of the light. You simply have to call ```setShader(new Shader("name-of-shader"));``` to set the shader of the light.
+Every light extends the base class ```Light```, which holds information about the ```color```, ```shader```, and ```intensity``` of the light. Then you simply have to call ```setShader(new Shader("name-of-shader"));``` to set the shader of the light.
 
 ## Model loader
 The engine has the ability to load 3D models. Currently only .obj is supported. Other filetypes are on the [Planned features](#planned-features) list.
@@ -98,7 +98,7 @@ public class TestGame extends Game {
 		
 		addChild(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera)); // Add a new game object to the scene, with the FreeLook, FreeMove and camera components.
 		
-		addChild(Prefab.load("test")); // Load a prefab and add it to the scene
+		addChild(Prefab.load("plane")); // Load a prefab and add it to the scene
 	}
 }
 ```
@@ -123,7 +123,7 @@ public class LookAtComponent extends Component {
 
 ```
 
-Test prefab
+Plane prefab
 ```
 Mesh plane.obj // Set the mesh of the game object
 
