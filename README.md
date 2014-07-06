@@ -6,8 +6,8 @@ A work in progress 3D game engine made in Java using OpenGL.
 - [Component system](#component-system)
 - [Forward rendering](#forward-rendering)
 - [Lighting](#lighting)
-- Normal maps
-- Displacement maps
+- [Normal maps](http://en.wikipedia.org/wiki/Normal_mapping)
+- [Displacement maps](http://en.wikipedia.org/wiki/Displacement_mapping)
 - [Model loader](#model-loader)
 - [Automatic resource management](#automatic-resource-management)
 - [Automatic shader uniform updating](#automatic-shader-uniform-updating)
