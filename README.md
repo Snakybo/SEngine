@@ -5,7 +5,7 @@ A work in progress 3D game engine made in Java using OpenGL.
 ## Core features:
 - [Component system](#component-system)
 - [Forward rendering](#forward-rendering)
-- [Lighting](##lighting)
+- [Lighting](#lighting)
 - Normal maps
 - Displacement maps
 - [Model loader](#model-loader)
