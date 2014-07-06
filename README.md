@@ -21,12 +21,8 @@ A work in progress 3D game engine made in Java using OpenGL.
 - [ ] Profiling system
 - [ ] Deffered rendering
 
-## [Examples](#basic-game-example)
-
-------------------------
-
 ## Component system
-SEngine uses a system similar to [Unity 3D](http://unity3d.com/), It offers a scene that you can fill with game objects, each game object can have multiple components attached to them. This offers an unique way of developing, since there are no hard-connections between game objects or components.
+SEngine uses a system similar to [Unity 3D](http://unity3d.com/), It offers a scene which you can fill with game objects. You can attach multiple components to each game object.
 
 ## Forward rendering
 The engine uses a forward rendering system, meaning it's fast and relatively easy on the GPU. Deffered rendering support is on the [Planned features](#planned-features) list.
