@@ -9,10 +9,8 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LESS;
-import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_VERSION;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -22,44 +20,54 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
-import static org.lwjgl.opengl.GL11.glGetString;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.Transform;
-import com.snakybo.sengine.components.lighting.BaseLight;
-import com.snakybo.sengine.core.GameObject;
-import com.snakybo.sengine.core.utils.Vector3f;
-import com.snakybo.sengine.rendering.resourceManagement.MappedValues;
+import com.snakybo.sengine.components.Light;
+import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.utils.MappedValues;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 public class RenderingEngine extends MappedValues {
-	private HashMap<String, Integer> samplerMap;
+	private static RenderingEngine instance = null;
 	
-	private ArrayList<BaseLight> lights;
+	private static final int SAMPLER_LAYER_DIFFUSE = 0;
+	private static final int SAMPLER_LAYER_NORMAL_MAP = 1;
+	private static final int SAMPLER_LAYER_DISPLACEMENT_MAP = 2;
 	
-	private BaseLight activeLight;
+	private static HashMap<String, Integer> samplerMap;
 	
-	private Shader forwardAmbient;
-	private Camera mainCamera;
+	private static ArrayList<Light> lights;
 	
-	public RenderingEngine() {
-		super();
+	private static Light activeLight;
+	
+	private static Shader ambientShader;
+	
+	private static Camera mainCamera;
+	
+	public static void create(Vector3f ambientColor, Vector3f clearColor) {
+		if(instance != null)
+			return;
 		
-		lights = new ArrayList<BaseLight>();
+		instance = new RenderingEngine();
+		
+		lights = new ArrayList<Light>();
 		samplerMap = new HashMap<String, Integer>();
 		
-		samplerMap.put("diffuse", 0);
-		samplerMap.put("normalMap", 1);
-		samplerMap.put("dispMap", 2);
+		samplerMap.put("diffuse", SAMPLER_LAYER_DIFFUSE);
+		samplerMap.put("normalMap", SAMPLER_LAYER_NORMAL_MAP);
+		samplerMap.put("dispMap", SAMPLER_LAYER_DISPLACEMENT_MAP);
 		
-		setVector3f("ambient", new Vector3f(0.8f, 0.8f, 0.8f));
+		instance.setVector3f("ambient", ambientColor);
 		
-		forwardAmbient = new Shader("forward/ambient");
+		ambientShader = new Shader("forward-ambient");
 		
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
@@ -68,30 +76,26 @@ public class RenderingEngine extends MappedValues {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
-		
-		setTexture("displayTexture", new Texture(null, Texture.TEXTURE_TYPE_2D, Texture.FILTER_NEAREST, Texture.WRAP_NONE, new int[] {GL_NONE}, Window.getWidth(), Window.getHeight(), 1));
 	}
 	
-	public void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName,
+	public static void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName,
 			String uniformType) {
 		throw new IllegalArgumentException(uniformType + " is not a supported type in RenderingEngine");
 	}
 	
-	public void render(GameObject object) {
-		getTexture("displayTexture").bindAsRenderTarget();
-		
+	public static void render(GameObject object) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		object.renderAll(forwardAmbient, this);
+		object.renderAll(ambientShader);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
 		glDepthMask(false);
 		glDepthFunc(GL_EQUAL);
 		
-		for(BaseLight light : lights) {
+		for(Light light : lights) {
 			activeLight = light;
-			object.renderAll(light.getShader(), this);
+			object.renderAll(light.getShader());
 		}
 		
 		glDepthFunc(GL_LESS);
@@ -99,31 +103,31 @@ public class RenderingEngine extends MappedValues {
 		glDisable(GL_BLEND);
 	}
 	
-	public static String getOpenGLVersion() {
-		return glGetString(GL_VERSION);
-	}
-	
-	public void addLight(BaseLight light) {
+	public static void addLight(Light light) {
 		lights.add(light);
 	}
 	
-	public void addCamera(Camera camera) {
+	public static void addCamera(Camera camera) {
 		mainCamera = camera;
 	}
 	
-	public int getSamplerSlot(String samplerName) {
+	public static int getSamplerSlot(String samplerName) {
 		return samplerMap.get(samplerName);
 	}
 	
-	public BaseLight getActiveLight() {
+	public static Light getActiveLight() {
 		return activeLight;
 	}
 	
-	public Camera getMainCamera() {
+	public static Camera getMainCamera() {
 		return mainCamera;
 	}
 	
-	public void setMainCamera(Camera mainCamera) {
-		this.mainCamera = mainCamera;
+	public static Vector3f rGetVector3f(String name) {
+		return instance.getVector3f(name);
+	}
+	
+	public static float rGetFloat(String name) {
+		return instance.getFloat(name);
 	}
 }

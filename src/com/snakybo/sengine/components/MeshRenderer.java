@@ -1,24 +1,39 @@
 package com.snakybo.sengine.components;
 
-import com.snakybo.sengine.core.Component;
+import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.Material;
-import com.snakybo.sengine.rendering.Mesh;
-import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Shader;
+import com.snakybo.sengine.resource.Mesh;
+import com.snakybo.sengine.resource.Shader;
 
+/** This class extends the {@link Component} class
+ * 
+ * <p>
+ * This class has the ability to render meshes, it requires a {@link Mesh} and a {@link Material}
+ * </p>
+ * 
+ * @author Kevin Krol
+ * @since Apr 4, 2014
+ * @see Component
+ * @see Mesh
+ * @see Material */
 public class MeshRenderer extends Component {
 	private Mesh mesh;
 	private Material material;
 	
+	/** Constructor for the component
+	 * @param mesh The mesh to render
+	 * @param material The material to render the mesh with
+	 * @see Mesh
+	 * @see Material */
 	public MeshRenderer(Mesh mesh, Material material) {
 		this.mesh = mesh;
 		this.material = material;
 	}
 	
 	@Override
-	public void render(Shader shader, RenderingEngine renderingEngine) {
+	protected void render(Shader shader) {
 		shader.bind();
-		shader.updateUniforms(getTransform(), material, renderingEngine);
+		shader.updateUniforms(getTransform(), material);
 		mesh.draw();
 	}
 }

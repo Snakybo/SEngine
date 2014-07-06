@@ -1,9 +1,19 @@
 package com.snakybo.sengine.components;
 
-import com.snakybo.sengine.core.Component;
-import com.snakybo.sengine.core.Input;
-import com.snakybo.sengine.core.utils.Vector3f;
+import com.snakybo.sengine.core.object.Component;
+import com.snakybo.sengine.utils.Input;
+import com.snakybo.sengine.utils.Input.KeyCode;
+import com.snakybo.sengine.utils.math.Vector3f;
 
+/** This class extends the {@link Component} class
+ * 
+ * <p>
+ * Allows the parent game object to move around freely
+ * </p>
+ * 
+ * @author Kevin Krol
+ * @since Apr 4, 2014
+ * @see Component */
 public class FreeMove extends Component {
 	private float speed;
 	
@@ -12,33 +22,54 @@ public class FreeMove extends Component {
 	private int keyLeft;
 	private int keyRight;
 	
+	/** Constructor for the component
+	 * 
+	 * <p>
+	 * This constructor will call {@link #FreeMove(float, int, int, int, int)} with the keycodes W, S, A and D.
+	 * </p>
+	 * 
+	 * @param speed The speed of the game object
+	 * @see #FreeMove(float, int, int, int, int) */
 	public FreeMove(float speed) {
-		this(speed, Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D);
+		this(speed, KeyCode.KEY_W, KeyCode.KEY_S, KeyCode.KEY_A, KeyCode.KEY_D);
 	}
 	
-	public FreeMove(float speed, int forwardKey, int backKey, int leftKey, int rightKey) {
+	/** Constructor for the component
+	 * @param speed The speed of the game object
+	 * @param keyForward The key to use to go forward
+	 * @param keyBackward The key to use to go backward
+	 * @param keyLeft The key to use to go to the left
+	 * @param keyRight The key to use to go to the right */
+	public FreeMove(float speed, int keyForward, int keyBackward, int keyLeft, int keyRight) {
 		this.speed = speed;
-		this.keyForward = forwardKey;
-		this.keyBackward = backKey;
-		this.keyLeft = leftKey;
-		this.keyRight = rightKey;
+		
+		this.keyForward = keyForward;
+		this.keyBackward = keyBackward;
+		this.keyLeft = keyLeft;
+		this.keyRight = keyRight;
 	}
 	
 	@Override
-	public void input(float delta) {
-		float movAmt = speed * delta;
+	protected void input(double delta) {
+		float moveAmount = speed * (float)delta;
 		
 		if(Input.getKey(keyForward))
-			move(getTransform().getRotation().getForward(), movAmt);
+			move(getTransform().getRotation().getForward(), moveAmount);
+		
 		if(Input.getKey(keyBackward))
-			move(getTransform().getRotation().getForward(), -movAmt);
+			move(getTransform().getRotation().getForward(), -moveAmount);
+		
 		if(Input.getKey(keyLeft))
-			move(getTransform().getRotation().getLeft(), movAmt);
+			move(getTransform().getRotation().getLeft(), moveAmount);
+		
 		if(Input.getKey(keyRight))
-			move(getTransform().getRotation().getRight(), movAmt);
+			move(getTransform().getRotation().getRight(), moveAmount);
 	}
 	
-	private void move(Vector3f dir, float amt) {
-		getTransform().setPosition(getTransform().getPosition().add(dir.mul(amt)));
+	/** Move the game object in the specified direction by the specified amount
+	 * @param direction The direction to move in
+	 * @param amount The amount of units to move */
+	private void move(Vector3f direction, float amount) {
+		getTransform().setPosition(getTransform().getPosition().add(direction.mul(amount)));
 	}
 }

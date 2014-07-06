@@ -12,10 +12,16 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
-import com.snakybo.sengine.core.utils.Vector2f;
+import com.snakybo.sengine.utils.math.Vector2f;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Window {
 	public static final int MSAA = 0x01;
+	
+	private ContextAttribs contextAttribs;
+	
+	private Vector3f ambientColor;
+	private Vector3f clearColor;
 	
 	private int width;
 	private int height;
@@ -27,10 +33,13 @@ public class Window {
 		this.width = width;
 		this.height = height;
 		
+		ambientColor = new Vector3f(1.0f, 1.0f, 1.0f);
+		clearColor = new Vector3f(0.0f, 0.0f, 0.0f);
+		
 		Display.setTitle(title);
 	}
 	
-	public void create(ContextAttribs contextAttribs) {
+	public void create() {
 		PixelFormat pixelFormat = new PixelFormat();
 		
 		if(aaType == MSAA)
@@ -66,9 +75,33 @@ public class Window {
 		return Display.isCloseRequested();
 	}
 	
+	public boolean isCreated() {
+		return Display.isCreated();
+	}
+	
 	public void setAA(int aaType, int aaSamples) {
 		this.aaType = aaType;
 		this.aaSamples = aaSamples;
+	}
+	
+	public void setContextAttribs(ContextAttribs contextAttribs) {
+		this.contextAttribs = contextAttribs;
+	}
+	
+	public void setAmbientColor(Vector3f ambientColor) {
+		this.ambientColor = ambientColor;
+	}
+	
+	public void setClearColor(Vector3f clearColor) {
+		this.clearColor = clearColor;
+	}
+	
+	public Vector3f getAmbientColor() {
+		return ambientColor;
+	}
+	
+	public Vector3f getClearColor() {
+		return clearColor;
 	}
 	
 	public static int getWidth() {

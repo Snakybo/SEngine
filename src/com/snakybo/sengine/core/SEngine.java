@@ -1,11 +1,15 @@
 package com.snakybo.sengine.core;
 
-import com.snakybo.sengine.core.utils.Time;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.utils.Input;
+import com.snakybo.sengine.utils.Time;
 
+/** Core class for the engine
+ * 
+ * @author Kevin Krol
+ * @since Apr 4, 2014 */
 public class SEngine {
-	private RenderingEngine renderingEngine;
 	private Window window;
 	private Game game;
 	
@@ -13,44 +17,62 @@ public class SEngine {
 	
 	private boolean isRunning;
 	
+	/** Constructor for the engine
+	 * @param game The base class for your game */
 	public SEngine(Game game) {
 		this.isRunning = false;
 		
 		this.game = game;
-		
-		game.setEngine(this);
 	}
 	
+	/** Start the engine
+	 * @param window The window you've created
+	 * @param frameRate The desired frame rate of the game */
 	public void start(Window window, double frameRate) {
 		if(isRunning)
 			return;
 		
+		if(!window.isCreated())
+			throw new IllegalStateException(
+					"The window has not been created, make sure you call window.create() prior to starting the engine");
+		
 		this.window = window;
 		
 		frameTime = 1.0 / frameRate;
-		renderingEngine = new RenderingEngine();
 		
-		window.bindAsRenderTarget();		
+		isRunning = true;
+		
+		RenderingEngine.create(window.getAmbientColor(), window.getClearColor());
+		
+		window.bindAsRenderTarget();
+		
+		game.internalInit();
+		game.init();
+		
 		run();
 	}
 	
+	/** Stop the engine
+	 * 
+	 * <p>
+	 * This method stops the game loop and destroys the window
+	 * </p> */
 	public void stop() {
 		if(!isRunning)
 			return;
 		
 		isRunning = false;
+		
+		window.destroy();
 	}
 	
+	/** Main loop of the engine, timing logic is handled here */
 	private void run() {
-		isRunning = true;
-		
 		int frames = 0;
-		long frameCounter = 0;
-		
-		game.init();
 		
 		double lastTime = Time.getTime();
-		double unprocessedTime = 0;
+		double unprocessedTime = 0.0;
+		double frameCounter = 0.0;
 		
 		while(isRunning) {
 			boolean render = false;
@@ -62,27 +84,30 @@ public class SEngine {
 			unprocessedTime += passedTime;
 			frameCounter += passedTime;
 			
+			if(frameCounter >= 1.0) {
+				System.out.println(frames);
+				frames = 0;
+				frameCounter = 0.0;
+			}
+			
 			while(unprocessedTime > frameTime) {
 				render = true;
 				
 				unprocessedTime -= frameTime;
 				
-				if(window.isCloseRequested())
+				if(window.isCloseRequested()) {
 					stop();
+					return;
+				}
 				
-				game.input((float)frameTime);
+				game.input(frameTime);
 				Input.update();
 				
-				game.update((float)frameTime);
-				
-				if(frameCounter >= 1.0) {
-					System.out.println(frames);
-					frames = 0;
-					frameCounter = 0;
-				}
+				game.update(frameTime);
 			}
+			
 			if(render) {
-				game.render(renderingEngine);
+				game.render();
 				window.render();
 				frames++;
 			} else {
@@ -93,19 +118,5 @@ public class SEngine {
 				}
 			}
 		}
-		
-		destroy();
-	}
-	
-	private void destroy() {
-		window.destroy();
-	}
-	
-	public RenderingEngine getRenderingEngine() {
-		return renderingEngine;
-	}
-	
-	public Window getWindow() {
-		return window;
 	}
 }

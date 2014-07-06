@@ -1,28 +1,17 @@
 package com.snakybo.game;
 
-import com.snakybo.sengine.core.Component;
-import com.snakybo.sengine.core.utils.Quaternion;
-import com.snakybo.sengine.core.utils.Vector3f;
+import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Shader;
+import com.snakybo.sengine.utils.math.Quaternion;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 public class LookAtComponent extends Component {
-	RenderingEngine renderingEngine;
-	
 	@Override
-	public void update(float delta) {
-		if(renderingEngine != null) {
-			Quaternion newRotation =
+	public void update(double delta) {
+		Quaternion newRotation =
 				getTransform().getLookAtRotation(
-					renderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0)
-				);
-			
-			getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, delta * 5.0f, true));
-		}
-	}
-	
-	@Override
-	public void render(Shader shader, RenderingEngine renderingEngine) {
-		this.renderingEngine = renderingEngine;
+						RenderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0));
+		
+		getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, (float)delta * 5.0f, true));
 	}
 }

@@ -1,6 +1,7 @@
 package com.snakybo.sengine.rendering;
 
-import com.snakybo.sengine.rendering.resourceManagement.MappedValues;
+import com.snakybo.sengine.resource.Texture;
+import com.snakybo.sengine.utils.MappedValues;
 
 public class Material extends MappedValues {
 	public Material() {
