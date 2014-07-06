@@ -21,6 +21,8 @@ A work in progress 3D game engine made in Java using OpenGL.
 - [ ] Profiling system
 - [ ] Deffered rendering
 
+## [Examples](#basic-game-example)
+
 ------------------------
 
 ## Component system
@@ -53,3 +55,88 @@ The engine has support for a basic prefab system. This allows the developer to c
 
 ## Anti-Aliasing
 Currently the engine only supports [MSAA](http://en.wikipedia.org/wiki/Multisample_anti-aliasing), Other anti-aliasing techniques are on the [Planned features](#planned-features) list.
+
+------------------------
+
+## Basic game example
+
+Main
+```
+package com.snakybo.game;
+
+import com.snakybo.sengine.core.SEngine;
+import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.utils.math.Vector3f;
+
+public class Main {
+	public static void main(String[] args) {
+		SEngine engine = new SEngine(new TestGame()); // Create the engine, passing in your main game class
+		Window window = new Window(1280, 720, "SEngine Test Game"); // Create a new window
+		
+		window.setAmbientColor(new Vector3f(1.0f, 1.0f, 0.0f)); // Set the ambient color to yellow
+		window.setClearColor(new Vector3f(1.0f, 0.0f, 1.0f)); // Set the clear color to purple
+		window.setAA(Window.MSAA, 16); // Turn on 16x MSAA
+		
+		window.create();
+		engine.start(window, 60.0); // Start the engine, second parameter is the desired framerate of the game
+	}
+}
+
+```
+
+TestGame
+```
+package com.snakybo.game;
+
+import com.snakybo.sengine.components.Camera;
+import com.snakybo.sengine.components.FreeLook;
+import com.snakybo.sengine.components.FreeMove;
+import com.snakybo.sengine.core.Game;
+import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.resource.Prefab;
+
+public class TestGame extends Game {
+	public void init() {
+		Camera camera = Camera.initPerspectiveCamera((float)Math.toRadians(70.0f), (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f); // Create a camera and set it to a perspective projection
+		
+		addChild(new GameObject(new FreeLook(0.5f), new FreeMove(10.0f), camera)); // Add a new game object to the scene, with the FreeLook, FreeMove and camera components.
+		
+		addChild(Prefab.load("test")); // Load a prefab and add it to the scene
+	}
+}
+```
+
+LookAtComponent
+```
+package com.snakybo.game;
+
+import com.snakybo.sengine.core.object.Component;
+import com.snakybo.sengine.rendering.RenderingEngine;
+import com.snakybo.sengine.utils.math.Quaternion;
+import com.snakybo.sengine.utils.math.Vector3f;
+
+public class LookAtComponent extends Component {
+	@Override
+	public void update(float delta) {
+		Quaternion newRotation = getTransform().getLookAtRotation(RenderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0));
+		
+		getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, delta * 5.0f, true)); // Rotate the game object towards the main camera
+	}
+}
+
+```
+
+Test prefab
+```
+Mesh plane.obj // Set the mesh of the game object
+
+Material Diffuse bricks.jpg // Set the diffuse texture of the material
+Material NormalMap bricks_normal.jpg // Set the normal map of the material
+Material DispMap bricks_disp.png 0.04 -0.5 // Set the displacement map of the material
+Material Specular 0.5 4 // Set the specular reflection of the material
+
+Transform Position 0.0 -1.0 5.0 // Set the position of the game object
+
+Component com.snakybo.game.LookAtComponent // add the LookAtComponent to the game object
+```
