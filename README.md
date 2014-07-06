@@ -1,19 +1,18 @@
-SEngine
--------
+# SEngine
 
 A work in progress 3D game engine made in Java using OpenGL.
 
-###### Core features:
-- [Component system](##Component System)
-- [Forward rendering](##Forward Rendering)
-- [Lighting](##Lighting)
+## Core features:
+- [Component system](##component-system)
+- [Forward rendering](##forward-rendering)
+- [Lighting](##lighting)
 - Normal maps
 - Displacement maps
-- [Model loader](##Model loader)
-- [Automatic resource management](##Automatic resource management)
-- [Automatic shader uniform updating](##Automatic uniform updating)
-- [Prefab system](##Prefab system)
-- [Anti-Aliasing](##Anti-Aliasing)
+- [Model loader](##model-loader)
+- [Automatic resource management](##automatic-resource-management)
+- [Automatic shader uniform updating](##automatic-uniform-updating)
+- [Prefab system](##prefab-system)
+- [Anti-Aliasing](##anti-aliasing)
 
 ## Planned features
 - [ ] FXAA anti-aliasing
@@ -24,10 +23,10 @@ A work in progress 3D game engine made in Java using OpenGL.
 
 ------------------------
 
-## Component System
+## Component system
 SEngine uses a system similar to [Unity 3D](http://unity3d.com/), It offers a scene that you can fill with game objects, each game object can have multiple components attached to them. This offers an unique way of developing, since there are no hard-connections between game objects or components.
 
-## Forward Rendering
+## Forward rendering
 The engine uses a forward rendering system, meaning it's fast and relatively easy on the GPU. Deffered rendering support is on the [Planned features]() list.
 
 ## Lighting
@@ -49,7 +48,7 @@ The engine automatically manages resources that have been loaded. Whenever you c
 ## Automatic shader unfiorm updating
 The engine has the ability to automatically update most shader uniforms, it supports the GLSL datatypes ```float```, ```vec3``` , ```mat4``` and ```sampler2D```. These variables should be prefixed with ```T_```, ```M_``` or ```R_``` if it's for the ```Transform```, ```Material``` or ```Rendererer```.
 
-## Prefab System
+## Prefab system
 The engine has support for a basic prefab system. This allows the developer to create a game object in a prefab file, add components and modify any variables. This allows for easy editing of objects, without having to rebuild every time you change a variable.
 
 ## Anti-Aliasing
