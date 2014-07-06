@@ -3,16 +3,16 @@
 A work in progress 3D game engine made in Java using OpenGL.
 
 ## Core features:
-- [Component system](##component-system)
-- [Forward rendering](##forward-rendering)
-- [Lighting](##lighting)
+- [Component system](#component-system)
+- [Forward rendering](#forward-rendering)
+- [Lighting](##ighting)
 - Normal maps
 - Displacement maps
-- [Model loader](##model-loader)
-- [Automatic resource management](##automatic-resource-management)
-- [Automatic shader uniform updating](##automatic-uniform-updating)
-- [Prefab system](##prefab-system)
-- [Anti-Aliasing](##anti-aliasing)
+- [Model loader](#model-loader)
+- [Automatic resource management](#automatic-resource-management)
+- [Automatic shader uniform updating](#automatic-uniform-updating)
+- [Prefab system](#prefab-system)
+- [Anti-Aliasing](#anti-aliasing)
 
 ## Planned features
 - [ ] FXAA anti-aliasing
