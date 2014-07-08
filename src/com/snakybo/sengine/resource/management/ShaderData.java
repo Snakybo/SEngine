@@ -83,13 +83,17 @@ public class ShaderData extends ReferenceCounter {
 	}
 	
 	@Override
-	protected void finalize() {
-		for(int shader : shaders) {
-			glDetachShader(program, shader);
-			glDeleteShader(shader);
+	protected void finalize() throws Throwable {
+		try {
+			for(int shader : shaders) {
+				glDetachShader(program, shader);
+				glDeleteShader(shader);
+			}
+			
+			glDeleteProgram(program);
+		} finally {
+			super.finalize();
 		}
-		
-		glDeleteProgram(program);
 	}
 	
 	private void addVertexShader(String text) {

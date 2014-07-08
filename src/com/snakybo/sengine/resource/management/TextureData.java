@@ -76,12 +76,16 @@ public class TextureData extends ReferenceCounter {
 	}
 	
 	@Override
-	protected void finalize() {
-		glDeleteFramebuffers(frameBuffer);
-		glDeleteRenderbuffers(renderBuffer);
-		
-		for(int textureId : textureIds.array())
-			glDeleteBuffers(textureId);
+	protected void finalize() throws Throwable {
+		try {
+			glDeleteFramebuffers(frameBuffer);
+			glDeleteRenderbuffers(renderBuffer);
+			
+			for(int textureId : textureIds.array())
+				glDeleteBuffers(textureId);
+		} finally {
+			super.finalize();
+		}
 	}	
 	
 	public void bind(int textureNum) {

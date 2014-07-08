@@ -1,46 +1,104 @@
 package com.snakybo.sengine.resource.management;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class MeshData {
-	private int vbo;
-	private int ibo;
-	private int size;
-	private int refCount;
+import java.nio.IntBuffer;
+
+import org.lwjgl.BufferUtils;
+
+import com.snakybo.sengine.resource.loading.IndexedModel;
+import com.snakybo.sengine.utils.Buffer;
+import com.snakybo.sengine.utils.ReferenceCounter;
+
+/** @author Kevin
+ * @since Jul 8, 2014 */
+public class MeshData extends ReferenceCounter {
+	private static final int NUM_BUFFERS = 5;
 	
-	public MeshData(int size) {
-		vbo = glGenBuffers();
-		ibo = glGenBuffers();
-		this.size = size;
-		this.refCount = 1;
+	private static final int POSITION_VB = 0;
+	private static final int TEXCOORD_VB = 1;
+	private static final int NORMAL_VB = 2;
+	private static final int TANGENT_VB = 3;
+	private static final int INDEX_VB = 4;
+	
+	private IntBuffer vertexArrayObject;
+	private IntBuffer vertexArrayBuffers;
+	
+	private int drawCount;
+	
+	public MeshData(IndexedModel model) {
+		super();
+		
+		if(!model.isValid()) {
+			System.err.println("Error: Invalid mesh! A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
+			System.exit(1);
+		}
+		
+		vertexArrayObject = BufferUtils.createIntBuffer(1);
+		vertexArrayBuffers = BufferUtils.createIntBuffer(NUM_BUFFERS);
+		drawCount = model.getIndices().size();
+		
+		glGenVertexArrays(vertexArrayObject);
+		glBindVertexArray(vertexArrayObject.get(0));
+		
+		glGenBuffers(vertexArrayBuffers);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(POSITION_VB));
+		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getPositions()), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TEXCOORD_VB));
+		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV2(model.getTexCoords()), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(NORMAL_VB));
+		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getNormals()), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TANGENT_VB));
+		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getTangents()), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexArrayBuffers.get(INDEX_VB));
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBufferi(model.getIndices()), GL_STATIC_DRAW);
 	}
 	
 	@Override
-	protected void finalize() {
-		glDeleteBuffers(vbo);
-		glDeleteBuffers(ibo);
+	protected void finalize() throws Throwable {
+		try {
+			glDeleteVertexArrays(vertexArrayObject);
+			glDeleteBuffers(vertexArrayBuffers);
+		} finally {
+			super.finalize();
+		}
 	}
 	
-	public void addReference() {
-		refCount++;
-	}
-	
-	public boolean removeReference() {
-		refCount--;
+	public void draw() {
+		glBindVertexArray(vertexArrayObject.get(0));
 		
-		return refCount == 0;
-	}
-	
-	public int getVbo() {
-		return vbo;
-	}
-	
-	public int getIbo() {
-		return ibo;
-	}
-	
-	public int getSize() {
-		return size;
+		glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
 	}
 }

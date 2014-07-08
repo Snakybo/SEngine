@@ -52,9 +52,13 @@ public class Shader {
 	}
 	
 	@Override
-	protected void finalize() {
-		if(resource.removeReference() && !fileName.isEmpty())
-			resourceMap.remove(fileName);
+	protected void finalize() throws Throwable {
+		try {
+			if(resource.removeReference() && !fileName.isEmpty())
+				resourceMap.remove(fileName);
+		} finally {
+			super.finalize();
+		}
 	}
 	
 	public void bind() {

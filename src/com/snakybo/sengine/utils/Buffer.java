@@ -3,11 +3,13 @@ package com.snakybo.sengine.utils;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.rendering.Vertex;
 import com.snakybo.sengine.utils.math.Matrix4f;
+import com.snakybo.sengine.utils.math.Vector2f;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Buffer {
 	public static FloatBuffer createFloatBuffer(int size) {
@@ -30,24 +32,30 @@ public class Buffer {
 		return buffer;
 	}
 	
-	public static FloatBuffer createFlippedBuffer(Vertex[] vertices) {
-		FloatBuffer buffer = createFloatBuffer(vertices.length * Vertex.SIZE);
+	public static IntBuffer createFlippedBufferi(List<Integer> values) {
+		return createFlippedBuffer(Utils.toIntArray(values.toArray(new Integer[values.size()])));
+	}
+	
+	public static FloatBuffer createFlippedBufferV2(List<Vector2f> values) {
+		FloatBuffer buffer = createFloatBuffer(values.size() * 2);
 		
-		for(int i = 0; i < vertices.length; i++) {
-			buffer.put(vertices[i].getPosition().x);
-			buffer.put(vertices[i].getPosition().y);
-			buffer.put(vertices[i].getPosition().z);
-			
-			buffer.put(vertices[i].getTexCoord().x);
-			buffer.put(vertices[i].getTexCoord().y);
-			
-			buffer.put(vertices[i].getNormal().x);
-			buffer.put(vertices[i].getNormal().y);
-			buffer.put(vertices[i].getNormal().z);
-			
-			buffer.put(vertices[i].getTangent().x);
-			buffer.put(vertices[i].getTangent().y);
-			buffer.put(vertices[i].getTangent().z);
+		for(int i = 0; i < values.size(); i++) {
+			buffer.put(values.get(i).x);
+			buffer.put(values.get(i).y);
+		}
+		
+		buffer.flip();
+		
+		return buffer;
+	}
+	
+	public static FloatBuffer createFlippedBufferV3(List<Vector3f> values) {
+		FloatBuffer buffer = createFloatBuffer(values.size() * 3);
+		
+		for(int i = 0; i < values.size(); i++) {
+			buffer.put(values.get(i).x);
+			buffer.put(values.get(i).y);
+			buffer.put(values.get(i).z);
 		}
 		
 		buffer.flip();

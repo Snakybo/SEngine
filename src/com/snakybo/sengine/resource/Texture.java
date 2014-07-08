@@ -101,7 +101,7 @@ public class Texture {
 			resource = existingResource;
 			resource.addReference();
 		} else {
-			loadTexture(fileName, textureTarget, filters, internalFormat, format, clamp, attachments);
+			loadTexture(textureTarget, filters, internalFormat, format, clamp, attachments);
 		}
 	}
 	
@@ -113,9 +113,13 @@ public class Texture {
 	}
 	
 	@Override
-	protected void finalize() {
-		if(resource.removeReference() && !fileName.isEmpty())
-			resourceMap.remove(fileName);
+	protected void finalize() throws Throwable {
+		try {
+			if(resource.removeReference() && !fileName.isEmpty())
+				resourceMap.remove(fileName);
+		} finally {
+			super.finalize();
+		}
 	}
 	
 	public void bind() {
@@ -141,7 +145,7 @@ public class Texture {
 		return resource.getHeight();
 	}
 	
-	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments) {
+	private void loadTexture(int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments) {
 		try {
 			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
