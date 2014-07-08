@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.snakybo.sengine.components.DirectionalLight;
 import com.snakybo.sengine.components.PointLight;
@@ -20,7 +21,7 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Shader {
-	private static HashMap<String, ShaderData> resourceMap = new HashMap<String, ShaderData>();
+	private static Map<String, ShaderData> resourceMap = new HashMap<String, ShaderData>();
 	
 	private ShaderData resource;
 	private String fileName;

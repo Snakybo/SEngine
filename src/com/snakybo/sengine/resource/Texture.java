@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -19,7 +20,7 @@ import com.snakybo.sengine.resource.management.TextureData;
 import com.snakybo.sengine.utils.Buffer;
 
 public class Texture {
-	private static HashMap<String, TextureData> resourceMap = new HashMap<String, TextureData>();
+	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();
 	
 	private TextureData resource;
 	private String fileName;
@@ -168,6 +169,7 @@ public class Texture {
 			
 			resourceMap.put(fileName, resource);
 		} catch(IOException e) {
+			System.err.println("Error loading texture: The texture " + fileName + " doesn't exist");
 			e.printStackTrace();
 			System.exit(1);
 		}

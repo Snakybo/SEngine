@@ -19,13 +19,13 @@ A work in progress 3D game engine made in Java using OpenGL.
 - [ ] Support for different types of models
 - [ ] Dynamic shadows
 - [ ] Profiling system
-- [ ] Deffered rendering
+- [ ] Deferred rendering
 
 ## Component system
 SEngine uses a system similar to [Unity 3D](http://unity3d.com/), It offers a scene which you can fill with game objects. You can attach multiple components to each game object.
 
 ## Forward rendering
-The engine uses a forward rendering system, meaning it's fast and relatively easy on the GPU. Deffered rendering support is on the [Planned features](#planned-features) list.
+The engine uses a forward rendering system, meaning it's fast and relatively easy on the GPU. Deferred rendering support is on the [Planned features](#planned-features) list.
 
 ## Lighting
 The engine supports different kinds of lighting, including:
@@ -43,11 +43,11 @@ The engine has the ability to load 3D models. Currently only .obj is supported. 
 ## Automatic resource management
 The engine automatically manages resources that have been loaded. Whenever you create a texture, mesh or shader it automatically checks if it has been loaded before. This saves a lot of time and memory when you try to load the same file multiple times. It also automatically frees any memory allocated to the file by OpenGL when the last reference to the file has been destroyed.
 
-## Automatic shader unfiorm updating
+## Automatic shader uniform updating
 The engine has the ability to automatically update most shader uniforms, it supports the GLSL datatypes ```float```, ```vec3``` , ```mat4``` and ```sampler2D```. These variables should be prefixed with ```T_```, ```M_``` or ```R_``` if it's for the ```Transform```, ```Material``` or ```Rendererer```.
 
 ## Prefab system
-The engine has support for a basic prefab system. This allows the developer to create a game object in a prefab file, add components and modify any variables. This allows for easy editing of objects, without having to rebuild every time you change a variable.
+The engine has support for a basic prefab system. This allows you to create a game object in a prefab file, you can modify any variables in this file. This allows for easy editing of objects, without having to rebuild every time you change a variable. However it's not possible to add components from a prefab yet.
 
 ## Anti-Aliasing
 Currently the engine only supports [MSAA](http://en.wikipedia.org/wiki/Multisample_anti-aliasing), Other anti-aliasing techniques are on the [Planned features](#planned-features) list.
@@ -133,6 +133,4 @@ Material DispMap bricks_disp.png 0.04 -0.5 // Set the displacement map of the ma
 Material Specular 0.5 4 // Set the specular reflection of the material
 
 Transform Position 0.0 -1.0 5.0 // Set the position of the game object
-
-Component com.snakybo.game.LookAtComponent // add the LookAtComponent to the game object
 ```
