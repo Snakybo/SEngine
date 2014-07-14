@@ -24,7 +24,7 @@ public class SpotLight extends PointLight {
 		
 		this.cutoff = cutoff;
 		
-		setShader(new Shader("forward-spot"));
+		setShader(new Shader("internal/forward-rendering/forward-spot"));
 	}
 	
 	/** Set the range at which the light should cut off
@@ -36,7 +36,7 @@ public class SpotLight extends PointLight {
 	/** @return The direction the light is pointed at
 	 * @see Vector3f */
 	public Vector3f getDirection() {
-		return getTransform().getTransformedRotation().getForward();
+		return getTransform().getWorldRotation().getForward();
 	}
 	
 	/** @return The cutoff of the light */

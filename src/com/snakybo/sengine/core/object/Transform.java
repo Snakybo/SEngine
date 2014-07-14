@@ -64,6 +64,22 @@ public class Transform {
 		return false;
 	}
 	
+	public void setParent(Transform parent) {
+		this.parent = parent;
+	}
+	
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+	
+	public void setRotation(Quaternion rotation) {
+		this.rotation = rotation;
+	}
+	
+	public void setScale(Vector3f scale) {
+		this.scale = scale;
+	}
+	
 	public Matrix4f getTransformation() {
 		Matrix4f translationMatrix = new Matrix4f().initTranslation(position.x, position.y, position.z);
 		Matrix4f rotationMatrix = rotation.toRotationMatrix();
@@ -79,19 +95,15 @@ public class Transform {
 		return parentMatrix;
 	}
 	
-	public void setParent(Transform parent) {
-		this.parent = parent;
-	}
-	
-	public Vector3f getTransformedPosition() {
+	public Vector3f getWorldPosition() {
 		return getParentMatrix().transform(position);
 	}
 	
-	public Quaternion getTransformedRotation() {
+	public Quaternion getWorldRotation() {
 		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
 		
 		if(parent != null)
-			parentRotation = parent.getTransformedRotation();
+			parentRotation = parent.getWorldRotation();
 		
 		return parentRotation.mul(rotation);
 	}
@@ -100,23 +112,11 @@ public class Transform {
 		return position;
 	}
 	
-	public void setPosition(Vector3f position) {
-		this.position = position;
-	}
-	
 	public Quaternion getRotation() {
 		return rotation;
 	}
 	
-	public void setRotation(Quaternion rotation) {
-		this.rotation = rotation;
-	}
-	
 	public Vector3f getScale() {
 		return scale;
-	}
-	
-	public void setScale(Vector3f scale) {
-		this.scale = scale;
 	}
 }

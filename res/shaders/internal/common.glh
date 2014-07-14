@@ -1,9 +1,9 @@
 #if (GLSL_VERSION >= 150)
 	#define DeclareFragOutput(locationNumber, type) out type outputLocation##locationNumber
 	#define SetFragOutput(locationNumber, val) outputLocation##locationNumber = val
-	
+
 	#define texture2D(tex, coord) texture(tex, coord)
-	
+
 	#if defined(VS_BUILD)
 		#define varying out
 	#elif defined(FS_BUILD)

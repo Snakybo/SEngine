@@ -12,9 +12,9 @@ import com.snakybo.sengine.utils.Utils;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-// FIXME: Maybe something is wrong with normal/tangent calculation
+//FIXME: Normal maps aren't working anymore
 
-public class ObjModel {
+public class ObjModel implements IModel {
 	private class ObjIndex {
 		public int vertex;
 		public int texCoord;

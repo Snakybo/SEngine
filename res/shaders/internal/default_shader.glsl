@@ -1,4 +1,4 @@
-#include "common.glh"
+#include "internal/common.glh"
 
 varying vec2 texCoord0;
 
@@ -10,8 +10,8 @@ attribute vec2 texCoord;
 uniform mat4 T_MVP;
 
 void main() {
-    gl_Position = T_MVP * vec4(position, 1.0);
-    texCoord0 = texCoord; 
+	gl_Position = T_MVP * vec4(position, 1.0);
+	texCoord0 = texCoord; 
 }
 
 #elif defined(FS_BUILD)

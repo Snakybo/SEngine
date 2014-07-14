@@ -2,24 +2,10 @@ package com.snakybo.sengine.utils;
 
 /** @author Kevin
  * @since Jul 5, 2014 */
-public class ReferenceCounter {
-	private int refCount;
+public interface ReferenceCounter {
+	void addReference();
 	
-	public ReferenceCounter() {
-		refCount = 0;
-	}
+	boolean removeReference();
 	
-	public void addReference() {
-		refCount++;
-	}
-	
-	public boolean removeReference() {
-		refCount--;
-		
-		return refCount == 0;
-	}
-	
-	public int getReferenceCount() {
-		return refCount;
-	}
+	int getReferenceCount();
 }

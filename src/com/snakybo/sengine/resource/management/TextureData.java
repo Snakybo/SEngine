@@ -48,8 +48,9 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 
 import com.snakybo.sengine.utils.ReferenceCounter;
+import com.snakybo.sengine.utils.math.MathUtils;
 
-public class TextureData extends ReferenceCounter {
+public class TextureData implements ReferenceCounter {
 	private IntBuffer textureIds;
 	
 	private int textureTarget;
@@ -59,9 +60,9 @@ public class TextureData extends ReferenceCounter {
 	private int width;
 	private int height;
 	
+	private int refCount;
+	
 	public TextureData(int textureTarget, int width, int height, int numTextures, ByteBuffer data, int filters, int internalFormat, int format, boolean clamp, int attachments) {
-		super();
-		
 		this.textureIds = BufferUtils.createIntBuffer(numTextures);
 		this.textureTarget = textureTarget;
 		this.numTextures = numTextures;
@@ -70,6 +71,7 @@ public class TextureData extends ReferenceCounter {
 		
 		frameBuffer = 0;
 		renderBuffer = 0;
+		refCount = 0;
 		
 		initTextures(data, filters, internalFormat, format, clamp);
 		initRenderTargets(attachments);
@@ -86,7 +88,24 @@ public class TextureData extends ReferenceCounter {
 		} finally {
 			super.finalize();
 		}
-	}	
+	}
+	
+	@Override
+	public void addReference() {
+		refCount++;
+	}
+	
+	@Override
+	public boolean removeReference() {
+		refCount--;
+		
+		return refCount == 0;
+	}
+	
+	@Override
+	public int getReferenceCount() {
+		return refCount;
+	}
 	
 	public void bind(int textureNum) {
 		glBindTexture(textureTarget, textureIds.get(textureNum));
@@ -121,7 +140,7 @@ public class TextureData extends ReferenceCounter {
 			if(mipmapEnabled) {
 				glGenerateMipmap(textureTarget);
 				
-				float maxAnisotropic = glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+				float maxAnisotropic = MathUtils.clamp(glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0.0f, 8.0f);
 				assert(maxAnisotropic >= 0.0f && maxAnisotropic <= 8.0f);
 				
 				glTexParameterf(textureTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropic);

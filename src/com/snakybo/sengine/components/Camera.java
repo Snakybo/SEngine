@@ -43,8 +43,8 @@ public class Camera extends Component {
 	 *         before returning the projection
 	 * @see Matrix4f */
 	public Matrix4f getViewProjection() {
-		Matrix4f cameraRotation = getTransform().getTransformedRotation().conjugate().toRotationMatrix();
-		Vector3f cameraPos = getTransform().getTransformedPosition().mul(-1);
+		Matrix4f cameraRotation = getTransform().getWorldRotation().conjugate().toRotationMatrix();
+		Vector3f cameraPos = getTransform().getWorldPosition().mul(-1);
 		
 		Matrix4f cameraTranslation = new Matrix4f().initTranslation(cameraPos.x, cameraPos.y, cameraPos.z);
 		

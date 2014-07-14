@@ -16,16 +16,16 @@ public abstract class MappedValues {
 		textureHashMap = new HashMap<String, Texture>();
 	}
 	
-	public void setVector3f(String name, Vector3f vector3f) {
-		vector3fHashMap.put(name, vector3f);
+	public void setVector3f(String name, Vector3f value) {
+		vector3fHashMap.put(name, value);
 	}
 	
-	public void setFloat(String name, float floatValue) {
-		floatHashMap.put(name, floatValue);
+	public void setFloat(String name, float value) {
+		floatHashMap.put(name, value);
 	}
 	
-	public void setTexture(String name, Texture texture) {
-		textureHashMap.put(name, texture);
+	public void setTexture(String name, Texture value) {
+		textureHashMap.put(name, value);
 	}
 	
 	public Vector3f getVector3f(String name) {

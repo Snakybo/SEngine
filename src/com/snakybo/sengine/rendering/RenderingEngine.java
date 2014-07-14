@@ -28,7 +28,7 @@ import java.util.HashMap;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.Light;
 import com.snakybo.sengine.core.object.GameObject;
-import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.utils.MappedValues;
 import com.snakybo.sengine.utils.math.Vector3f;
@@ -59,13 +59,13 @@ public class RenderingEngine extends MappedValues {
 		lights = new ArrayList<Light>();
 		samplerMap = new HashMap<String, Integer>();
 		
-		samplerMap.put("diffuse", SAMPLER_LAYER_DIFFUSE);
-		samplerMap.put("normalMap", SAMPLER_LAYER_NORMAL_MAP);
-		samplerMap.put("dispMap", SAMPLER_LAYER_DISPLACEMENT_MAP);
+		samplerMap.put(Material.DIFFUSE, SAMPLER_LAYER_DIFFUSE);
+		samplerMap.put(Material.NORMAL_MAP, SAMPLER_LAYER_NORMAL_MAP);
+		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
 		
 		instance.setVector3f("ambient", ambientColor);
 		
-		ambientShader = new Shader("forward-ambient");
+		ambientShader = new Shader("internal/forward-rendering/forward-ambient");
 		
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		
@@ -76,11 +76,6 @@ public class RenderingEngine extends MappedValues {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
-	}
-	
-	public static void updateUniformStruct(Transform transform, Material material, Shader shader, String uniformName,
-			String uniformType) {
-		throw new IllegalArgumentException(uniformType + " is not a supported type in RenderingEngine");
 	}
 	
 	public static void render(GameObject object) {

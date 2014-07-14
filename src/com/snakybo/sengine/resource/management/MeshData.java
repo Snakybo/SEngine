@@ -25,9 +25,9 @@ import com.snakybo.sengine.resource.loading.IndexedModel;
 import com.snakybo.sengine.utils.Buffer;
 import com.snakybo.sengine.utils.ReferenceCounter;
 
-/** @author Kevin
+/** @author Kevin Krol
  * @since Jul 8, 2014 */
-public class MeshData extends ReferenceCounter {
+public class MeshData implements ReferenceCounter {
 	private static final int NUM_BUFFERS = 5;
 	
 	private static final int POSITION_VB = 0;
@@ -40,6 +40,7 @@ public class MeshData extends ReferenceCounter {
 	private IntBuffer vertexArrayBuffers;
 	
 	private int drawCount;
+	private int refCount;
 	
 	public MeshData(IndexedModel model) {
 		super();
@@ -94,6 +95,23 @@ public class MeshData extends ReferenceCounter {
 		} finally {
 			super.finalize();
 		}
+	}
+	
+	@Override
+	public void addReference() {
+		refCount++;
+	}
+	
+	@Override
+	public boolean removeReference() {
+		refCount--;
+		
+		return refCount == 0;
+	}
+	
+	@Override
+	public int getReferenceCount() {
+		return refCount;
 	}
 	
 	public void draw() {

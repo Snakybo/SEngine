@@ -16,7 +16,7 @@ public class Mesh {
 	private String fileName;
 	
 	public Mesh() {
-		this("cube.obj");
+		this("internal/cube.obj");
 	}
 	
 	public Mesh(String fileName) {

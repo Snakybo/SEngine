@@ -13,7 +13,6 @@ import com.snakybo.sengine.components.DirectionalLight;
 import com.snakybo.sengine.components.PointLight;
 import com.snakybo.sengine.components.SpotLight;
 import com.snakybo.sengine.core.object.Transform;
-import com.snakybo.sengine.rendering.Material;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.management.ShaderData;
 import com.snakybo.sengine.utils.Buffer;
@@ -27,14 +26,14 @@ public class Shader {
 	private String fileName;
 	
 	public Shader() {
-		this("basicShader");
+		this("default_shader");
 	}
 	
 	public Shader(String fileName) {
 		this.fileName = fileName;
 		
 		ShaderData existingResource = resourceMap.get(fileName);
-		
+		System.out.println("Now loading: " + fileName);
 		if(existingResource != null) {
 			resource = existingResource;
 			resource.addReference();
@@ -61,11 +60,11 @@ public class Shader {
 		}
 	}
 	
-	public void bind() {
+	public final void bind() {
 		glUseProgram(resource.getProgram());
 	}
 	
-	public void updateUniforms(Transform transform, Material material) {
+	public final void updateUniforms(Transform transform, Material material) {
 		Matrix4f worldMatrix = transform.getTransformation();
 		Matrix4f mvpMatrix = RenderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 		
@@ -92,11 +91,10 @@ public class Shader {
 				} else if(uniformType.equals("SpotLight")) {
 					setUniformSpotLight(uniformName, (SpotLight)RenderingEngine.getActiveLight());
 				} else {
-					RenderingEngine.updateUniformStruct(transform, material, this, uniformName, uniformType);
+					updateUniforms(transform, material, uniformName, uniformType);
 				}
 			} else if(uniformType.equals("sampler2D")) {
 				int samplerSlot = RenderingEngine.getSamplerSlot(uniformName);
-				
 				material.getTexture(uniformName).bind(samplerSlot);
 				setUniformi(uniformName, samplerSlot);
 			} else if(uniformName.startsWith("T_")) {
@@ -109,7 +107,7 @@ public class Shader {
 				}	
 			} else if(uniformName.startsWith("C_")) {
 				if(uniformName.equals("C_eyePos")) {
-					setUniformVector3f(uniformName, RenderingEngine.getMainCamera().getTransform().getTransformedPosition());
+					setUniformVector3f(uniformName, RenderingEngine.getMainCamera().getTransform().getWorldPosition());
 				} else {
 					throw new IllegalArgumentException(uniformName + " is not a valid component of Camera");
 				}
@@ -125,50 +123,52 @@ public class Shader {
 		}
 	}
 	
-	public void setUniformi(String uniformName, int value) {
+	protected void updateUniforms(Transform transform, Material material, String uniformName, String uniformType) { }
+	
+	public final void setUniformi(String uniformName, int value) {
 		glUniform1i(resource.getUniformMap().get(uniformName), value);
 	}
 	
-	public void setUniformf(String uniformName, float value) {
+	public final void setUniformf(String uniformName, float value) {
 		glUniform1f(resource.getUniformMap().get(uniformName), value);
 	}
 	
-	public void setUniformMatrix4f(String uniformName, Matrix4f value) {
+	public final void setUniformMatrix4f(String uniformName, Matrix4f value) {
 		glUniformMatrix4(resource.getUniformMap().get(uniformName), true, Buffer.createFlippedBuffer(value));
 	}
 	
-	public void setUniformVector3f(String uniformName, Vector3f value) {
+	public final void setUniformVector3f(String uniformName, Vector3f value) {
 		glUniform3f(resource.getUniformMap().get(uniformName), value.x, value.y, value.z);
 	}
 	
-	private void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight) {
+	private final void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight) {		
 		setUniformVector3f(uniformName + ".direction", directionalLight.getDirection());
-		setUniformVector3f(uniformName + ".base.color", directionalLight.getColor());
+		setUniformVector3f(uniformName + ".baseLight.color", directionalLight.getColor());
 		
-		setUniformf(uniformName + ".base.intensity", directionalLight.getIntensity());
+		setUniformf(uniformName + ".baseLight.intensity", directionalLight.getIntensity());
 	}
 	
-	private void setUniformPointLight(String uniformName, PointLight pointLight) {
-		setUniformVector3f(uniformName + ".position", pointLight.getTransform().getTransformedPosition());
-		setUniformVector3f(uniformName + ".base.color", pointLight.getColor());
+	private final void setUniformPointLight(String uniformName, PointLight pointLight) {
+		setUniformVector3f(uniformName + ".position", pointLight.getTransform().getWorldPosition());
+		setUniformVector3f(uniformName + ".baseLight.color", pointLight.getColor());
 		
-		setUniformf(uniformName + ".base.intensity", pointLight.getIntensity());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
+		setUniformf(uniformName + ".baseLight.intensity", pointLight.getIntensity());
+		setUniformf(uniformName + ".attenuation.constant", pointLight.getAttenuation().getConstant());
+		setUniformf(uniformName + ".attenuation.linear", pointLight.getAttenuation().getLinear());
+		setUniformf(uniformName + ".attenuation.exponent", pointLight.getAttenuation().getExponent());
 		setUniformf(uniformName + ".range", pointLight.getRange());
 	}
 	
-	private void setUniformSpotLight(String uniformName, SpotLight spotLight) {
-		setUniformVector3f(uniformName + ".position", spotLight.getTransform().getTransformedPosition());
+	private final void setUniformSpotLight(String uniformName, SpotLight spotLight) {
+		setUniformVector3f(uniformName + ".pointLight.position", spotLight.getTransform().getWorldPosition());
 		setUniformVector3f(uniformName + ".direction", spotLight.getDirection());
-		setUniformVector3f(uniformName + ".base.color", spotLight.getColor());
+		setUniformVector3f(uniformName + ".pointLight.baseLight.color", spotLight.getColor());
 		
-		setUniformf(uniformName + ".base.intensity", spotLight.getIntensity());
-		setUniformf(uniformName + ".atten.constant", spotLight.getAttenuation().getConstant());
-		setUniformf(uniformName + ".atten.linear", spotLight.getAttenuation().getLinear());
-		setUniformf(uniformName + ".atten.exponent", spotLight.getAttenuation().getExponent());
+		setUniformf(uniformName + ".pointLight.baseLight.intensity", spotLight.getIntensity());
+		setUniformf(uniformName + ".pointLight.attenuation.constant", spotLight.getAttenuation().getConstant());
+		setUniformf(uniformName + ".pointLight.attenuation.linear", spotLight.getAttenuation().getLinear());
+		setUniformf(uniformName + ".pointLight.attenuation.exponent", spotLight.getAttenuation().getExponent());
 		setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
-		setUniformf(uniformName + ".range", spotLight.getRange());
+		setUniformf(uniformName + ".pointLight.range", spotLight.getRange());
 	}
 }

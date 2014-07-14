@@ -1,13 +1,13 @@
-#include "common.glh"
-#include "forwardlighting.glh"
+#include "internal/common.glh"
+#include "internal/forward-rendering/forwardlighting.glh"
 
 #if defined(VS_BUILD)
 
-#include "forwardlighting.vsh"
+#include "internal/forward-rendering/forwardlighting.vsh"
 
 #elif defined(FS_BUILD)
 
-#include "lighting.glh"
+#include "internal/lighting.glh"
 
 uniform vec3 C_eyePos;
 uniform float specularIntensity;
@@ -19,6 +19,6 @@ vec4 CalcLightingEffect(vec3 normal, vec3 worldPos) {
 	return CalcPointLight(R_pointLight, normal, worldPos, specularIntensity, specularPower, C_eyePos);
 }
 
-#include "lightingMain.fsh"
+#include "internal/lightingMain.fsh"
 
 #endif

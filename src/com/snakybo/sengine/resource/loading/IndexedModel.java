@@ -6,6 +6,8 @@ import java.util.List;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
+// FIXME: Normal maps aren't working anymore
+
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
 public class IndexedModel {
@@ -47,7 +49,7 @@ public class IndexedModel {
 		for(int i = 0; i < positions.size(); i++)
 			normals.add(new Vector3f(0.0f, 0.0f, 0.0f));
 		
-		for(int i = 0; i < indices.size(); i++) {
+		for(int i = 0; i < indices.size(); i += 3) {
 			int i0 = indices.get(i);
 			int i1 = indices.get(i + 1);
 			int i2 = indices.get(i + 2);

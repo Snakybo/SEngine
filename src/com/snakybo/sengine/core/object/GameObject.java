@@ -17,13 +17,10 @@ public class GameObject {
 	
 	/** Constructor for the game object
 	 * @param args Optionally pass in components */
-	public GameObject(Component... args) {
+	public GameObject() {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();
 		transform = new Transform();
-		
-		for(int i = 0; i < args.length; i++)
-			addComponent(args[i]);
 	}
 	
 	/** Set a game object as a child of this game object, the child object will also receive any

@@ -10,7 +10,7 @@ public class LookAtComponent extends Component {
 	public void update(double delta) {
 		Quaternion newRotation =
 				getTransform().getLookAtRotation(
-						RenderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0));
+						RenderingEngine.getMainCamera().getTransform().getWorldPosition(), new Vector3f(0, 1, 0));
 		
 		getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, (float)delta * 5.0f, true));
 	}

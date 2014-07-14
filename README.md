@@ -11,7 +11,6 @@ A work in progress 3D game engine made in Java using OpenGL.
 - [Model loader](#model-loader)
 - [Automatic resource management](#automatic-resource-management)
 - [Automatic shader uniform updating](#automatic-shader-uniform-updating)
-- [Prefab system](#prefab-system)
 - [Anti-Aliasing](#anti-aliasing)
 
 ## Planned features
@@ -45,9 +44,6 @@ The engine automatically manages resources that have been loaded. Whenever you c
 
 ## Automatic shader uniform updating
 The engine has the ability to automatically update most shader uniforms, it supports the GLSL datatypes ```float```, ```vec3``` , ```mat4``` and ```sampler2D```. These variables should be prefixed with ```T_```, ```M_``` or ```R_``` if it's for the ```Transform```, ```Material``` or ```Rendererer```.
-
-## Prefab system
-The engine has support for a basic prefab system. This allows you to create a game object in a prefab file, you can modify any variables in this file. This allows for easy editing of objects, without having to rebuild every time you change a variable. However it's not possible to add components from a prefab yet.
 
 ## Anti-Aliasing
 Currently the engine only supports [MSAA](http://en.wikipedia.org/wiki/Multisample_anti-aliasing), Other anti-aliasing techniques are on the [Planned features](#planned-features) list.

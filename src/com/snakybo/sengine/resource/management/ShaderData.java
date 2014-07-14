@@ -34,10 +34,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.snakybo.sengine.utils.ReferenceCounter;
+import com.snakybo.sengine.utils.Utils;
 
-public class ShaderData extends ReferenceCounter {
+public class ShaderData implements ReferenceCounter {
+	private static final String ATTRIBUTE_KEYWORD_1 = "varying";
+	private static final String ATTRIBUTE_KEYWORD_2 = "in";
+	
 	private static int supportedOpenGlLevel = 0;
-	private static String glslVersion = "";
+	
+	private static String glslVersion = "";	
 	
 	private int program;
 	
@@ -47,9 +52,9 @@ public class ShaderData extends ReferenceCounter {
 	
 	private Map<String, Integer> uniformMap;
 	
+	private int refCount;
+	
 	public ShaderData(String fileName) {
-		super();
-		
 		shaders = new ArrayList<Integer>();
 		uniformNames = new ArrayList<String>();
 		uniformTypes = new ArrayList<String>();
@@ -57,6 +62,7 @@ public class ShaderData extends ReferenceCounter {
 		uniformMap = new HashMap<String, Integer>();
 		
 		program = glCreateProgram();
+		refCount = 0;
 		
 		if(program == 0) {
 			System.err.println("Error creating shader program");
@@ -74,7 +80,7 @@ public class ShaderData extends ReferenceCounter {
 		addVertexShader(vertexShaderText);
 		addFragmentShader(fragmentShaderText);
 		
-		addAllAttributes(vertexShaderText, supportedOpenGlLevel < 320 ? "attribute" : "attribute"); // TODO: Support the "in" keyword in shaders
+		addAllAttributes(vertexShaderText, supportedOpenGlLevel < 320 ? ATTRIBUTE_KEYWORD_1 : ATTRIBUTE_KEYWORD_2);
 		
 		compileShader();
 		
@@ -94,6 +100,23 @@ public class ShaderData extends ReferenceCounter {
 		} finally {
 			super.finalize();
 		}
+	}
+	
+	@Override
+	public void addReference() {
+		refCount++;
+	}
+	
+	@Override
+	public boolean removeReference() {
+		refCount--;
+		
+		return refCount == 0;
+	}
+	
+	@Override
+	public int getReferenceCount() {
+		return refCount;
 	}
 	
 	private void addVertexShader(String text) {
@@ -125,28 +148,28 @@ public class ShaderData extends ReferenceCounter {
 		shaders.add(shader);
 	}
 	
-	private void addAllAttributes(String vertexShaderText, String attributeKeyword) {
-		int currentAttribLocation = 0;
-		int attributeLocation = vertexShaderText.indexOf(attributeKeyword);
+	private void addAllAttributes(String shaderText, String attributeKeyword) {
+		int currentAttribLocation = 0;		
+		int attributeLocation = Utils.indexOfWholeWord(shaderText, attributeKeyword);
 		
 		while(attributeLocation != -1) {
 			boolean isCommented = false;
 			
-			int lastLineEnd = vertexShaderText.indexOf(";", attributeLocation);
+			int lastLineEnd = shaderText.lastIndexOf(';', attributeLocation);
 			
 			if(lastLineEnd != -1) {
-				String potentialCommentSection = vertexShaderText.substring(lastLineEnd, (lastLineEnd + (lastLineEnd - attributeLocation)));
+				String commentedLine = shaderText.substring(lastLineEnd, attributeLocation).trim();				
 				
-				isCommented = potentialCommentSection.contains("//");
+				isCommented = commentedLine.indexOf("//") != -1;
 			}
 			
 			if(!isCommented) {
 				int begin = attributeLocation + attributeKeyword.length();
-				int end = vertexShaderText.indexOf(";", begin);
+				int end = shaderText.indexOf(';', begin);
 				
-				String attributeLine = vertexShaderText.substring(begin + 1, (begin + (end - begin)));
+				String attributeLine = shaderText.substring(begin + 1, end - 1);
 				
-				begin = attributeLine.indexOf(" ");
+				begin = attributeLine.indexOf(' ');
 				
 				String attributeName = attributeLine.substring(begin + 1);
 				
@@ -154,7 +177,7 @@ public class ShaderData extends ReferenceCounter {
 				currentAttribLocation++;
 			}
 			
-			attributeLocation = vertexShaderText.indexOf(attributeKeyword, attributeLocation + attributeKeyword.length());
+			attributeLocation = shaderText.indexOf(attributeKeyword, attributeLocation + attributeKeyword.length());
 		}
 	}
 	
@@ -163,26 +186,26 @@ public class ShaderData extends ReferenceCounter {
 		
 		List<UniformStruct> structs = findUniformStructs(shaderText);
 		
-		int uniformLocation = shaderText.indexOf(UNIFORM_KEY);
+		int uniformLocation = Utils.indexOfWholeWord(shaderText, UNIFORM_KEY);
 		
 		while(uniformLocation != -1) {
 			boolean isCommented = false;
 			
-			int lastLineEnd = shaderText.indexOf(";", uniformLocation);
+			int lastLineEnd = shaderText.lastIndexOf(';', uniformLocation);
 			
 			if(lastLineEnd != -1) {
-				String potentialCommentSection = shaderText.substring(lastLineEnd, (lastLineEnd + (lastLineEnd - uniformLocation)));
+				String commentedLine = shaderText.substring(lastLineEnd, uniformLocation).trim();				
 				
-				isCommented = potentialCommentSection.contains("//");
+				isCommented = commentedLine.indexOf("//") != -1;
 			}
 			
 			if(!isCommented) {
 				int begin = uniformLocation + UNIFORM_KEY.length();
-				int end = shaderText.indexOf(";", begin);
+				int end = shaderText.indexOf(';', begin);
 				
-				String uniformLine = shaderText.substring(begin + 1, (begin + (end - begin)));
+				String uniformLine = shaderText.substring(begin + 1, end);
 				
-				begin = uniformLine.indexOf(" ");
+				begin = uniformLine.indexOf(' ');
 				
 				String uniformName = uniformLine.substring(begin + 1);
 				String uniformType = uniformLine.substring(0, begin);
@@ -204,8 +227,11 @@ public class ShaderData extends ReferenceCounter {
 			if(structs.get(i).getName().compareTo(uniformType) == 0) {
 				addThis = false;
 				
-				for(int j = 0; i < structs.get(i).getMemberNames().length; j++)
-					addUniform(uniformName + "." + structs.get(i).getMemberNames()[j].getName(), structs.get(i).getMemberNames()[j].getType(), structs);
+				for(int j = 0; j < structs.get(i).getMemberNames().length; j++) {
+					TypedData[] data = structs.get(i).getMemberNames();
+					
+					addUniform(uniformName + "." + data[j].getName(), data[j].getType(), structs);
+				}
 			}
 		}
 		
@@ -314,12 +340,13 @@ public class ShaderData extends ReferenceCounter {
 		while(structLocation != -1) {
 			structLocation += STRUCT_KEY.length() + 1;
 			
-			int braceOpening = shaderText.indexOf("{", structLocation);
-			int braceClosing = shaderText.indexOf("}", structLocation);
+			int braceOpening = shaderText.indexOf('{', structLocation);
+			int braceClosing = shaderText.indexOf('}', structLocation);
 			
-			result.add(new UniformStruct(
-					findUniformStructName(shaderText.substring(structLocation, braceOpening - structLocation)),
-					findUniformStructComponents(shaderText.substring(braceOpening, braceClosing - braceOpening))));
+			String name = findUniformStructName(shaderText.substring(structLocation, braceOpening));
+			List<TypedData> components = findUniformStructComponents(shaderText.substring(braceOpening, braceClosing));
+			
+			result.add(new UniformStruct(name, components));
 			
 			structLocation = shaderText.indexOf(STRUCT_KEY, structLocation);			
 		}
@@ -328,15 +355,15 @@ public class ShaderData extends ReferenceCounter {
 	}
 	
 	private static String findUniformStructName(String text) {
-		return text.split("\\r?\\n")[0];
+		return text.split("\\r?\\n")[0].trim();
 	}
 	
-	private static List<TypedData> findUniformStructComponents(String text) {
-		final char[] charsToIgnore = {' ', '\n', 't', '{'};
+	private static List<TypedData> findUniformStructComponents(String struct) {
+		final char[] charsToIgnore = {' ', '\n', '\t', '{'};
 		
 		List<TypedData> result = new ArrayList<TypedData>();
-		String[] structLines = text.split(";");
-				
+		String[] structLines = struct.split(";");
+		
 		for(int i = 0; i < structLines.length; i++) {
 			int nameBegin = -1;
 			int nameEnd = -1;
@@ -345,7 +372,7 @@ public class ShaderData extends ReferenceCounter {
 				boolean isIgnorableCharacter = false;
 				
 				for(int k = 0; k < charsToIgnore.length; k++) {
-					if(structLines[i].equals(charsToIgnore[k])) {
+					if(structLines[i].charAt(j) == charsToIgnore[k]) {
 						isIgnorableCharacter = true;
 						break;
 					}
@@ -362,7 +389,10 @@ public class ShaderData extends ReferenceCounter {
 			if(nameBegin == -1 || nameEnd == -1)
 				continue;
 			
-			TypedData newData = new TypedData(structLines[i].substring(nameEnd + 1), structLines[i].substring(nameBegin, nameEnd - nameBegin));
+			String name = structLines[i].substring(nameEnd + 1).trim();
+			String type = structLines[i].substring(nameBegin, nameEnd + 1).trim();
+			
+			TypedData newData = new TypedData(name, type);
 			
 			result.add(newData);
 		}

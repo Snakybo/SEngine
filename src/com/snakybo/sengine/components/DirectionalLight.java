@@ -16,12 +16,12 @@ public class DirectionalLight extends Light {
 	public DirectionalLight(Color color, float intensity) {
 		super(color, intensity);
 		
-		setShader(new Shader("forward-directional"));
+		setShader(new Shader("internal/forward-rendering/forward-directional"));
 	}
 	
 	/** @return The direction the light is pointed at
 	 * @see Vector3f */
 	public Vector3f getDirection() {
-		return getTransform().getTransformedRotation().getForward();
+		return getTransform().getWorldRotation().getForward();
 	}
 }
