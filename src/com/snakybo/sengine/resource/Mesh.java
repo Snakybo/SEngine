@@ -1,8 +1,11 @@
 package com.snakybo.sengine.resource;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.snakybo.sengine.resource.loading.IModel;
 import com.snakybo.sengine.resource.loading.IndexedModel;
 import com.snakybo.sengine.resource.loading.ObjModel;
 import com.snakybo.sengine.resource.management.MeshData;
@@ -10,13 +13,16 @@ import com.snakybo.sengine.resource.management.MeshData;
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
 public class Mesh {
+	public static final String MESH_FOLDER = "./res/models/";
+	public static final String DEFAULT_MESH = "internal/cube.obj";
+	
 	private static Map<String, MeshData> resourceMap = new HashMap<String, MeshData>();
 	
 	private MeshData resource;
 	private String fileName;
 	
 	public Mesh() {
-		this("internal/cube.obj");
+		this(DEFAULT_MESH);
 	}
 	
 	public Mesh(String fileName) {
@@ -28,7 +34,7 @@ public class Mesh {
 			resource = existingResource;
 			resource.addReference();
 		} else {
-			loadMesh();
+			loadMesh(fileName);
 			resourceMap.put(fileName, resource);
 		}
 	}
@@ -68,19 +74,24 @@ public class Mesh {
 		resource.draw();
 	}
 	
-	private void loadMesh() {
-		final String MODEL_PATH = "./res/models/";
-		
-		String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
-		
-		switch(ext) {
-		case ".obj":
-			IndexedModel model = new ObjModel(MODEL_PATH + fileName).toIndexedModel();
-			resource = new MeshData(model);
-			break;
-		default:
-			System.err.println("The file extension of the model " + fileName + " is not supported by the engine");
-			System.exit(1);
+	private void loadMesh(String fileName) {
+		try {
+			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+			IModel model = null;
+			
+			switch(ext) {
+			case ".obj":
+				model = new ObjModel(new FileReader(MESH_FOLDER + fileName));
+				break;
+			default:
+				System.err.println("The file extension of the model " + fileName + " is not supported by the engine");
+				System.exit(1);
+			}
+			
+			resource = new MeshData(model.toIndexedModel());
+		} catch(FileNotFoundException e) {
+			System.err.println("Error loading mesh: The mesh " + fileName + " doesn't exist. Using the default mesh");
+			loadMesh(DEFAULT_MESH);
 		}
 	}
 }

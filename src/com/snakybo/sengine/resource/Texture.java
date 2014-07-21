@@ -20,6 +20,9 @@ import com.snakybo.sengine.resource.management.TextureData;
 import com.snakybo.sengine.utils.Buffer;
 
 public class Texture {
+	public static final String TEXTURE_FOLDER = "./res/textures/";
+	public static final String DEFAULT_TEXTURE = "internal/default_diffuse.png";
+	
 	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();
 	
 	private TextureData resource;
@@ -101,7 +104,7 @@ public class Texture {
 			resource = existingResource;
 			resource.addReference();
 		} else {
-			loadTexture(textureTarget, filters, internalFormat, format, clamp, attachments);
+			loadTexture(fileName, textureTarget, filters, internalFormat, format, clamp, attachments);
 		}
 	}
 	
@@ -127,7 +130,8 @@ public class Texture {
 	}
 	
 	public void bind(int unit) {
-		assert(unit >= 0 && unit <= 31);
+		if(unit < 0 || unit >= 32)
+			throw new IllegalArgumentException("The unit " + unit + " is out of bounds\n");
 		
 		glActiveTexture(GL_TEXTURE0 + unit);
 		resource.bind(0);
@@ -145,9 +149,9 @@ public class Texture {
 		return resource.getHeight();
 	}
 	
-	private void loadTexture(int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments) {
+	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments) {
 		try {
-			BufferedImage image = ImageIO.read(new File("./res/textures/" + fileName));
+			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 			
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
@@ -173,9 +177,9 @@ public class Texture {
 			
 			resourceMap.put(fileName, resource);
 		} catch(IOException e) {
-			System.err.println("Error loading texture: The texture " + fileName + " doesn't exist");
+			System.err.println("Error loading texture: The texture " + fileName + " doesn't exist. Using the default texture");
 			e.printStackTrace();
-			System.exit(1);
+			loadTexture(DEFAULT_TEXTURE, textureTarget, filters, internalFormat, format, clamp, attachments);
 		}
 	}
 }

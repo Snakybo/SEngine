@@ -63,25 +63,25 @@ public class MeshData implements ReferenceCounter {
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getPositions()), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TEXCOORD_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV2(model.getTexCoords()), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
-
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0L);
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(NORMAL_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getNormals()), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
-
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0L);
+			
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TANGENT_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBufferV3(model.getTangents()), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0L);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexArrayBuffers.get(INDEX_VB));
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBufferi(model.getIndices()), GL_STATIC_DRAW);

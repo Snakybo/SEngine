@@ -20,20 +20,22 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Shader {
+	public static final String DEFAULT_SHADER = "internal/default_shader";
+	
 	private static Map<String, ShaderData> resourceMap = new HashMap<String, ShaderData>();
 	
 	private ShaderData resource;
 	private String fileName;
 	
 	public Shader() {
-		this("default_shader");
+		this(DEFAULT_SHADER);
 	}
 	
 	public Shader(String fileName) {
 		this.fileName = fileName;
 		
 		ShaderData existingResource = resourceMap.get(fileName);
-		System.out.println("Now loading: " + fileName);
+		
 		if(existingResource != null) {
 			resource = existingResource;
 			resource.addReference();

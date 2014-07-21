@@ -6,8 +6,6 @@ import java.util.List;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-// FIXME: Normal maps aren't working anymore
-
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
 public class IndexedModel {
@@ -87,13 +85,16 @@ public class IndexedModel {
 			float deltaU2 = texCoords.get(i2).x - texCoords.get(i0).x;
 			float deltaV2 = texCoords.get(i2).y - texCoords.get(i0).y;
 			
+			System.out.println(deltaU1 * deltaV2);
+			
 			float dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
 			float f = dividend == 0 ? 0.0f : 1.0f / dividend;
 			
-			Vector3f tangent = new Vector3f(0.0f, 0.0f, 0.0f);
-			tangent.x = f * (deltaV2 * edge1.x - deltaV1 * edge2.x);
-			tangent.y = f * (deltaV2 * edge1.y - deltaV1 * edge2.y);
-			tangent.z = f * (deltaV2 * edge1.z - deltaV1 * edge2.z);
+			Vector3f tangent = new Vector3f(
+				f * (deltaV2 * edge1.x - deltaV1 * edge2.x),
+				f * (deltaV2 * edge1.y - deltaV1 * edge2.y),
+				f * (deltaV2 * edge1.z - deltaV1 * edge2.z)
+			);
 			
 			tangents.get(i0).set(tangents.get(i0).add(tangent));
 			tangents.get(i1).set(tangents.get(i1).add(tangent));

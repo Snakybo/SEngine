@@ -18,6 +18,9 @@ public class Material extends MappedValues {
 	public static final String DISP_MAP_SCALE = "dispMapScale";
 	public static final String DISP_MAP_BIAS = "dispMapBias";
 	
+	public static final String DEFAULT_NORMAL_TEXTURE = "internal/default_normal.png";
+	public static final String DEFAULT_DISP_TEXTURE = "internal/default_disp.png";
+	
 	private static Map<String, MaterialData> resourceMap = new HashMap<String, MaterialData>();
 	
 	private MaterialData resource;
@@ -44,11 +47,11 @@ public class Material extends MappedValues {
 	}
 	
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower) {		
-		this(materialName, diffuse, specularIntensity, specularPower, new Texture("internal/default_normal.png"));
+		this(materialName, diffuse, specularIntensity, specularPower, new Texture(DEFAULT_NORMAL_TEXTURE));
 	}
 	
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower, Texture normalMap) {
-		this(materialName, diffuse, specularIntensity, specularPower, normalMap, new Texture("internal/default_disp.png"));
+		this(materialName, diffuse, specularIntensity, specularPower, normalMap, new Texture(DEFAULT_DISP_TEXTURE));
 	}
 	
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower, Texture normalMap, Texture dispMap) {
@@ -64,6 +67,12 @@ public class Material extends MappedValues {
 		
 		resource = new MaterialData();
 		resourceMap.put(materialName, resource);
+		
+		if(normalMap == null)
+			normalMap = new Texture(DEFAULT_NORMAL_TEXTURE);
+		
+		if(dispMap == null)
+			dispMap = new Texture(DEFAULT_DISP_TEXTURE);
 		
 		resource.setTexture(DIFFUSE, diffuse);
 		resource.setTexture(NORMAL_MAP, normalMap);

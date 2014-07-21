@@ -48,9 +48,10 @@ public abstract class MappedValues {
 	
 	public Texture getTexture(String name) {
 		Texture result = textureHashMap.get(name);
+		
 		if(result != null)
 			return result;
 		
-		return new Texture("test.png");
+		return new Texture(Texture.DEFAULT_TEXTURE);
 	}
 }

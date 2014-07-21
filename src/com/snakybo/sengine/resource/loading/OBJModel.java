@@ -12,8 +12,6 @@ import com.snakybo.sengine.utils.Utils;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-//FIXME: Normal maps aren't working anymore
-
 public class ObjModel implements IModel {
 	private class ObjIndex {
 		public int vertex;
@@ -51,7 +49,7 @@ public class ObjModel implements IModel {
 	private boolean hasTexCoords;
 	private boolean hasNormals;
 	
-	public ObjModel(String fileName) {
+	public ObjModel(FileReader file) {
 		indices = new ArrayList<ObjIndex>();
 		positions = new ArrayList<Vector3f>();
 		texCoords = new ArrayList<Vector2f>();
@@ -63,7 +61,7 @@ public class ObjModel implements IModel {
 		BufferedReader bufferedReader = null;
 		
 		try {
-			bufferedReader = new BufferedReader(new FileReader(fileName));
+			bufferedReader = new BufferedReader(file);
 			String line;
 			
 			while((line = bufferedReader.readLine()) != null) {
@@ -157,7 +155,7 @@ public class ObjModel implements IModel {
 				normalModel.addVertex(currentPosition);
 				normalModel.addTexCoord(currentTexCoord);
 				normalModel.addNormal(currentNormal);
-				normalModel.addTangent(new Vector3f(0, 0, 0));
+				normalModel.addTangent(new Vector3f(0.0f, 0.0f, 0.0f));
 			}
 			
 			model.getIndices().add(modelVertexIndex);
@@ -170,13 +168,13 @@ public class ObjModel implements IModel {
 			normalModel.calcNormals();
 			
 			for(int i = 0; i < model.getPositions().size(); i++)
-				model.getNormals().get(i).set(normalModel.getNormals().get(indexMap.get(i)));
+				model.getNormals().get(i).set(model.getNormals().get(i).add(normalModel.getNormals().get(indexMap.get(i))));
 		}
 		
 		normalModel.calcTangents();
 		
 		for(int i = 0; i < model.getPositions().size(); i++)
-			model.getTangents().get(i).set(normalModel.getTangents().get(indexMap.get(i)));
+			model.getTangents().get(i).set(model.getTangents().get(i).add(normalModel.getTangents().get(indexMap.get(i))));
 		
 		return model;
 	}

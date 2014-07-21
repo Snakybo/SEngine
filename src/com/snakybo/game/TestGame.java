@@ -10,6 +10,7 @@ import com.snakybo.sengine.components.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.rendering.Attenuation;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Mesh;
@@ -22,24 +23,38 @@ import com.snakybo.sengine.utils.math.Vector3f;
 
 public class TestGame extends Game {
 	public void init() {
-		Camera camera =
-				Camera.initPerspectiveCamera((float)Math.toRadians(70.0f),
-						(float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
+		Camera.initPerspectiveCamera(
+			(float)Math.toRadians(70.0f),
+			(float)Window.getWidth() / (float)Window.getHeight(),
+			0.01f, 1000.0f
+		);
 		
-		addChild(new GameObject()
-					.addComponent(new FreeLook(0.5f))
-					.addComponent(new FreeMove(10.0f))
-					.addComponent(camera)
-				);
+		addChild(
+			new GameObject()
+				.addComponent(new FreeLook(0.5f))
+				.addComponent(new FreeMove(10.0f))
+				.addComponent(RenderingEngine.getMainCamera())
+		);
 		
-		new Material("bricks", new Texture("bricks.png"), 0.0f, 0.0f, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
-		new Material("bricks2", new Texture("bricks2.png"), 0.0f, 0.0f, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.png"), 0.04f, -1.0f);
+		new Material(
+			"bricks",
+			new Texture("bricks2.png"), 1.0f, 8.0f,
+			new Texture("bricks2_normal.png"),
+			new Texture("bricks2_disp.png"), 0.03f, -0.5f
+		);
+		
+		new Material(
+			"bricks2",
+			new Texture("bricks2.png"), 1.0f, 8.0f
+		);
 		
 		//addCustomMesh();
-		addMesh();
-		addLights();
+		addMesh(new Vector3f(-1.5f, -2.5f, 5), "bricks");
+		addMesh(new Vector3f(1.5f, -2.5f, 5), "bricks2");
+		//addLights();
 	}
 	
+	@SuppressWarnings("unused")
 	private void addCustomMesh() {		
 		IndexedModel plane = new IndexedModel(); {
 			plane.addVertex(new Vector3f(1.0f, -1.0f, 0.0f));  plane.addTexCoord(new Vector2f(1.0f, 1.0f));
@@ -51,30 +66,46 @@ public class TestGame extends Game {
 			plane.addFace(2, 1, 3);
 		}
 		
-		GameObject go = new GameObject()
-					.addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
+		GameObject go =	new GameObject().addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
 		
 		go.getTransform().getPosition().set(0.0f, -1.0f, 5.0f);
 		
 		addChild(go);
 	}
 	
-	private void addMesh() {
-		GameObject go = new GameObject()
-					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks2")));
+	private void addMesh(Vector3f position, String material) {
+		GameObject go = new GameObject().addComponent(new MeshRenderer(new Mesh(), new Material(material)));
 		
-		go.getTransform().getPosition().set(0.0f, -1.0f, 5.0f);
+		go.getTransform().getPosition().set(position);
 		
 		addChild(go);
 	}
 	
+	@SuppressWarnings("unused")
 	private void addLights() {
-		GameObject directionalLight = new GameObject()
-										.addComponent(new DirectionalLight(new Color(0.93f, 0.93f, 0.93f), 0.2f));
-		GameObject pointLight = new GameObject()
-									.addComponent(new PointLight(new Color(0.0f, 1.0f, 0.5f), 0.9f, new Attenuation(0.0f, 0.0f, 1.0f)));
-		GameObject spotLight = new GameObject()
-									.addComponent(new SpotLight(new Color(1.0f, 1.0f, 0.0f), 1.0f, new Attenuation(0.0f, 0.0f, 0.05f), 0.7f));
+		GameObject directionalLight = new GameObject().addComponent(
+			new DirectionalLight(
+				new Color(0.93f, 0.93f, 0.93f),
+				0.2f
+			)
+		);
+		
+		GameObject pointLight = new GameObject().addComponent(
+			new PointLight(
+				new Color(0.0f, 1.0f, 0.5f),
+				0.9f,
+				new Attenuation(0.0f, 0.0f, 1.0f)
+			)
+		);
+		
+		GameObject spotLight = new GameObject().addComponent(
+			new SpotLight(
+				new Color(1.0f, 1.0f, 0.0f),
+				1.0f,
+				new Attenuation(0.0f, 0.0f, 0.05f),
+				0.7f
+			)
+		);
 		
 		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1.0f, 0.0f, 0.0f), (float)Math.toRadians(-45.0f)));
 		

@@ -37,6 +37,9 @@ import com.snakybo.sengine.utils.ReferenceCounter;
 import com.snakybo.sengine.utils.Utils;
 
 public class ShaderData implements ReferenceCounter {
+	public static final String SHADER_FOLDER = "./res/shaders/";
+	public static final String DEFAULT_SHADER = "default_shader";
+	
 	private static final String ATTRIBUTE_KEYWORD_1 = "varying";
 	private static final String ATTRIBUTE_KEYWORD_2 = "in";
 	
@@ -310,7 +313,7 @@ public class ShaderData implements ReferenceCounter {
 		BufferedReader shaderReader = null;
 		
 		try {
-			shaderReader = new BufferedReader(new FileReader("./res/shaders/" + fileName));
+			shaderReader = new BufferedReader(new FileReader(SHADER_FOLDER + fileName));
 			String line;
 			
 			while((line = shaderReader.readLine()) != null) {
@@ -323,8 +326,8 @@ public class ShaderData implements ReferenceCounter {
 			
 			shaderReader.close();
 		} catch(IOException e) {
-			System.err.println("Unable to load shader: " + fileName);
-			e.printStackTrace();
+			System.err.println("Error loading shader: The shader " + fileName + " doesn't exist. Using the default shader");
+			loadShader(DEFAULT_SHADER);
 		}
 		
 		return shaderSource.toString();
