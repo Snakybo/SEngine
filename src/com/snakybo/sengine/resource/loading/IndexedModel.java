@@ -85,8 +85,6 @@ public class IndexedModel {
 			float deltaU2 = texCoords.get(i2).x - texCoords.get(i0).x;
 			float deltaV2 = texCoords.get(i2).y - texCoords.get(i0).y;
 			
-			System.out.println(deltaU1 * deltaV2);
-			
 			float dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
 			float f = dividend == 0 ? 0.0f : 1.0f / dividend;
 			

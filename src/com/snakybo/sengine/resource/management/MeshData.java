@@ -90,8 +90,8 @@ public class MeshData implements ReferenceCounter {
 	@Override
 	protected void finalize() throws Throwable {
 		try {
-			glDeleteVertexArrays(vertexArrayObject);
 			glDeleteBuffers(vertexArrayBuffers);
+			glDeleteVertexArrays(vertexArrayObject);
 		} finally {
 			super.finalize();
 		}

@@ -40,9 +40,6 @@ public class ShaderData implements ReferenceCounter {
 	public static final String SHADER_FOLDER = "./res/shaders/";
 	public static final String DEFAULT_SHADER = "default_shader";
 	
-	private static final String ATTRIBUTE_KEYWORD_1 = "varying";
-	private static final String ATTRIBUTE_KEYWORD_2 = "in";
-	
 	private static int supportedOpenGlLevel = 0;
 	
 	private static String glslVersion = "";	
@@ -83,12 +80,11 @@ public class ShaderData implements ReferenceCounter {
 		addVertexShader(vertexShaderText);
 		addFragmentShader(fragmentShaderText);
 		
-		addAllAttributes(vertexShaderText, supportedOpenGlLevel < 320 ? ATTRIBUTE_KEYWORD_1 : ATTRIBUTE_KEYWORD_2);
+		addAllAttributes(vertexShaderText, "attribute");
 		
 		compileShader();
 		
-		addShaderUniforms(vertexShaderText);
-		addShaderUniforms(fragmentShaderText);
+		addShaderUniforms(shaderText);
 	}
 	
 	@Override
@@ -158,12 +154,12 @@ public class ShaderData implements ReferenceCounter {
 		while(attributeLocation != -1) {
 			boolean isCommented = false;
 			
-			int lastLineEnd = shaderText.lastIndexOf(';', attributeLocation);
+			int lastLineEnd = shaderText.lastIndexOf('\n', attributeLocation);
 			
 			if(lastLineEnd != -1) {
 				String commentedLine = shaderText.substring(lastLineEnd, attributeLocation).trim();				
 				
-				isCommented = commentedLine.indexOf("//") != -1;
+				isCommented = commentedLine.indexOf("//") != -1 || commentedLine.indexOf('#') != -1;
 			}
 			
 			if(!isCommented) {
@@ -194,12 +190,12 @@ public class ShaderData implements ReferenceCounter {
 		while(uniformLocation != -1) {
 			boolean isCommented = false;
 			
-			int lastLineEnd = shaderText.lastIndexOf(';', uniformLocation);
+			int lastLineEnd = shaderText.lastIndexOf('\n', uniformLocation);
 			
 			if(lastLineEnd != -1) {
 				String commentedLine = shaderText.substring(lastLineEnd, uniformLocation).trim();				
 				
-				isCommented = commentedLine.indexOf("//") != -1;
+				isCommented = commentedLine.indexOf("//") != -1 || commentedLine.indexOf('#') != -1;
 			}
 			
 			if(!isCommented) {

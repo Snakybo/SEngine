@@ -14,5 +14,6 @@ void main() {
 	vec3 normal = normalize(tbnMatrix * (255.0 / 128.0 * texture2D(normalMap, texCoords.xy).xyz - 1));
 
 	vec4 lightingAmt = CalcLightingEffect(normal, worldPos0);
+
 	SetFragOutput(0, texture2D(diffuse, texCoords) * lightingAmt);
 }

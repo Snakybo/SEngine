@@ -42,7 +42,7 @@ vec4 CalcLight(BaseLight baseLight, vec3 direction, vec3 normal, vec3 worldPos, 
 	specularFactor = clamp(pow(specularFactor, specularPower), 0.0, 1.0);
 
 	if(specularFactor > 0)
-	specularColor = vec4(baseLight.color, 1.0) * specularIntensity * specularFactor;
+		specularColor = vec4(baseLight.color, 1.0) * specularIntensity * specularFactor;
 
 	return diffuseColor + specularColor;
 }
@@ -53,10 +53,10 @@ vec4 CalcPointLight(PointLight pointLight, vec3 normal, vec3 worldPos, float spe
 	float distanceToPoint = length(lightDirection);
 
 	if(distanceToPoint > pointLight.range)
-	return vec4(0, 0, 0, 0);
+		return vec4(0, 0, 0, 0);
 
 	lightDirection = normalize(lightDirection);
-
+	
 	vec4 color = CalcLight(pointLight.baseLight, lightDirection, normal, worldPos,
 				   specularIntensity, specularPower, eyePos);
 
