@@ -52,6 +52,6 @@ public abstract class MappedValues {
 		if(result != null)
 			return result;
 		
-		return new Texture(Texture.DEFAULT_TEXTURE);
+		return Texture.getDefaultTexture();
 	}
 }

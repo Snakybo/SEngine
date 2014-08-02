@@ -6,6 +6,22 @@ public class Quaternion {
 	public float z;
 	public float w;
 	
+	public Quaternion() {
+		this(0.0f);
+	}
+	
+	public Quaternion(float x) {
+		this(x, 0.0f);
+	}
+	
+	public Quaternion(float x, float y) {
+		this(x, y, 0.0f);
+	}
+	
+	public Quaternion(float x, float y, float z) {
+		this(x, y, z, 1.0f);
+	}
+	
 	public Quaternion(float x, float y, float z, float w) {
 		this.x = x;
 		this.y = y;

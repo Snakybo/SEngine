@@ -18,8 +18,8 @@ public class Material extends MappedValues {
 	public static final String DISP_MAP_SCALE = "dispMapScale";
 	public static final String DISP_MAP_BIAS = "dispMapBias";
 	
-	public static final String DEFAULT_NORMAL_TEXTURE = "internal/default_normal.png";
-	public static final String DEFAULT_DISP_TEXTURE = "internal/default_disp.png";
+	private static final Texture DEFAULT_NORMAL_TEXTURE = new Texture("internal/default_normal.png");
+	private static final Texture DEFAULT_DISP_TEXTURE = new Texture("internal/default_disp.png");
 	
 	private static Map<String, MaterialData> resourceMap = new HashMap<String, MaterialData>();
 	
@@ -68,11 +68,14 @@ public class Material extends MappedValues {
 		resource = new MaterialData();
 		resourceMap.put(materialName, resource);
 		
+		if(diffuse == null)
+			diffuse = Texture.getDefaultTexture();
+		
 		if(normalMap == null)
-			normalMap = new Texture(DEFAULT_NORMAL_TEXTURE);
+			normalMap = DEFAULT_NORMAL_TEXTURE;
 		
 		if(dispMap == null)
-			dispMap = new Texture(DEFAULT_DISP_TEXTURE);
+			dispMap = DEFAULT_DISP_TEXTURE;
 		
 		resource.setTexture(DIFFUSE, diffuse);
 		resource.setTexture(NORMAL_MAP, normalMap);
@@ -125,5 +128,13 @@ public class Material extends MappedValues {
 	
 	public Texture getTexture(String name) {
 		return resource.getTexture(name);
+	}
+	
+	public static Texture getDefaultNormalMap() {
+		return DEFAULT_NORMAL_TEXTURE;
+	}
+	
+	public static Texture getDefaultDiffuseMap() {
+		return DEFAULT_DISP_TEXTURE;
 	}
 }

@@ -13,8 +13,8 @@ import com.snakybo.sengine.resource.management.MeshData;
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
 public class Mesh {
-	public static final String MESH_FOLDER = "./res/models/";
-	public static final String DEFAULT_MESH = "internal/cube.obj";
+	private static final String MESH_FOLDER = "./res/models/";
+	private static final String DEFAULT_MESH = "internal/cube.obj";
 	
 	private static Map<String, MeshData> resourceMap = new HashMap<String, MeshData>();
 	
@@ -76,6 +76,9 @@ public class Mesh {
 	
 	private void loadMesh(String fileName) {
 		try {
+			if(fileName.lastIndexOf('.') == -1)
+				throw new IllegalArgumentException("Invalid file name passed: make sure to add the extension to the file name: " + fileName);
+			
 			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
 			IModel model = null;
 			

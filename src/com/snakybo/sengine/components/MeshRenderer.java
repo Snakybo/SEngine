@@ -1,6 +1,7 @@
 package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.object.Component;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Mesh;
 import com.snakybo.sengine.resource.Shader;
@@ -31,9 +32,9 @@ public class MeshRenderer extends Component {
 	}
 	
 	@Override
-	protected void render(Shader shader) {
+	protected void render(RenderingEngine renderingEngine, Shader shader) {
 		shader.bind();
-		shader.updateUniforms(getTransform(), material);
+		shader.updateUniforms(getTransform(), material, renderingEngine);
 		mesh.draw();
 	}
 }

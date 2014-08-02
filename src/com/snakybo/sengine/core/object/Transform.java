@@ -10,16 +10,28 @@ public class Transform {
 	
 	private Vector3f position;
 	private Quaternion rotation;
-	private Vector3f scale;
+	private float scale;
 	
 	private Vector3f oldPosition;
 	private Quaternion oldRotation;
-	private Vector3f oldScale;
+	private float oldScale;
 	
 	public Transform() {
-		position = new Vector3f(0, 0, 0);
-		rotation = new Quaternion(0, 0, 0, 1);
-		scale = new Vector3f(1, 1, 1);
+		this(new Vector3f(0.0f, 0.0f, 0.0f));
+	}
+	
+	public Transform(Vector3f position) {
+		this(position, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+	
+	public Transform(Vector3f position, Quaternion rotation) {
+		this(position, rotation, 1.0f);
+	}
+	
+	public Transform(Vector3f position, Quaternion rotation, float scale) {
+		this.position = position;
+		this.rotation = rotation;
+		this.scale = scale;
 		
 		parentMatrix = new Matrix4f().initIdentity();
 	}
@@ -28,11 +40,11 @@ public class Transform {
 		if(oldPosition != null) {
 			oldPosition.set(position);
 			oldRotation.set(rotation);
-			oldScale.set(scale);
+			oldScale = scale;
 		} else {
 			oldPosition = new Vector3f(position).add(1.0f);
 			oldRotation = new Quaternion(rotation).mul(0.5f);
-			oldScale = new Vector3f(scale).add(1.0f);
+			oldScale = scale + 1.0f;
 		}
 	}
 	
@@ -58,7 +70,7 @@ public class Transform {
 		if(!rotation.equals(oldRotation))
 			return true;
 		
-		if(!scale.equals(oldScale))
+		if(scale != oldScale)
 			return true;
 		
 		return false;
@@ -76,14 +88,14 @@ public class Transform {
 		this.rotation = rotation;
 	}
 	
-	public void setScale(Vector3f scale) {
+	public void setScale(float scale) {
 		this.scale = scale;
 	}
 	
 	public Matrix4f getTransformation() {
 		Matrix4f translationMatrix = new Matrix4f().initTranslation(position.x, position.y, position.z);
 		Matrix4f rotationMatrix = rotation.toRotationMatrix();
-		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.x, scale.y, scale.z);
+		Matrix4f scaleMatrix = new Matrix4f().initScale(scale, scale, scale);
 		
 		return getParentMatrix().mul(translationMatrix.mul(rotationMatrix.mul(scaleMatrix)));
 	}
@@ -116,7 +128,7 @@ public class Transform {
 		return rotation;
 	}
 	
-	public Vector3f getScale() {
+	public float getScale() {
 		return scale;
 	}
 }

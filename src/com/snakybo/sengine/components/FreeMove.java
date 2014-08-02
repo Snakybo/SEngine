@@ -25,13 +25,67 @@ public class FreeMove extends Component {
 	/** Constructor for the component
 	 * 
 	 * <p>
-	 * This constructor will call {@link #FreeMove(float, int, int, int, int)} with the keycodes W, S, A and D.
+	 * This constructor will call {@link #FreeMove(float)} with {@code 10.0} as {@code speed}
 	 * </p>
 	 * 
 	 * @param speed The speed of the game object
-	 * @see #FreeMove(float, int, int, int, int) */
+	 * @see #FreeMove(float) */
+	public FreeMove() {
+		this(10.0f);
+	}
+	
+	/** Constructor for the component
+	 * 
+	 * <p>
+	 * This constructor will call {@link #FreeMove(float, int)} with {@code W} as {@code keyForward}
+	 * </p>
+	 * 
+	 * @param speed The speed of the game object
+	 * @see #FreeMove(float, int) */
 	public FreeMove(float speed) {
-		this(speed, KeyCode.KEY_W, KeyCode.KEY_S, KeyCode.KEY_A, KeyCode.KEY_D);
+		this(speed, KeyCode.KEY_W);
+	}
+	
+	/** Constructor for the component
+	 * 
+	 * <p>
+	 * This constructor will call {@link #FreeMove(float, int, int)} with {@code S} as {@code keyBackward}
+	 * </p>
+	 * 
+	 * @param speed The speed of the game object
+	 * @param keyForward The key to use to go forward
+	 * @see #FreeMove(float, int, int) */
+	public FreeMove(float speed, int keyForward) {
+		this(speed, keyForward, KeyCode.KEY_S);
+	}
+	
+	/** Constructor for the component
+	 * 
+	 * <p>
+	 * This constructor will call {@link #FreeMove(float, int, int, int)} with {@code A} as {@code keyLeft}
+	 * </p>
+	 * 
+	 * @param speed The speed of the game object
+	 * @param keyForward The key to use to go forward
+	 * @param keyBackward The key to use to go backward
+	 * @see #FreeMove(float, int, int, int) */
+	public FreeMove(float speed, int keyForward, int keyBackward) {
+		this(speed, keyForward, keyBackward, KeyCode.KEY_A);
+	}
+	
+	/** Constructor for the component
+	 * 
+	 * <p>
+	 * This constructor will call {@link #FreeMove(float, int, int, int, int)} with {@code D} as {@code keyRight}
+	 * </p>
+	 * 
+	 * @param speed The speed of the game object
+	 * @param keyForward The key to use to go forward
+	 * @param keyBackward The key to use to go backward
+	 * @param keyLeft The key to use to go to the left
+	 * @see #FreeMove(float, int, int, int, int) */
+	public FreeMove(float speed, int keyForward, int keyBackward, int keyLeft) {
+		this(speed, keyForward, keyBackward, keyLeft, KeyCode.KEY_D);
 	}
 	
 	/** Constructor for the component

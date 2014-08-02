@@ -22,7 +22,7 @@ import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class TestGame extends Game {
-	public void init() {
+	public void init(Window window) {
 		Camera.initPerspectiveCamera(
 			(float)Math.toRadians(70.0f),
 			(float)Window.getWidth() / (float)Window.getHeight(),
@@ -31,26 +31,38 @@ public class TestGame extends Game {
 		
 		addChild(
 			new GameObject()
-				.addComponent(new FreeLook(0.5f))
-				.addComponent(new FreeMove(10.0f))
+				.addComponent(new FreeLook(Window.getCenter()))
+				.addComponent(new FreeMove())
 				.addComponent(RenderingEngine.getMainCamera())
 		);
 		
 		new Material(
 			"bricks",
-			new Texture("bricks2.png"), 1.0f, 8.0f,
-			new Texture("bricks2_normal.png"),
-			new Texture("bricks2_disp.png"), 0.03f, -0.5f
+			new Texture("bricks.png"), 0.5f, 4.0f,
+			new Texture("bricks_normal.png"),
+			new Texture("bricks_disp.png"), 0.03f, -0.5f
+		);
+		
+		new Material(
+			"bricksTemp",
+			new Texture("bricks.png"), 0.5f, 4.0f,
+			null,
+			new Texture("bricks_disp.png"), 0.03f, -0.5f
 		);
 		
 		new Material(
 			"bricks2",
-			new Texture("bricks2.png"), 1.0f, 8.0f
+			new Texture("bricks2.png"), 0.5f, 4.0f,
+			new Texture("bricks2_normal.png"),
+			new Texture("bricks2_disp.png"), 0.04f, -1.0f
 		);
 		
-		//addCustomMesh();
-		addMesh(new Vector3f(-1.5f, -2.5f, 5), "bricks");
-		addMesh(new Vector3f(1.5f, -2.5f, 5), "bricks2");
+		addChild(new GameObject(new Vector3f(-1.5f, -2.5f, 5.0f), new Quaternion(), 5.0f)
+					.addComponent(new MeshRenderer(new Mesh("plane2.obj"), new Material("bricks"))));
+		
+		addChild(new GameObject(new Vector3f(-1.5f, -2.5f, -15.0f), new Quaternion(), 5.0f)
+					.addComponent(new MeshRenderer(new Mesh("plane2.obj"), new Material("bricksTemp"))));
+		
 		//addLights();
 	}
 	
@@ -66,17 +78,7 @@ public class TestGame extends Game {
 			plane.addFace(2, 1, 3);
 		}
 		
-		GameObject go =	new GameObject().addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
-		
-		go.getTransform().getPosition().set(0.0f, -1.0f, 5.0f);
-		
-		addChild(go);
-	}
-	
-	private void addMesh(Vector3f position, String material) {
-		GameObject go = new GameObject().addComponent(new MeshRenderer(new Mesh(), new Material(material)));
-		
-		go.getTransform().getPosition().set(position);
+		GameObject go =	new GameObject(new Vector3f(0.0f, -1.0f, 5.0f)).addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
 		
 		addChild(go);
 	}
@@ -113,7 +115,7 @@ public class TestGame extends Game {
 		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0.0f, 1.0f, 0.0f), (float)Math.toRadians(90.0f)));
 		
 		addChild(directionalLight);
-		addChild(pointLight);
-		addChild(spotLight);
+		//addChild(pointLight);
+		//addChild(spotLight);
 	}
 }

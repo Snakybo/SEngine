@@ -41,6 +41,13 @@ public class IndexedModel {
 				normals.size() == tangents.size();
 	}
 	
+	public void calcTexCoords() {
+		texCoords.clear();
+		
+		for(int i = 0; i < positions.size(); i++)
+			texCoords.add(new Vector2f(0.0f, 0.0f));
+	}
+	
 	public void calcNormals() {
 		normals.clear();
 		
@@ -85,7 +92,7 @@ public class IndexedModel {
 			float deltaU2 = texCoords.get(i2).x - texCoords.get(i0).x;
 			float deltaV2 = texCoords.get(i2).y - texCoords.get(i0).y;
 			
-			float dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+			float dividend = deltaU1 * deltaV2 - deltaU2 * deltaV1;
 			float f = dividend == 0 ? 0.0f : 1.0f / dividend;
 			
 			Vector3f tangent = new Vector3f(
@@ -108,8 +115,7 @@ public class IndexedModel {
 			return this;
 		
 		if(texCoords.size() == 0)
-			for(int i = 0; i < positions.size(); i++)
-				addTexCoord(new Vector2f(0.0f, 0.0f));
+			calcTexCoords();
 		
 		if(normals.size() == 0)
 			calcNormals();

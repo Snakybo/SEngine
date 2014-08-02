@@ -20,7 +20,7 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Shader {
-	public static final String DEFAULT_SHADER = "internal/default_shader";
+	private static final String DEFAULT_SHADER = "internal/default_shader";
 	
 	private static Map<String, ShaderData> resourceMap = new HashMap<String, ShaderData>();
 	
@@ -66,7 +66,7 @@ public class Shader {
 		glUseProgram(resource.getProgram());
 	}
 	
-	public final void updateUniforms(Transform transform, Material material) {
+	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine) {
 		Matrix4f worldMatrix = transform.getTransformation();
 		Matrix4f mvpMatrix = RenderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 		
@@ -78,25 +78,25 @@ public class Shader {
 				String unprefixedName = uniformName.substring(2);
 				
 				if(uniformType.equals("sampler2D")) {
-					int samplerSlot = RenderingEngine.getSamplerSlot(unprefixedName);
+					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
 					
-					material.getTexture(unprefixedName).bind(samplerSlot);
+					renderingEngine.getTexture(unprefixedName).bind(samplerSlot);
 					setUniformi(uniformName, samplerSlot);
 				} else if(uniformType.equals("vec3")) {
-					setUniformVector3f(uniformName, RenderingEngine.rGetVector3f(unprefixedName));
+					setUniformVector3f(uniformName, renderingEngine.getVector3f(unprefixedName));
 				} else if(uniformType.equals("float")) {
-					setUniformf(uniformName, RenderingEngine.rGetFloat(unprefixedName));
+					setUniformf(uniformName, renderingEngine.getFloat(unprefixedName));
 				} else if(uniformType.equals("DirectionalLight")) {
-					setUniformDirectionalLight(uniformName, (DirectionalLight)RenderingEngine.getActiveLight());
+					setUniformDirectionalLight(uniformName, (DirectionalLight)renderingEngine.getActiveLight());
 				} else if(uniformType.equals("PointLight")) {
-					setUniformPointLight(uniformName, (PointLight)RenderingEngine.getActiveLight());
+					setUniformPointLight(uniformName, (PointLight)renderingEngine.getActiveLight());
 				} else if(uniformType.equals("SpotLight")) {
-					setUniformSpotLight(uniformName, (SpotLight)RenderingEngine.getActiveLight());
+					setUniformSpotLight(uniformName, (SpotLight)renderingEngine.getActiveLight());
 				} else {
 					updateUniforms(transform, material, uniformName, uniformType);
 				}
 			} else if(uniformType.equals("sampler2D")) {
-				int samplerSlot = RenderingEngine.getSamplerSlot(uniformName);
+				int samplerSlot = renderingEngine.getSamplerSlot(uniformName);
 				material.getTexture(uniformName).bind(samplerSlot);
 				setUniformi(uniformName, samplerSlot);
 			} else if(uniformName.startsWith("T_")) {

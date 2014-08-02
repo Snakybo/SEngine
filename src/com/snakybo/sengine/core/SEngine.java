@@ -10,6 +10,7 @@ import com.snakybo.sengine.utils.Time;
  * @author Kevin Krol
  * @since Apr 4, 2014 */
 public class SEngine {
+	private RenderingEngine renderingEngine;
 	private Window window;
 	private Game game;
 	
@@ -37,17 +38,14 @@ public class SEngine {
 					"The window has not been created, make sure you call window.create() prior to starting the engine");
 		
 		this.window = window;
+		this.renderingEngine = new RenderingEngine(window);
 		
 		frameTime = 1.0 / frameRate;
 		
 		isRunning = true;
 		
-		RenderingEngine.create(window.getAmbientColor(), window.getClearColor());
-		
-		window.bindAsRenderTarget();
-		
-		game.internalInit();
-		game.init();
+		game.internalInit(renderingEngine);
+		game.init(window);
 		
 		run();
 	}
@@ -107,7 +105,7 @@ public class SEngine {
 			}
 			
 			if(render) {
-				game.render();
+				game.render(renderingEngine);
 				window.render();
 				frames++;
 			} else {

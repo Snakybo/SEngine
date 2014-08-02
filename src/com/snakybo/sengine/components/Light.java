@@ -25,8 +25,11 @@ public class Light extends Component {
 	public Light(Color color, float intensity) {
 		this.color = color;
 		this.intensity = intensity;
-		
-		RenderingEngine.addLight(this);
+	}
+	
+	@Override
+	protected void onAddedToScene(RenderingEngine renderingEngine) {
+		renderingEngine.addLight(this);
 	}
 	
 	/** Set the shader of the light

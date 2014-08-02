@@ -36,7 +36,7 @@ public class Camera extends Component {
 	public Camera(Matrix4f projection) {
 		this.projection = projection;
 		
-		RenderingEngine.addCamera(this);
+		RenderingEngine.setMainCamera(this);
 	}
 	
 	/** @return A transformed version of the projection matrix, rotation and translation is applied

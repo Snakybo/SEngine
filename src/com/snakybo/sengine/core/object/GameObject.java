@@ -3,7 +3,10 @@ package com.snakybo.sengine.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.utils.math.Quaternion;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 /** The game object class, every object in the scene is a game object
  * 
@@ -13,14 +16,27 @@ public class GameObject {
 	private ArrayList<GameObject> children;
 	private ArrayList<Component> components;
 	
+	private RenderingEngine renderingEngine;
 	private Transform transform;
 	
 	/** Constructor for the game object
 	 * @param args Optionally pass in components */
 	public GameObject() {
+		this(new Vector3f(0.0f, 0.0f, 0.0f));
+	}
+	
+	public GameObject(Vector3f position) {
+		this(position, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+	
+	public GameObject(Vector3f position, Quaternion rotation) {
+		this(position, rotation, 1.0f);
+	}
+	
+	public GameObject(Vector3f position, Quaternion rotation, float scale) {
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<Component>();
-		transform = new Transform();
+		transform = new Transform(position, rotation, scale);
 	}
 	
 	/** Set a game object as a child of this game object, the child object will also receive any
@@ -28,7 +44,12 @@ public class GameObject {
 	 * @param child The game object to set as a child */
 	public void addChild(GameObject child) {
 		children.add(child);
+		
 		child.getTransform().setParent(transform);
+		child.addToRenderingEngine(renderingEngine);
+		
+		for(Component component : child.components)
+			component.onAddedToScene(renderingEngine);
 	}
 	
 	/** Add a {@link Component} to the game object.
@@ -62,11 +83,11 @@ public class GameObject {
 	
 	/** Render the game object, all it's components and it's children
 	 * @param delta The delta time */
-	public void renderAll(Shader shader) {
-		render(shader);
+	public void renderAll(RenderingEngine renderingEngine, Shader shader) {
+		render(renderingEngine, shader);
 		
 		for(GameObject child : children)
-			child.renderAll(shader);
+			child.renderAll(renderingEngine, shader);
 	}
 	
 	/** Handle input for every component of this game object
@@ -87,9 +108,15 @@ public class GameObject {
 	
 	/** Render every component of the game object
 	 * @param delta The delta time */
-	public void render(Shader shader) {
+	public void render(RenderingEngine renderingEngine, Shader shader) {
 		for(Component component : components)
-			component.render(shader);
+			component.render(renderingEngine, shader);
+	}
+	
+	/** Add the game object to the rendering engine
+	 * @param renderingEngine The rendering engine */
+	public void addToRenderingEngine(RenderingEngine renderingEngine) {
+		this.renderingEngine = renderingEngine;
 	}
 	
 	/** This method creates an array, containing all the children of this game object, and the

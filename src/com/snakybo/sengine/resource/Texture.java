@@ -19,11 +19,12 @@ import javax.imageio.ImageIO;
 import com.snakybo.sengine.resource.management.TextureData;
 import com.snakybo.sengine.utils.Buffer;
 
-public class Texture {
-	public static final String TEXTURE_FOLDER = "./res/textures/";
-	public static final String DEFAULT_TEXTURE = "internal/default_diffuse.png";
-	
+public class Texture {	
 	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();
+	
+	private static final String TEXTURE_FOLDER = "./res/textures/";
+	
+	private static final Texture DEFAULT_TEXTURE = new Texture("internal/default_diffuse.png");
 	
 	private TextureData resource;
 	private String fileName;
@@ -177,9 +178,15 @@ public class Texture {
 			
 			resourceMap.put(fileName, resource);
 		} catch(IOException e) {
-			System.err.println("Error loading texture: The texture " + fileName + " doesn't exist. Using the default texture");
+			System.err.println("Error loading texture: The texture " + fileName
+					+ " doesn't exist. Using the default texture");
 			e.printStackTrace();
-			loadTexture(DEFAULT_TEXTURE, textureTarget, filters, internalFormat, format, clamp, attachments);
+			
+			resource = DEFAULT_TEXTURE.resource;
 		}
+	}
+	
+	public static Texture getDefaultTexture() {
+		return DEFAULT_TEXTURE;
 	}
 }

@@ -168,7 +168,7 @@ public class ObjModel implements IModel {
 			normalModel.calcNormals();
 			
 			for(int i = 0; i < model.getPositions().size(); i++)
-				model.getNormals().get(i).set(model.getNormals().get(i).add(normalModel.getNormals().get(indexMap.get(i))));
+				model.getNormals().add(normalModel.getNormals().get(indexMap.get(i)));
 		}
 		
 		normalModel.calcTangents();

@@ -1,5 +1,6 @@
 package com.snakybo.sengine.core.object;
 
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Shader;
 
 /** Base component class used by the engine, every component in the game has to extend this class in
@@ -24,7 +25,11 @@ public abstract class Component {
 	 * The shader that's currently active is passed as a parameter in this method
 	 * </p>
 	 * @param shader The currently active shader */
-	protected void render(Shader shader) {}
+	protected void render(RenderingEngine renderingEngine, Shader shader) {}
+	
+	/** This method is called when the {@link #parent} is added to the scene
+	 * @param renderingEngine The rendering engine */
+	protected void onAddedToScene(RenderingEngine renderingEngine) {}
 	
 	/** Set the parent of the component
 	 * <p>
