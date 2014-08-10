@@ -36,7 +36,7 @@ public class SpotLight extends PointLight {
 	/** @return The direction the light is pointed at
 	 * @see Vector3f */
 	public Vector3f getDirection() {
-		return getTransform().getWorldRotation().getForward();
+		return getTransform().getRotation().getForward();
 	}
 	
 	/** @return The cutoff of the light */

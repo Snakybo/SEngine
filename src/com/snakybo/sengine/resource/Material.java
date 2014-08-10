@@ -11,6 +11,7 @@ public class Material extends MappedValues {
 	public static final String DIFFUSE = "diffuse";
 	public static final String NORMAL_MAP = "normalMap";
 	public static final String DISP_MAP = "dispMap";
+	public static final String SHADOW_MAP = "shadowMap";
 	
 	public static final String SPECULAR_INTENSITY = "specularIntensity";
 	public static final String SPECULAR_POWER = "specularPower";

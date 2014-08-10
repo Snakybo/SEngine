@@ -36,7 +36,7 @@ public abstract class Component {
 	 * This method should only be used internally by the engine
 	 * </p>
 	 * @param parent The new parent of the game object */
-	final void setParent(GameObject parent) {
+	public void setParent(GameObject parent) {
 		this.parent = parent;
 	}
 	

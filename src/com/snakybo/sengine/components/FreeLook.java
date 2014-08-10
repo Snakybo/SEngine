@@ -79,7 +79,7 @@ public class FreeLook extends Component {
 			if(rotY)
 				rotate(yAxis, -deltaPos.x);
 			if(rotX)
-				rotate(getTransform().getRotation().getRight(), deltaPos.y);
+				rotate(getTransform().getLocalRotation().getRight(), deltaPos.y);
 			
 			if(rotY || rotX)
 				Input.setMousePosition(windowCenter);

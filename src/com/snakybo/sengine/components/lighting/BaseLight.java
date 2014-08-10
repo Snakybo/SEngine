@@ -4,6 +4,7 @@ import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.utils.Color;
+import com.snakybo.sengine.utils.math.Matrix4f;
 
 /** Base class for every light in the game
  * 
@@ -15,6 +16,7 @@ public class BaseLight extends Component {
 	private Color color;
 	
 	private Shader shader;
+	private ShadowInfo shadowInfo;
 	
 	private float intensity;
 	
@@ -32,12 +34,6 @@ public class BaseLight extends Component {
 		renderingEngine.addLight(this);
 	}
 	
-	/** Set the shader of the light
-	 * @param shader The new shader to use */
-	public void setShader(Shader shader) {
-		this.shader = shader;
-	}
-	
 	/** Set the color of the light
 	 * @param color The new color to use */
 	public void setColor(Color color) {
@@ -50,10 +46,27 @@ public class BaseLight extends Component {
 		this.intensity = intensity;
 	}
 	
+	/** Set the shader of the light
+	 * @param shader The new shader to use */
+	protected void setShader(Shader shader) {
+		this.shader = shader;
+	}
+	
+	/** Set the shadow info of the light
+	 * @param shadowInfo The new shadow information */
+	protected void setShadowInfo(ShadowInfo shadowInfo) {
+		this.shadowInfo = shadowInfo;
+	}
+	
 	/** @return The shader the light uses
 	 * @see Shader */
 	public Shader getShader() {
 		return shader;
+	}
+	
+	/** @return The shadow information of the light */
+	public ShadowInfo getShadowInfo() {
+		return shadowInfo;
 	}
 	
 	/** @return The color of the light
@@ -65,5 +78,18 @@ public class BaseLight extends Component {
 	/** @return The intensity of the light */
 	public float getIntensity() {
 		return intensity;
+	}
+	
+	// TODO: JavaDocs for the ShadowInfo class
+	public class ShadowInfo {
+		private Matrix4f projection;
+		
+		public ShadowInfo(Matrix4f projection) {
+			this.projection = projection;
+		}
+		
+		public Matrix4f getProjection() {
+			return projection;
+		}
 	}
 }

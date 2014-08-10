@@ -77,7 +77,9 @@ public class Shader {
 			if(uniformName.startsWith("R_")) {
 				String unprefixedName = uniformName.substring(2);
 				
-				if(uniformType.equals("sampler2D")) {
+				if(unprefixedName.equals("lightMatrix")) {
+					setUniformMatrix4f(uniformName, renderingEngine.getLightMatrix().mul(worldMatrix));
+				} else if(uniformType.equals("sampler2D")) {
 					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
 					
 					renderingEngine.getTexture(unprefixedName).bind(samplerSlot);
@@ -109,7 +111,7 @@ public class Shader {
 				}	
 			} else if(uniformName.startsWith("C_")) {
 				if(uniformName.equals("C_eyePos")) {
-					setUniformVector3f(uniformName, RenderingEngine.getMainCamera().getTransform().getWorldPosition());
+					setUniformVector3f(uniformName, RenderingEngine.getMainCamera().getTransform().getPosition());
 				} else {
 					throw new IllegalArgumentException(uniformName + " is not a valid component of Camera");
 				}
@@ -151,7 +153,7 @@ public class Shader {
 	}
 	
 	private final void setUniformPointLight(String uniformName, PointLight pointLight) {
-		setUniformVector3f(uniformName + ".position", pointLight.getTransform().getWorldPosition());
+		setUniformVector3f(uniformName + ".position", pointLight.getTransform().getPosition());
 		setUniformVector3f(uniformName + ".baseLight.color", pointLight.getColor());
 		
 		setUniformf(uniformName + ".baseLight.intensity", pointLight.getIntensity());
@@ -162,7 +164,7 @@ public class Shader {
 	}
 	
 	private final void setUniformSpotLight(String uniformName, SpotLight spotLight) {
-		setUniformVector3f(uniformName + ".pointLight.position", spotLight.getTransform().getWorldPosition());
+		setUniformVector3f(uniformName + ".pointLight.position", spotLight.getTransform().getPosition());
 		setUniformVector3f(uniformName + ".direction", spotLight.getDirection());
 		setUniformVector3f(uniformName + ".pointLight.baseLight.color", spotLight.getColor());
 		

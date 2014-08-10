@@ -38,7 +38,7 @@ import com.snakybo.sengine.utils.Utils;
 
 public class ShaderData implements ReferenceCounter {
 	public static final String SHADER_FOLDER = "./res/shaders/";
-	public static final String DEFAULT_SHADER = "default_shader";
+	public static final String DEFAULT_SHADER = "/internal/default_shader.glsl";
 	
 	private static int supportedOpenGlLevel = 0;
 	
@@ -138,7 +138,7 @@ public class ShaderData implements ReferenceCounter {
 		glCompileShader(shader);
 		
 		if(glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
-			System.err.println("Error compiling shader of type " + type + "\n" + glGetShaderInfoLog(shader, 1024));
+			System.err.println("Error compiling shader\n" + glGetShaderInfoLog(shader, 1024));
 			System.exit(1);
 		}
 		

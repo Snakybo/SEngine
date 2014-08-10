@@ -108,22 +108,22 @@ public class FreeMove extends Component {
 		float moveAmount = speed * (float)delta;
 		
 		if(Input.getKey(keyForward))
-			move(getTransform().getRotation().getForward(), moveAmount);
+			move(getTransform().getLocalRotation().getForward(), moveAmount);
 		
 		if(Input.getKey(keyBackward))
-			move(getTransform().getRotation().getForward(), -moveAmount);
+			move(getTransform().getLocalRotation().getForward(), -moveAmount);
 		
 		if(Input.getKey(keyLeft))
-			move(getTransform().getRotation().getLeft(), moveAmount);
+			move(getTransform().getLocalRotation().getLeft(), moveAmount);
 		
 		if(Input.getKey(keyRight))
-			move(getTransform().getRotation().getRight(), moveAmount);
+			move(getTransform().getLocalRotation().getRight(), moveAmount);
 	}
 	
 	/** Move the game object in the specified direction by the specified amount
 	 * @param direction The direction to move in
 	 * @param amount The amount of units to move */
 	private void move(Vector3f direction, float amount) {
-		getTransform().setPosition(getTransform().getPosition().add(direction.mul(amount)));
+		getTransform().setPosition(getTransform().getLocalPosition().add(direction.mul(amount)));
 	}
 }

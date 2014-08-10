@@ -1,6 +1,6 @@
 package com.snakybo.game;
 
-import com.snakybo.sengine.components.Camera;
+import com.snakybo.sengine.components.Camera.CameraComponent;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
@@ -10,28 +10,28 @@ import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.rendering.Attenuation;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Mesh;
 import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.utils.Color;
+import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Quaternion;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class TestGame extends Game {
 	public void init(Window window) {
-		Camera.initPerspectiveCamera(
+		CameraComponent camera = new CameraComponent(new Matrix4f().initPerspective(
 			(float)Math.toRadians(70.0f),
 			(float)Window.getWidth() / (float)Window.getHeight(),
 			0.01f, 1000.0f
-		);
+		));
 		
 		addChild(
 			new GameObject()
 				.addComponent(new FreeLook(Window.getCenter()))
 				.addComponent(new FreeMove())
-				.addComponent(RenderingEngine.getMainCamera())
+				.addComponent(camera)
 		);
 		
 		new Material(
@@ -46,7 +46,7 @@ public class TestGame extends Game {
 			new Texture("BullTex.jpg"), 0.5f, 4.0f
 		);
 		
-		addChild(new GameObject(new Vector3f(2.0f, 0.0f, 2.0f), new Quaternion(), 5.0f)
+		addChild(new GameObject(new Vector3f(2.0f, -0.4f, 2.0f), new Quaternion(), 5.0f)
 					.addComponent(new MeshRenderer(new Mesh("stier.obj"), new Material("bull"))));
 		
 		addChild(new GameObject(new Vector3f(0.0f, -1.0f, 0.0f))
@@ -80,13 +80,13 @@ public class TestGame extends Game {
 			)
 		);
 		
-		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1.0f, 0.0f, 0.0f), (float)Math.toRadians(-45.0f)));
+		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1.0f, 0.0f, 0.0f), (float)Math.toRadians(-90.0f)));
 		
-		spotLight.getTransform().getPosition().set(3.0f, 0.0f, 3.0f);
+		spotLight.getTransform().getLocalPosition().set(3.0f, 0.0f, 3.0f);
 		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0.0f, 1.0f, 0.0f), (float)Math.toRadians(90.0f)));
 		
 		addChild(directionalLight);
-		addChild(pointLight);
-		addChild(spotLight);
+		//addChild(pointLight);
+		//addChild(spotLight);
 	}
 }

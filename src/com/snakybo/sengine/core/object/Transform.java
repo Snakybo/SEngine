@@ -127,28 +127,28 @@ public class Transform {
 		return parentMatrix;
 	}
 	
-	public Vector3f getWorldPosition() {
+	public Vector3f getPosition() {
 		return getParentMatrix().transform(position);
 	}
 	
-	public Quaternion getWorldRotation() {
+	public Quaternion getRotation() {
 		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
 		
 		if(parent != null)
-			parentRotation = parent.getWorldRotation();
+			parentRotation = parent.getRotation();
 		
 		return parentRotation.mul(rotation);
 	}
 	
-	public Vector3f getPosition() {
+	public Vector3f getLocalPosition() {
 		return position;
 	}
 	
-	public Quaternion getRotation() {
+	public Quaternion getLocalRotation() {
 		return rotation;
 	}
 	
-	public float getScale() {
+	public float getLocalScale() {
 		return scale;
 	}
 }

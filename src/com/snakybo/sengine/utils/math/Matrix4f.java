@@ -25,6 +25,10 @@ public class Matrix4f {
 		return this;
 	}
 	
+	public Matrix4f initTranslation(Vector3f translation) {
+		return initTranslation(translation.x, translation.y, translation.z);
+	}
+	
 	public Matrix4f initRotation(float x, float y, float z) {
 		Matrix4f rx = new Matrix4f();
 		Matrix4f ry = new Matrix4f();
