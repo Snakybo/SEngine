@@ -9,9 +9,9 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.snakybo.sengine.components.DirectionalLight;
-import com.snakybo.sengine.components.PointLight;
-import com.snakybo.sengine.components.SpotLight;
+import com.snakybo.sengine.components.lighting.DirectionalLight;
+import com.snakybo.sengine.components.lighting.PointLight;
+import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.management.ShaderData;

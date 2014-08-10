@@ -1,14 +1,14 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.components.lighting;
 
 import com.snakybo.sengine.rendering.Attenuation;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.utils.Color;
 
-/** This class extends the {@link Light} class
+/** This class extends the {@link BaseLight} class
  * @author Kevin Krol
  * @since Apr 4, 2014
- * @see Light */
-public class PointLight extends Light {
+ * @see BaseLight */
+public class PointLight extends BaseLight {
 	private static final int COLOR_DEPTH = 256;
 	
 	private Attenuation attenuation;

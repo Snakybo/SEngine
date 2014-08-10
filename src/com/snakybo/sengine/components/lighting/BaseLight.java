@@ -1,4 +1,4 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.components.lighting;
 
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
@@ -11,7 +11,7 @@ import com.snakybo.sengine.utils.Color;
  * @author Kevin Krol
  * @since Apr 4, 2014
  * @see Component */
-public class Light extends Component {
+public class BaseLight extends Component {
 	private Color color;
 	
 	private Shader shader;
@@ -22,7 +22,7 @@ public class Light extends Component {
 	 * @param color The color of the light
 	 * @param intensity The intensity of the light
 	 * @see Color*/
-	public Light(Color color, float intensity) {
+	public BaseLight(Color color, float intensity) {
 		this.color = color;
 		this.intensity = intensity;
 	}

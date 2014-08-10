@@ -1,4 +1,4 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.components.lighting;
 
 import com.snakybo.sengine.rendering.Attenuation;
 import com.snakybo.sengine.resource.Shader;

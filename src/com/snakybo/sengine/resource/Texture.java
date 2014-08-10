@@ -6,7 +6,6 @@ import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL42.IMAGE_FORMAT_COMPATIBILITY_BY_CLASS;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -154,19 +153,19 @@ public class Texture {
 	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments) {
 		try {
 			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
-			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
-			int[] temp = new int[pixels.length];
+			int[] flippedPixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
+			int[] pixels = new int[flippedPixels.length];
 			
+			// Flip the image vertically
 			for(int i = 0; i < image.getWidth(); i++)
 				for(int j = 0; j < image.getHeight(); j++)
-					temp[i + j * image.getWidth()] = pixels[i + (image.getHeight() - j - 1) * image.getWidth()];
-			
-			pixels = temp;
+					pixels[i + j * image.getWidth()] = flippedPixels[i + (image.getHeight() - j - 1) * image.getWidth()];
 			
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 			
 			boolean hasAlpha = image.getColorModel().hasAlpha();
 			
+			// Put each pixel in a Byte Buffer
 			for(int y = 0; y < image.getHeight(); y++) {
 				for(int x = 0; x < image.getWidth(); x++) {
 					int pixel = pixels[y * image.getWidth() + x];

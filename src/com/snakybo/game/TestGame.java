@@ -1,12 +1,12 @@
 package com.snakybo.game;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.DirectionalLight;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
-import com.snakybo.sengine.components.PointLight;
-import com.snakybo.sengine.components.SpotLight;
+import com.snakybo.sengine.components.lighting.DirectionalLight;
+import com.snakybo.sengine.components.lighting.PointLight;
+import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.rendering.Attenuation;
@@ -42,22 +42,15 @@ public class TestGame extends Game {
 		);
 		
 		new Material(
-			"bricks2",
-			new Texture("bricks2.png"), 0.5f, 4.0f,
-			new Texture("bricks2_normal.png"),
-			new Texture("bricks2_disp.png"), 0.04f, -1.0f
+			"bull",
+			new Texture("BullTex.jpg"), 0.5f, 4.0f
 		);
 		
-		new Material(
-			"uv",
-			new Texture("monkey_uv.png"), 0.5f, 4.0f
-		);
-		
-		addChild(new GameObject(new Vector3f(2.0f, 4.0f, 2.0f))
-					.addComponent(new MeshRenderer(new Mesh("monkey.obj"), new Material("uv"))));
+		addChild(new GameObject(new Vector3f(2.0f, 0.0f, 2.0f), new Quaternion(), 5.0f)
+					.addComponent(new MeshRenderer(new Mesh("stier.obj"), new Material("bull"))));
 		
 		addChild(new GameObject(new Vector3f(0.0f, -1.0f, 0.0f))
-					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks2"))));
+					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks"))));
 		
 		addLights();
 	}

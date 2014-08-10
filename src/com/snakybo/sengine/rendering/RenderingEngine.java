@@ -23,19 +23,24 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
+import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.Light;
+import com.snakybo.sengine.components.lighting.BaseLight;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.utils.MappedValues;
 
+/** The rendering engine, this is the main renderer in the engine
+ * 
+ * @author Kevin
+ * @since Apr 4, 2014 */
 public class RenderingEngine extends MappedValues {
 	private static final int SAMPLER_LAYER_DIFFUSE = 0;
 	private static final int SAMPLER_LAYER_NORMAL_MAP = 1;
@@ -47,27 +52,33 @@ public class RenderingEngine extends MappedValues {
 	
 	private HashMap<String, Integer> samplerMap;
 	
-	private List<Light> lights;
-	private Light activeLight;
+	private List<BaseLight> baseLights;
+	private BaseLight activeLight;
 	
 	private Window window;
 	
+	/** Constructor for the rendering engine
+	 * @param window The window the rendering engine should render in */
 	public RenderingEngine(Window window) {
 		this.window = window;
 		
 		samplerMap = new HashMap<String, Integer>();
-		lights = new ArrayList<Light>();
+		baseLights = new ArrayList<BaseLight>();
 		
 		samplerMap.put(Material.DIFFUSE, SAMPLER_LAYER_DIFFUSE);
 		samplerMap.put(Material.NORMAL_MAP, SAMPLER_LAYER_NORMAL_MAP);
 		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
 		
 		setVector3f("ambient", window.getAmbientColor());
-		setTexture("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_RGBA, GL_RGBA, false, GL_COLOR_ATTACHMENT0));
+		setTexture("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_RGBA, GL_RGBA, false,
+				GL_COLOR_ATTACHMENT0));
 		
 		initOpenGl();
 	}
 	
+	/** Render the object passed in, calls {@link #renderLighting(GameObject)} when the object has
+	 * been rendered using the ambient shader
+	 * @param object The object to render */
 	public void render(GameObject object) {
 		window.bindAsRenderTarget();
 		
@@ -76,14 +87,20 @@ public class RenderingEngine extends MappedValues {
 		
 		object.renderAll(this, AMBIENT_SHADER);
 		
+		renderLighting(object);
+	}
+	
+	/** Apply lighting to the object passed in
+	 * @param object The object to apply lighting to */
+	private final void renderLighting(GameObject object) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
 		glDepthMask(false);
 		glDepthFunc(GL_EQUAL);
 		
-		for(Light light : lights) {
-			activeLight = light;
-			object.renderAll(this, light.getShader());
+		for(BaseLight baseLight : baseLights) {
+			activeLight = baseLight;
+			object.renderAll(this, baseLight.getShader());
 		}
 		
 		glDepthMask(true);
@@ -91,33 +108,42 @@ public class RenderingEngine extends MappedValues {
 		glDisable(GL_BLEND);
 	}
 	
-	private void initOpenGl() {
+	/** Initialize OpenGL */
+	private final void initOpenGl() {
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
 		
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_DEPTH_CLAMP);
+		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
 	}
 	
-	public static void setMainCamera(Camera camera) {
+	/** Add a light to the rendering engine
+	 * @param light The light to add to the rendering engine */
+	public final void addLight(BaseLight light) {
+		baseLights.add(light);
+	}
+	
+	/** Set the main camera
+	 * @param camera The camera to use */
+	public final static void setMainCamera(Camera camera) {
 		mainCamera = camera;
 	}
 	
-	public static Camera getMainCamera() {
+	/** @return The main camera */
+	public final static Camera getMainCamera() {
 		return mainCamera;
 	}
 	
-	public void addLight(Light light) {
-		lights.add(light);
-	}
-	
-	public int getSamplerSlot(String samplerName) {
+	/** @return The element in the sampler map with the name passed in
+	 * @param samplerName The name of the sampler slot */
+	public final int getSamplerSlot(String samplerName) {
 		return samplerMap.get(samplerName);
 	}
 	
-	public Light getActiveLight() {
+	/** @return The active light, this changes depending on which light is currently being used to render an object */
+	public final BaseLight getActiveLight() {
 		return activeLight;
 	}
 }

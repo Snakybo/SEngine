@@ -4,6 +4,10 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Quaternion;
 import com.snakybo.sengine.utils.math.Vector3f;
 
+/** The transform class, every game object has a transform by default
+ * 
+ * @author Kevin Krol
+ * @since Apr 4, 2014 */
 public class Transform {
 	private Transform parent;
 	private Matrix4f parentMatrix;
@@ -16,18 +20,33 @@ public class Transform {
 	private Quaternion oldRotation;
 	private float oldScale;
 	
+	/** Constructor for the transform This constructor will call {@link #Transform(Vector3f)}
+	 * @see #Transform(Vector3f) */
 	public Transform() {
-		this(new Vector3f(0.0f, 0.0f, 0.0f));
+		this(new Vector3f());
 	}
 	
+	/** Constructor for the transform This constructor will call
+	 * {@link #Transform(Vector3f, Quaternion)}
+	 * @param position The position of the transform
+	 * @see #Transform(Vector3f, Quaternion) */
 	public Transform(Vector3f position) {
-		this(position, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+		this(position, new Quaternion());
 	}
 	
+	/** Constructor for the transform This constructor will call
+	 * {@link #Transform(Vector3f, Quaternion, float)}
+	 * @param position The position of the transform
+	 * @param rotation The rotation of the transform
+	 * @see #Transform(Vector3f, Quaternion, float) */
 	public Transform(Vector3f position, Quaternion rotation) {
 		this(position, rotation, 1.0f);
 	}
 	
+	/** Constructor for the transform
+	 * @param position The position of the transform
+	 * @param rotation The rotation of the transform
+	 * @param scale The scale of the transform */
 	public Transform(Vector3f position, Quaternion rotation, float scale) {
 		this.position = position;
 		this.rotation = rotation;
@@ -36,7 +55,8 @@ public class Transform {
 		parentMatrix = new Matrix4f().initIdentity();
 	}
 	
-	public void update() {
+	/** Update the transform, sets the old transform values to the current values */
+	public final void update() {
 		if(oldPosition != null) {
 			oldPosition.set(position);
 			oldRotation.set(rotation);
