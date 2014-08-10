@@ -9,7 +9,9 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LESS;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -20,6 +22,7 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
+import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +33,7 @@ import com.snakybo.sengine.components.Light;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.utils.MappedValues;
 
 public class RenderingEngine extends MappedValues {
@@ -59,6 +63,7 @@ public class RenderingEngine extends MappedValues {
 		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
 		
 		setVector3f("ambient", window.getAmbientColor());
+		setTexture("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_RGBA, GL_RGBA, false, GL_COLOR_ATTACHMENT0));
 		
 		initOpenGl();
 	}

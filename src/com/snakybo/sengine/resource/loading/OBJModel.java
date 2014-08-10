@@ -125,16 +125,13 @@ public class ObjModel implements IModel {
 			ObjIndex currentIndex = indices.get(i);
 			
 			Vector3f currentPosition = positions.get(currentIndex.vertex);
-			Vector2f currentTexCoord;
-			Vector3f currentNormal;
-			
-			currentTexCoord = hasTexCoords ? texCoords.get(currentIndex.texCoord) : new Vector2f(0.0f, 0.0f);
-			currentNormal = hasNormals ? normals.get(currentIndex.normal) : new Vector3f(0.0f, 0.0f, 0.0f);
+			Vector2f currentTexCoord = hasTexCoords ? texCoords.get(currentIndex.texCoord) : new Vector2f(0.0f, 0.0f);
+			Vector3f currentNormal = hasNormals ? normals.get(currentIndex.normal) : new Vector3f(0.0f, 0.0f, 0.0f);
 			
 			Integer modelVertexIndex = resultIndexMap.get(currentIndex);
 			
 			if(modelVertexIndex == null) {
-				modelVertexIndex = model.getPositions().size();
+				modelVertexIndex = model.getPositions().length;
 				resultIndexMap.put(currentIndex, modelVertexIndex);
 				
 				model.addVertex(currentPosition);
@@ -149,7 +146,7 @@ public class ObjModel implements IModel {
 			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertex);
 			
 			if(normalModelIndex == null) {
-				normalModelIndex = normalModel.getPositions().size();
+				normalModelIndex = normalModel.getPositions().length;
 				normalIndexMap.put(currentIndex.vertex, normalModelIndex);
 				
 				normalModel.addVertex(currentPosition);
@@ -158,8 +155,8 @@ public class ObjModel implements IModel {
 				normalModel.addTangent(new Vector3f(0.0f, 0.0f, 0.0f));
 			}
 			
-			model.getIndices().add(modelVertexIndex);
-			normalModel.getIndices().add(normalModelIndex);
+			model.addIndex(modelVertexIndex);
+			normalModel.addIndex(normalModelIndex);
 			
 			indexMap.put(modelVertexIndex, normalModelIndex);
 		}
@@ -167,14 +164,14 @@ public class ObjModel implements IModel {
 		if(!hasNormals) {
 			normalModel.calcNormals();
 			
-			for(int i = 0; i < model.getPositions().size(); i++)
-				model.getNormals().add(normalModel.getNormals().get(indexMap.get(i)));
+			for(int i = 0; i < model.getPositions().length; i++)
+				model.addNormal(normalModel.getNormals()[indexMap.get(i)]);
 		}
 		
 		normalModel.calcTangents();
 		
-		for(int i = 0; i < model.getPositions().size(); i++)
-			model.getTangents().get(i).set(model.getTangents().get(i).add(normalModel.getTangents().get(indexMap.get(i))));
+		for(int i = 0; i < model.getPositions().length; i++)
+			model.setTangent(i, normalModel.getTangents()[indexMap.get(i)]);
 		
 		return model;
 	}

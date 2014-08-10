@@ -3,7 +3,6 @@ package com.snakybo.sengine.utils;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
@@ -32,15 +31,11 @@ public class Buffer {
 		return buffer;
 	}
 	
-	public static IntBuffer createFlippedBufferi(List<Integer> values) {
-		return createFlippedBuffer(Utils.toIntArray(values.toArray(new Integer[values.size()])));
-	}
-	
-	public static FloatBuffer createFlippedBufferV2(List<Vector2f> values) {
-		FloatBuffer buffer = createFloatBuffer(values.size() * 2);
+	public static FloatBuffer createFlippedBuffer(Vector2f[] values) {
+		FloatBuffer buffer = createFloatBuffer(values.length * 2);
 		
-		for(int i = 0; i < values.size(); i++) {
-			Vector2f value = values.get(i);
+		for(int i = 0; i < values.length; i++) {
+			Vector2f value = values[i];
 			
 			buffer.put(value.x);
 			buffer.put(value.y);
@@ -51,11 +46,11 @@ public class Buffer {
 		return buffer;
 	}
 	
-	public static FloatBuffer createFlippedBufferV3(List<Vector3f> values) {
-		FloatBuffer buffer = createFloatBuffer(values.size() * 3);
+	public static FloatBuffer createFlippedBuffer(Vector3f[] values) {
+		FloatBuffer buffer = createFloatBuffer(values.length * 3);
 		
-		for(int i = 0; i < values.size(); i++) {
-			Vector3f value = values.get(i);
+		for(int i = 0; i < values.length; i++) {
+			Vector3f value = values[i];
 			
 			buffer.put(value.x);
 			buffer.put(value.y);

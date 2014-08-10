@@ -15,10 +15,8 @@ import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Mesh;
 import com.snakybo.sengine.resource.Texture;
-import com.snakybo.sengine.resource.loading.IndexedModel;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
 public class TestGame extends Game {
@@ -44,51 +42,26 @@ public class TestGame extends Game {
 		);
 		
 		new Material(
-			"bricksTemp",
-			new Texture("bricks.png"), 0.5f, 4.0f,
-			null,
-			new Texture("bricks_disp.png"), 0.03f, -0.5f
-		);
-		
-		new Material(
 			"bricks2",
 			new Texture("bricks2.png"), 0.5f, 4.0f,
 			new Texture("bricks2_normal.png"),
 			new Texture("bricks2_disp.png"), 0.04f, -1.0f
 		);
 		
-		addChild(new GameObject(new Vector3f(-1.5f, -2.5f, 5.0f), new Quaternion(), 5.0f)
-					.addComponent(new MeshRenderer(new Mesh("plane2.obj"), new Material("bricks"))));
+		addChild(new GameObject(new Vector3f(2.0f, 0.0f, 2.0f))
+					.addComponent(new MeshRenderer(new Mesh("monkey.obj"), new Material("bricks2"))));
 		
-		addChild(new GameObject(new Vector3f(-1.5f, -2.5f, -15.0f), new Quaternion(), 5.0f)
-					.addComponent(new MeshRenderer(new Mesh("plane2.obj"), new Material("bricksTemp"))));
+		addChild(new GameObject(new Vector3f(0.0f, -1.0f, 0.0f))
+					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks2"))));
 		
-		//addLights();
+		addLights();
 	}
 	
-	@SuppressWarnings("unused")
-	private void addCustomMesh() {		
-		IndexedModel plane = new IndexedModel(); {
-			plane.addVertex(new Vector3f(1.0f, -1.0f, 0.0f));  plane.addTexCoord(new Vector2f(1.0f, 1.0f));
-			plane.addVertex(new Vector3f(1.0f, 1.0f, 0.0f));   plane.addTexCoord(new Vector2f(1.0f, 0.0f));
-			plane.addVertex(new Vector3f(-1.0f, -1.0f, 0.0f)); plane.addTexCoord(new Vector2f(0.0f, 1.0f));
-			plane.addVertex(new Vector3f(-1.0f, 1.0f, 0.0f));  plane.addTexCoord(new Vector2f(0.0f, 0.0f));
-			
-			plane.addFace(0, 1, 2);
-			plane.addFace(2, 1, 3);
-		}
-		
-		GameObject go =	new GameObject(new Vector3f(0.0f, -1.0f, 5.0f)).addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
-		
-		addChild(go);
-	}
-	
-	@SuppressWarnings("unused")
 	private void addLights() {
 		GameObject directionalLight = new GameObject().addComponent(
 			new DirectionalLight(
-				new Color(0.93f, 0.93f, 0.93f),
-				0.2f
+				new Color(1.0f, 1.0f, 1.0f),
+				0.1f
 			)
 		);
 		
@@ -115,7 +88,7 @@ public class TestGame extends Game {
 		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0.0f, 1.0f, 0.0f), (float)Math.toRadians(90.0f)));
 		
 		addChild(directionalLight);
-		//addChild(pointLight);
-		//addChild(spotLight);
+		addChild(pointLight);
+		addChild(spotLight);
 	}
 }

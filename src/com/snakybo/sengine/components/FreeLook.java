@@ -92,6 +92,9 @@ public class FreeLook extends Component {
 		}
 	}
 	
+	/** Rotate the camera, this method is a convenience method
+	 * @param axis The axis to rotate the camera on
+	 * @param amount The amount of degrees to rotate the camera */
 	private void rotate(Vector3f axis, float amount) {
 		getTransform().rotate(axis, (float)Math.toRadians(-amount * sensitivity));
 	}

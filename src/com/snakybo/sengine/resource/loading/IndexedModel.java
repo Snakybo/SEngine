@@ -3,6 +3,7 @@ package com.snakybo.sengine.resource.loading;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.snakybo.sengine.utils.Utils;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
@@ -142,29 +143,53 @@ public class IndexedModel {
 		tangents.add(tangent);
 	}
 	
+	public void addIndex(int index) {
+		indices.add(index);
+	}
+	
 	public void addFace(int vertIndex0, int vertIndex1, int vertIndex2) {
 		indices.add(vertIndex0);
 		indices.add(vertIndex1);
 		indices.add(vertIndex2);
 	}
 	
-	public List<Integer> getIndices() {
-		return indices;
+	public void setIndex(int index, Integer element) {
+		indices.set(index, element);
 	}
 	
-	public List<Vector3f> getPositions() {
-		return positions;
+	public void setVertex(int index, Vector3f element) {
+		positions.set(index, element);
 	}
 	
-	public List<Vector2f> getTexCoords() {
-		return texCoords;
+	public void setTexCoord(int index, Vector2f element) {
+		texCoords.set(index, element);
 	}
 	
-	public List<Vector3f> getNormals() {
-		return normals;
+	public void setNormal(int index, Vector3f element) {
+		normals.set(index, element);
 	}
 	
-	public List<Vector3f> getTangents() {
-		return tangents;
+	public void setTangent(int index, Vector3f element) {
+		tangents.set(index, element);
+	}
+	
+	public int[] getIndices() {
+		return Utils.toIntArray(indices.toArray(new Integer[indices.size()]));
+	}
+	
+	public Vector3f[] getPositions() {
+		return positions.toArray(new Vector3f[positions.size()]);
+	}
+	
+	public Vector2f[] getTexCoords() {
+		return texCoords.toArray(new Vector2f[texCoords.size()]);
+	}
+	
+	public Vector3f[] getNormals() {
+		return normals.toArray(new Vector3f[normals.size()]);
+	}
+	
+	public Vector3f[] getTangents() {
+		return tangents.toArray(new Vector3f[tangents.size()]);
 	}
 }
