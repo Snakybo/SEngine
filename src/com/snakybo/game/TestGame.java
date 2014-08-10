@@ -48,8 +48,13 @@ public class TestGame extends Game {
 			new Texture("bricks2_disp.png"), 0.04f, -1.0f
 		);
 		
-		addChild(new GameObject(new Vector3f(2.0f, 0.0f, 2.0f))
-					.addComponent(new MeshRenderer(new Mesh("monkey.obj"), new Material("bricks2"))));
+		new Material(
+			"uv",
+			new Texture("monkey_uv.png"), 0.5f, 4.0f
+		);
+		
+		addChild(new GameObject(new Vector3f(2.0f, 4.0f, 2.0f))
+					.addComponent(new MeshRenderer(new Mesh("monkey.obj"), new Material("uv"))));
 		
 		addChild(new GameObject(new Vector3f(0.0f, -1.0f, 0.0f))
 					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks2"))));

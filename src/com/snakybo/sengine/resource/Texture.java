@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL42.IMAGE_FORMAT_COMPATIBILITY_BY_CLASS;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -154,6 +155,13 @@ public class Texture {
 		try {
 			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
+			int[] temp = new int[pixels.length];
+			
+			for(int i = 0; i < image.getWidth(); i++)
+				for(int j = 0; j < image.getHeight(); j++)
+					temp[i + j * image.getWidth()] = pixels[i + (image.getHeight() - j - 1) * image.getWidth()];
+			
+			pixels = temp;
 			
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 			
