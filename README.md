@@ -34,8 +34,7 @@ The engine supports different kinds of lighting, including:
 - Point light
 - Spot light
 
-It's fairly easy to create your own light.
-Every light extends the base class ```Light```, which holds information about the ```color```, ```shader```, and ```intensity``` of the light. Then you simply have to call ```setShader(new Shader("name-of-shader"));``` to set the shader of the light.
+To learn how to create your own lights, check the wiki
 
 ## Model loader
 The engine has the ability to load 3D models. Currently only .obj is supported. Other filetypes are on the [Planned features](#planned-features) list.
@@ -84,72 +83,99 @@ package com.snakybo.game;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
+import com.snakybo.sengine.components.MeshRenderer;
+import com.snakybo.sengine.components.lighting.DirectionalLight;
+import com.snakybo.sengine.components.lighting.PointLight;
+import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.rendering.Attenuation;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.resource.Prefab;
+import com.snakybo.sengine.resource.Material;
+import com.snakybo.sengine.resource.Mesh;
+import com.snakybo.sengine.resource.Texture;
+import com.snakybo.sengine.utils.Color;
+import com.snakybo.sengine.utils.math.Quaternion;
+import com.snakybo.sengine.utils.math.Vector3f;
 
 public class TestGame extends Game {
 	public void init() {
-		Camera camera =
-				Camera.initPerspectiveCamera((float)Math.toRadians(70.0f),
-						(float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000.0f);
+		// Create a camera
+		Camera.initPerspectiveCamera(
+			(float)Math.toRadians(70.0f),
+			(float)Window.getWidth() / (float)Window.getHeight(),
+			0.01f, 1000.0f
+		); 
 		
-		addChild(new GameObject()
-					.addComponent(new FreeLook(0.5f))
-					.addComponent(new FreeMove(10.0f))
-					.addComponent(camera)
-				);
-				
-		new Material("bricks", new Texture("bricks.png"), 0.0f, 0.0f, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
-		new Material("bricks2", new Texture("bricks2.png"), 0.0f, 0.0f, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.png"), 0.04f, -1.0f);
+		// Add the camera to the scene, along with a component to look around and to move around
+		addChild(
+			new GameObject()
+				.addComponent(new FreeLook(Window.getCenter()))
+				.addComponent(new FreeMove())
+				.addComponent(RenderingEngine.getMainCamera())
+		);
 		
-		//addCustomMesh();
-		addMesh();
+		// Create a material
+		new Material(
+			"bricks", // The name of the material
+			new Texture("bricks.png"), 0.5f, 4.0f, // The diffuse texture, the specular intensity and the specular power
+			new Texture("bricks_normal.png"), // The normal map
+			new Texture("bricks_disp.png"), 0.03f, -0.5f // The displacement map, along with the displacement map scale and the displacement map offset
+		);
+		
+		// Create another material with just a diffuse texutre, and specular information
+		new Material(
+			"bull",
+			new Texture("BullTex.jpg"), 0.5f, 4.0f
+		);
+		
+		// Add a bull model to the scene
+		addChild(new GameObject(new Vector3f(2.0f, 0.0f, 2.0f), new Quaternion(), 5.0f)
+					.addComponent(new MeshRenderer(new Mesh("stier.obj"), new Material("bull"))));
+		
+		// Add a basic plane to the scene
+		addChild(new GameObject(new Vector3f(0.0f, -1.0f, 0.0f))
+					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks"))));
+		
 		addLights();
 	}
 	
-	private void addCustomMesh() {		
-		IndexedModel plane = new IndexedModel(); {
-			plane.addVertex(new Vector3f(1.0f, -1.0f, 0.0f));  plane.addTexCoord(new Vector2f(1.0f, 1.0f));
-			plane.addVertex(new Vector3f(1.0f, 1.0f, 0.0f));   plane.addTexCoord(new Vector2f(1.0f, 0.0f));
-			plane.addVertex(new Vector3f(-1.0f, -1.0f, 0.0f)); plane.addTexCoord(new Vector2f(0.0f, 1.0f));
-			plane.addVertex(new Vector3f(-1.0f, 1.0f, 0.0f));  plane.addTexCoord(new Vector2f(0.0f, 0.0f));
-			
-			plane.addFace(0, 1, 2);
-			plane.addFace(2, 1, 3);
-		}
-		
-		GameObject go = new GameObject()
-					.addComponent(new MeshRenderer(new Mesh("plane", plane.finish()), new Material("bricks")));
-		
-		go.getTransform().getPosition().set(0.0f, -1.0f, 5.0f);
-		
-		addChild(go);
-	}
-	
-	private void addMesh() {
-		GameObject go = new GameObject()
-					.addComponent(new MeshRenderer(new Mesh("plane.obj"), new Material("bricks2")));
-		
-		go.getTransform().getPosition().set(0.0f, -1.0f, 5.0f);
-		
-		addChild(go);
-	}
-	
 	private void addLights() {
-		GameObject directionalLight = new GameObject()
-										.addComponent(new DirectionalLight(new Color(0.93f, 0.93f, 0.93f), 0.2f));
-		GameObject pointLight = new GameObject()
-									.addComponent(new PointLight(new Color(0.0f, 1.0f, 0.5f), 0.9f, new Attenuation(0.0f, 0.0f, 1.0f)));
-		GameObject spotLight = new GameObject()
-									.addComponent(new SpotLight(new Color(1.0f, 1.0f, 0.0f), 1.0f, new Attenuation(0.0f, 0.0f, 0.05f), 0.7f));
+		// Create a game object with a directional light component
+		GameObject directionalLight = new GameObject().addComponent(
+			new DirectionalLight(
+				new Color(1.0f, 1.0f, 1.0f), // The color of the directional light
+				0.1f // The intensity of the directional light
+			)
+		);
 		
+		// Create a game object with a point light component
+		GameObject pointLight = new GameObject().addComponent(
+			new PointLight(
+				new Color(0.0f, 1.0f, 0.5f), // The color of the point light
+				0.9f, // The intensity of the point light
+				new Attenuation(0.0f, 0.0f, 1.0f) // The attenuation of the point light
+			)
+		);
+		
+		// Create a new game object with a spot light component
+		GameObject spotLight = new GameObject().addComponent(
+			new SpotLight(
+				new Color(1.0f, 1.0f, 0.0f), // The color of the spot light
+				1.0f, // The intensity of the pospotint light
+				new Attenuation(0.0f, 0.0f, 0.05f), // The attenuation of the spot light
+				0.7f // The cutoff range of the spot light
+			)
+		);
+		
+		// Translate and rotate the lights
 		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1.0f, 0.0f, 0.0f), (float)Math.toRadians(-45.0f)));
 		
 		spotLight.getTransform().getPosition().set(3.0f, 0.0f, 3.0f);
 		spotLight.getTransform().setRotation(new Quaternion(new Vector3f(0.0f, 1.0f, 0.0f), (float)Math.toRadians(90.0f)));
 		
+		// Add the lights to the scene
 		addChild(directionalLight);
 		addChild(pointLight);
 		addChild(spotLight);
@@ -168,10 +194,12 @@ import com.snakybo.sengine.utils.math.Vector3f;
 
 public class LookAtComponent extends Component {
 	@Override
-	public void update(float delta) {
-		Quaternion newRotation = getTransform().getLookAtRotation(RenderingEngine.getMainCamera().getTransform().getTransformedPosition(), new Vector3f(0, 1, 0));
+	public void update(double delta) {
+		Quaternion newRotation =
+				getTransform().getLookAtRotation(
+						RenderingEngine.getMainCamera().getTransform().getWorldPosition(), new Vector3f(0, 1, 0)); // Calculate the new rotation of the object
 		
-		getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, delta * 5.0f, true)); // Rotate the game object towards the main camera
+		getTransform().setRotation(getTransform().getRotation().nlerp(newRotation, (float)delta * 5.0f, true)); // Slowly rotate the game object towards the main camera
 	}
 }
 
