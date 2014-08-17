@@ -56,9 +56,7 @@ Main class
 ```
 package com.snakybo.game;
 
-import com.snakybo.sengine.core.SEngine;
-import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.*;
 
 public class Main {
 	public static void main(String[] args) {
@@ -80,24 +78,7 @@ Game class
 ```
 package com.snakybo.game;
 
-import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.FreeLook;
-import com.snakybo.sengine.components.FreeMove;
-import com.snakybo.sengine.components.MeshRenderer;
-import com.snakybo.sengine.components.lighting.DirectionalLight;
-import com.snakybo.sengine.components.lighting.PointLight;
-import com.snakybo.sengine.components.lighting.SpotLight;
-import com.snakybo.sengine.core.Game;
-import com.snakybo.sengine.core.object.GameObject;
-import com.snakybo.sengine.rendering.Attenuation;
-import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.resource.Material;
-import com.snakybo.sengine.resource.Mesh;
-import com.snakybo.sengine.resource.Texture;
-import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.*;
 
 public class TestGame extends Game {
 	public void init() {
@@ -187,10 +168,7 @@ Basic look-at component class
 ```
 package com.snakybo.game;
 
-import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.*;
 
 public class LookAtComponent extends Component {
 	@Override
