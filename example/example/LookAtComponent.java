@@ -1,4 +1,4 @@
-package com.snakybo.game;
+package example;
 
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;

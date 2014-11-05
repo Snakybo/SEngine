@@ -68,6 +68,8 @@ public class Matrix4f {
 	}
 	
 	public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar) {
+		fov = (float)Math.toRadians(fov);
+		
 		float tanHalfFOV = (float)Math.tan(fov / 2);
 		float zRange = zNear - zFar;
 		
