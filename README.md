@@ -2,7 +2,7 @@
 
 A 3D game engine, made in Java using using OpenGL.
 
-An [example](SEngine/tree/master/example) on how to use the engine.
+An [example](https://github.com/Snakybo/SEngine/tree/master/example/example) on how to use the engine.
 
 ## Core features:
 - [Component system](#component-system)
