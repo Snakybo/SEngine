@@ -12,7 +12,7 @@ import com.snakybo.sengine.utils.Utils;
 import com.snakybo.sengine.utils.math.Vector2f;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-public class ObjModel implements IModel {
+public class OBJModel implements IModel {
 	private class ObjIndex {
 		public int vertex;
 		public int texCoord;
@@ -49,7 +49,7 @@ public class ObjModel implements IModel {
 	private boolean hasTexCoords;
 	private boolean hasNormals;
 	
-	public ObjModel(FileReader file) {
+	public OBJModel(FileReader file) {
 		indices = new ArrayList<ObjIndex>();
 		positions = new ArrayList<Vector3f>();
 		texCoords = new ArrayList<Vector2f>();

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.snakybo.sengine.resource.loading.IModel;
 import com.snakybo.sengine.resource.loading.IndexedModel;
-import com.snakybo.sengine.resource.loading.ObjModel;
+import com.snakybo.sengine.resource.loading.OBJModel;
 import com.snakybo.sengine.resource.management.MeshData;
 
 /** @author Kevin Krol
@@ -84,7 +84,7 @@ public class Mesh {
 			
 			switch(ext) {
 			case ".obj":
-				model = new ObjModel(new FileReader(MESH_FOLDER + fileName));
+				model = new OBJModel(new FileReader(MESH_FOLDER + fileName));
 				break;
 			default:
 				System.err.println("The file extension of the model " + fileName + " is not supported by the engine");
