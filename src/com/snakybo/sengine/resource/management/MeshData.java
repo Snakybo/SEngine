@@ -27,38 +27,42 @@ import com.snakybo.sengine.utils.ReferenceCounter;
 
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
-public class MeshData implements ReferenceCounter {
+public class MeshData implements ReferenceCounter
+{
 	private static final int NUM_BUFFERS = 5;
-	
+
 	private static final int POSITION_VB = 0;
 	private static final int TEXCOORD_VB = 1;
 	private static final int NORMAL_VB = 2;
 	private static final int TANGENT_VB = 3;
 	private static final int INDEX_VB = 4;
-	
+
 	private IntBuffer vertexArrayObject;
 	private IntBuffer vertexArrayBuffers;
-	
+
 	private int drawCount;
 	private int refCount;
-	
-	public MeshData(IndexedModel model) {
+
+	public MeshData(IndexedModel model)
+	{
 		super();
-		
-		if(!model.isValid()) {
-			System.err.println("Error: Invalid mesh! A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
+
+		if (!model.isValid())
+		{
+			System.err.println(
+					"Error: Invalid mesh! A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
 			System.exit(1);
 		}
-		
+
 		vertexArrayObject = BufferUtils.createIntBuffer(1);
 		vertexArrayBuffers = BufferUtils.createIntBuffer(NUM_BUFFERS);
 		drawCount = model.getIndices().length;
-		
+
 		glGenVertexArrays(vertexArrayObject);
 		glBindVertexArray(vertexArrayObject.get(0));
-		
+
 		glGenBuffers(vertexArrayBuffers);
-		
+
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(POSITION_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getPositions()), GL_STATIC_DRAW);
 
@@ -70,13 +74,13 @@ public class MeshData implements ReferenceCounter {
 
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0L);
-		
+
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(NORMAL_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getNormals()), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0L);
-			
+
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TANGENT_VB));
 		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getTangents()), GL_STATIC_DRAW);
 
@@ -86,37 +90,45 @@ public class MeshData implements ReferenceCounter {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexArrayBuffers.get(INDEX_VB));
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getIndices()), GL_STATIC_DRAW);
 	}
-	
+
 	@Override
-	protected void finalize() throws Throwable {
-		try {
+	protected void finalize() throws Throwable
+	{
+		try
+		{
 			glDeleteBuffers(vertexArrayBuffers);
 			glDeleteVertexArrays(vertexArrayObject);
-		} finally {
+		}
+		finally
+		{
 			super.finalize();
 		}
 	}
-	
+
 	@Override
-	public void addReference() {
+	public void addReference()
+	{
 		refCount++;
 	}
-	
+
 	@Override
-	public boolean removeReference() {
+	public boolean removeReference()
+	{
 		refCount--;
-		
+
 		return refCount == 0;
 	}
-	
+
 	@Override
-	public int getReferenceCount() {
+	public int getReferenceCount()
+	{
 		return refCount;
 	}
-	
-	public void draw() {
+
+	public void draw()
+	{
 		glBindVertexArray(vertexArrayObject.get(0));
-		
+
 		glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
 	}
 }

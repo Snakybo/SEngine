@@ -12,77 +12,97 @@ import com.snakybo.sengine.resource.management.MeshData;
 
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
-public class Mesh {
+public class Mesh
+{
 	private static final String MESH_FOLDER = "./res/models/";
 	private static final String DEFAULT_MESH = "internal/cube.obj";
-	
+
 	private static Map<String, MeshData> resourceMap = new HashMap<String, MeshData>();
-	
+
 	private MeshData resource;
 	private String fileName;
-	
-	public Mesh() {
+
+	public Mesh()
+	{
 		this(DEFAULT_MESH);
 	}
-	
-	public Mesh(String fileName) {
+
+	public Mesh(String fileName)
+	{
 		this.fileName = fileName;
-		
+
 		MeshData existingResource = resourceMap.get(fileName);
-		
-		if(existingResource != null) {
+
+		if (existingResource != null)
+		{
 			resource = existingResource;
 			resource.addReference();
-		} else {
+		}
+		else
+		{
 			loadMesh(fileName);
 			resourceMap.put(fileName, resource);
 		}
 	}
-	
-	public Mesh(String meshName, IndexedModel model) {
+
+	public Mesh(String meshName, IndexedModel model)
+	{
 		this.fileName = meshName;
-		
+
 		MeshData existingResource = resourceMap.get(fileName);
-		
-		if(existingResource != null) {
+
+		if (existingResource != null)
+		{
 			resource = existingResource;
 			resource.addReference();
-		} else {
+		}
+		else
+		{
 			resource = new MeshData(model);
 			resourceMap.put(fileName, resource);
 		}
 	}
-	
-	public Mesh(Mesh other) {
+
+	public Mesh(Mesh other)
+	{
 		fileName = other.fileName;
 		resource = other.resource;
-		
+
 		resource.addReference();
 	}
-	
+
 	@Override
-	protected void finalize() throws Throwable {
-		try {
-			if(resource.removeReference() && !fileName.isEmpty())
+	protected void finalize() throws Throwable
+	{
+		try
+		{
+			if (resource.removeReference() && !fileName.isEmpty())
 				resourceMap.remove(fileName);
-		} finally {
+		}
+		finally
+		{
 			super.finalize();
 		}
 	}
-	
-	public void draw() {
+
+	public void draw()
+	{
 		resource.draw();
 	}
-	
-	private void loadMesh(String fileName) {
-		try {
-			if(fileName.lastIndexOf('.') == -1)
-				throw new IllegalArgumentException("Invalid file name passed: make sure to add the extension to the file name: " + fileName);
-			
+
+	private void loadMesh(String fileName)
+	{
+		try
+		{
+			if (fileName.lastIndexOf('.') == -1)
+				throw new IllegalArgumentException(
+						"Invalid file name passed: make sure to add the extension to the file name: " + fileName);
+
 			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
 			IModel model = null;
-			
-			switch(ext) {
+
+			switch (ext)
+			{
 			case ".obj":
 				model = new OBJModel(new FileReader(MESH_FOLDER + fileName));
 				break;
@@ -90,9 +110,11 @@ public class Mesh {
 				System.err.println("The file extension of the model " + fileName + " is not supported by the engine");
 				System.exit(1);
 			}
-			
+
 			resource = new MeshData(model.toIndexedModel());
-		} catch(FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e)
+		{
 			System.err.println("Error loading mesh: The mesh " + fileName + " doesn't exist. Using the default mesh");
 			loadMesh(DEFAULT_MESH);
 		}
