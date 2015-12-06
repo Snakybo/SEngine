@@ -40,10 +40,9 @@ public class Buffer
 	{
 		FloatBuffer buffer = createFloatBuffer(values.length * 2);
 
-		for (int i = 0; i < values.length; i++)
+		for(int i = 0; i < values.length; i++)
 		{
 			Vector2f value = values[i];
-
 			buffer.put(value.x);
 			buffer.put(value.y);
 		}
@@ -57,10 +56,9 @@ public class Buffer
 	{
 		FloatBuffer buffer = createFloatBuffer(values.length * 3);
 
-		for (int i = 0; i < values.length; i++)
+		for(int i = 0; i < values.length; i++)
 		{
 			Vector3f value = values[i];
-
 			buffer.put(value.x);
 			buffer.put(value.y);
 			buffer.put(value.z);
@@ -75,9 +73,13 @@ public class Buffer
 	{
 		FloatBuffer buffer = createFloatBuffer(4 * 4);
 
-		for (int i = 0; i < 4; i++)
-			for (int j = 0; j < 4; j++)
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
 				buffer.put(value.get(i, j));
+			}
+		}
 
 		buffer.flip();
 

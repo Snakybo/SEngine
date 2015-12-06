@@ -147,16 +147,20 @@ public class Input
 
 	public static void update()
 	{
-		for (int i = 0; i < NUM_KEYCODES; i++)
+		for(int i = 0; i < NUM_KEYCODES; i++)
+		{
 			lastKeys[i] = getKey(i);
+		}
 
-		for (int i = 0; i < NUM_MOUSEBUTTONS; i++)
+		for(int i = 0; i < NUM_MOUSEBUTTONS; i++)
+		{
 			lastMouse[i] = getMouse(i);
+		}
 	}
 
 	public static void setMousePosition(Vector2f position)
 	{
-		Mouse.setCursorPosition((int) position.x, (int) position.y);
+		Mouse.setCursorPosition((int)position.x, (int)position.y);
 	}
 
 	public static void setCursor(boolean enabled)

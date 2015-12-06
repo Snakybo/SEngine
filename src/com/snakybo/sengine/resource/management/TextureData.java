@@ -47,10 +47,10 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.utils.ReferenceCounter;
+import com.snakybo.sengine.utils.IReferenceCounter;
 import com.snakybo.sengine.utils.math.MathUtils;
 
-public class TextureData implements ReferenceCounter
+public class TextureData implements IReferenceCounter
 {
 	private IntBuffer textureIds;
 
@@ -63,8 +63,7 @@ public class TextureData implements ReferenceCounter
 
 	private int refCount;
 
-	public TextureData(int textureTarget, int width, int height, int numTextures, ByteBuffer data, int filters,
-			int internalFormat, int format, boolean clamp, int attachments)
+	public TextureData(int textureTarget, int width, int height, int numTextures, ByteBuffer data, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		this.textureIds = BufferUtils.createIntBuffer(numTextures);
 		this.textureTarget = textureTarget;
@@ -88,8 +87,10 @@ public class TextureData implements ReferenceCounter
 			glDeleteFramebuffers(frameBuffer);
 			glDeleteRenderbuffers(renderBuffer);
 
-			for (int textureId : textureIds.array())
+			for(int textureId : textureIds.array())
+			{
 				glDeleteBuffers(textureId);
+			}
 		}
 		finally
 		{
@@ -132,14 +133,14 @@ public class TextureData implements ReferenceCounter
 	{
 		glGenTextures(textureIds);
 
-		for (int i = 0; i < numTextures; i++)
+		for(int i = 0; i < numTextures; i++)
 		{
 			glBindTexture(textureTarget, textureIds.get(i));
 
 			glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, filters);
 			glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, filters);
 
-			if (clamp)
+			if(clamp)
 			{
 				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -147,10 +148,9 @@ public class TextureData implements ReferenceCounter
 
 			glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-			boolean mipmapEnabled = filters == GL_NEAREST_MIPMAP_NEAREST || filters == GL_NEAREST_MIPMAP_LINEAR
-					|| filters == GL_LINEAR_MIPMAP_NEAREST || filters == GL_LINEAR_MIPMAP_LINEAR;
+			boolean mipmapEnabled = filters == GL_NEAREST_MIPMAP_NEAREST || filters == GL_NEAREST_MIPMAP_LINEAR	|| filters == GL_LINEAR_MIPMAP_NEAREST || filters == GL_LINEAR_MIPMAP_LINEAR;
 
-			if (mipmapEnabled)
+			if(mipmapEnabled)
 			{
 				glGenerateMipmap(textureTarget);
 
@@ -169,17 +169,19 @@ public class TextureData implements ReferenceCounter
 
 	private void initRenderTargets(int attachments)
 	{
-		if (attachments == 0)
+		if(attachments == 0)
+		{
 			return;
+		}
 
 		IntBuffer drawBuffers = BufferUtils.createIntBuffer(32);
 		assert (numTextures <= 32);
 
 		boolean hasDepth = false;
 
-		for (int i = 0; i < numTextures; i++)
+		for(int i = 0; i < numTextures; i++)
 		{
-			if (attachments == GL_DEPTH_ATTACHMENT)
+			if(attachments == GL_DEPTH_ATTACHMENT)
 			{
 				drawBuffers.put(GL_NONE);
 				hasDepth = true;
@@ -189,23 +191,26 @@ public class TextureData implements ReferenceCounter
 				drawBuffers.put(attachments);
 			}
 
-			if (attachments == GL_NONE)
+			if(attachments == GL_NONE)
+			{
 				continue;
+			}
 
-			if (frameBuffer == 0)
+			if(frameBuffer == 0)
 			{
 				frameBuffer = glGenFramebuffers();
-
 				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 			}
 
 			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachments, textureTarget, textureIds.get(i), 0);
 		}
 
-		if (frameBuffer == 0)
+		if(frameBuffer == 0)
+		{
 			return;
+		}
 
-		if (!hasDepth)
+		if(!hasDepth)
 		{
 			renderBuffer = glGenRenderbuffers();
 
@@ -216,7 +221,7 @@ public class TextureData implements ReferenceCounter
 
 		glDrawBuffers(drawBuffers);
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{
 			System.err.println("Framebuffer creation failed");
 			System.exit(1);

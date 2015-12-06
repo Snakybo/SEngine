@@ -77,12 +77,10 @@ public class Texture
 		this(width, height, data, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat,
-			int format, boolean clamp, int attachments)
+	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		fileName = "";
-		resource = new TextureData(textureTarget, width, height, 1, data, filters, internalFormat, format, clamp,
-				attachments);
+		resource = new TextureData(textureTarget, width, height, 1, data, filters, internalFormat, format, clamp, attachments);
 	}
 
 	public Texture(String fileName)
@@ -115,14 +113,13 @@ public class Texture
 		this(fileName, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp,
-			int attachments)
+	public Texture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		this.fileName = fileName;
 
 		TextureData existingResource = resourceMap.get(fileName);
 
-		if (existingResource != null)
+		if(existingResource != null)
 		{
 			resource = existingResource;
 			resource.addReference();
@@ -146,8 +143,10 @@ public class Texture
 	{
 		try
 		{
-			if (resource.removeReference() && !fileName.isEmpty())
+			if(resource.removeReference() && !fileName.isEmpty())
+			{
 				resourceMap.remove(fileName);
+			}
 		}
 		finally
 		{
@@ -162,8 +161,10 @@ public class Texture
 
 	public void bind(int unit)
 	{
-		if (unit < 0 || unit >= 32)
+		if(unit < 0 || unit >= 32)
+		{
 			throw new IllegalArgumentException("The unit " + unit + " is out of bounds\n");
+		}
 
 		glActiveTexture(GL_TEXTURE0 + unit);
 		resource.bind(0);
@@ -184,8 +185,7 @@ public class Texture
 		return resource.getHeight();
 	}
 
-	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format,
-			boolean clamp, int attachments)
+	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		try
 		{
@@ -194,19 +194,22 @@ public class Texture
 			int[] pixels = new int[flippedPixels.length];
 
 			// Flip the image vertically
-			for (int i = 0; i < image.getWidth(); i++)
-				for (int j = 0; j < image.getHeight(); j++)
-					pixels[i + j * image.getWidth()] = flippedPixels[i
-							+ (image.getHeight() - j - 1) * image.getWidth()];
+			for(int i = 0; i < image.getWidth(); i++)
+			{	
+				for(int j = 0; j < image.getHeight(); j++)
+				{
+					pixels[i + j * image.getWidth()] = flippedPixels[i+ (image.getHeight() - j - 1) * image.getWidth()];
+				}
+			}
 
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 
 			boolean hasAlpha = image.getColorModel().hasAlpha();
 
 			// Put each pixel in a Byte Buffer
-			for (int y = 0; y < image.getHeight(); y++)
+			for(int y = 0; y < image.getHeight(); y++)
 			{
-				for (int x = 0; x < image.getWidth(); x++)
+				for(int x = 0; x < image.getWidth(); x++)
 				{
 					int pixel = pixels[y * image.getWidth() + x];
 
@@ -221,17 +224,13 @@ public class Texture
 
 			data.flip();
 
-			resource = new TextureData(textureTarget, image.getWidth(), image.getHeight(), 1, data, filters,
-					internalFormat, format, clamp, attachments);
+			resource = new TextureData(textureTarget, image.getWidth(), image.getHeight(), 1, data, filters, internalFormat, format, clamp, attachments);
 
 			resourceMap.put(fileName, resource);
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
-			System.err.println(
-					"Error loading texture: The texture " + fileName + " doesn't exist. Using the default texture");
-			e.printStackTrace();
-
+			System.err.println("Failed to load texture: " + fileName + " doesn't exist. Using the default texture");
 			resource = DEFAULT_TEXTURE.resource;
 		}
 	}

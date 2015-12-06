@@ -6,6 +6,6 @@ public class Time
 
 	public static double getTime()
 	{
-		return (double) System.nanoTime() / (double) SECOND;
+		return (double)System.nanoTime() / (double)SECOND;
 	}
 }

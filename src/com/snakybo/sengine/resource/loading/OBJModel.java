@@ -14,7 +14,7 @@ import com.snakybo.sengine.utils.math.Vector3f;
 
 public class OBJModel implements IModel
 {
-	private class ObjIndex
+	private class OBJIndex
 	{
 		public int vertex;
 		public int texCoord;
@@ -23,7 +23,7 @@ public class OBJModel implements IModel
 		@Override
 		public boolean equals(Object obj)
 		{
-			ObjIndex index = (ObjIndex) obj;
+			OBJIndex index = (OBJIndex)obj;
 
 			return vertex == index.vertex && texCoord == index.texCoord && normal == index.normal;
 		}
@@ -44,7 +44,7 @@ public class OBJModel implements IModel
 		}
 	}
 
-	private List<ObjIndex> indices;
+	private List<OBJIndex> indices;
 	private List<Vector3f> positions;
 	private List<Vector2f> texCoords;
 	private List<Vector3f> normals;
@@ -54,7 +54,7 @@ public class OBJModel implements IModel
 
 	public OBJModel(FileReader file)
 	{
-		indices = new ArrayList<ObjIndex>();
+		indices = new ArrayList<OBJIndex>();
 		positions = new ArrayList<Vector3f>();
 		texCoords = new ArrayList<Vector2f>();
 		normals = new ArrayList<Vector3f>();
@@ -69,25 +69,23 @@ public class OBJModel implements IModel
 			bufferedReader = new BufferedReader(file);
 			String line;
 
-			while ((line = bufferedReader.readLine()) != null)
+			while((line = bufferedReader.readLine()) != null)
 			{
 				String[] tokens = Utils.removeEmptyStrings(line.split(" "));
 
-				switch (tokens[0])
+				switch(tokens[0])
 				{
 				case "v":
-					positions.add(
-							new Vector3f(Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3])));
+					positions.add(new Vector3f(Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3])));
 					break;
 				case "vt":
 					texCoords.add(new Vector2f(Float.valueOf(tokens[1]), Float.valueOf(tokens[2])));
 					break;
 				case "vn":
-					normals.add(
-							new Vector3f(Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3])));
+					normals.add(new Vector3f(Float.valueOf(tokens[1]), Float.valueOf(tokens[2]), Float.valueOf(tokens[3])));
 					break;
 				case "f":
-					for (int i = 0; i < tokens.length - 3; i++)
+					for(int i = 0; i < tokens.length - 3; i++)
 					{
 						indices.add(parseObjIndex(tokens[1]));
 						indices.add(parseObjIndex(tokens[2 + i]));
@@ -113,13 +111,13 @@ public class OBJModel implements IModel
 		IndexedModel model = new IndexedModel();
 		IndexedModel normalModel = new IndexedModel();
 
-		Map<ObjIndex, Integer> resultIndexMap = new HashMap<ObjIndex, Integer>();
+		Map<OBJIndex, Integer> resultIndexMap = new HashMap<OBJIndex, Integer>();
 		Map<Integer, Integer> normalIndexMap = new HashMap<Integer, Integer>();
 		Map<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
 
-		for (int i = 0; i < indices.size(); i++)
+		for(int i = 0; i < indices.size(); i++)
 		{
-			ObjIndex currentIndex = indices.get(i);
+			OBJIndex currentIndex = indices.get(i);
 
 			Vector3f currentPosition = positions.get(currentIndex.vertex);
 			Vector2f currentTexCoord = hasTexCoords ? texCoords.get(currentIndex.texCoord) : new Vector2f(0.0f, 0.0f);
@@ -127,7 +125,7 @@ public class OBJModel implements IModel
 
 			Integer modelVertexIndex = resultIndexMap.get(currentIndex);
 
-			if (modelVertexIndex == null)
+			if(modelVertexIndex == null)
 			{
 				modelVertexIndex = model.getPositions().length;
 				resultIndexMap.put(currentIndex, modelVertexIndex);
@@ -135,15 +133,17 @@ public class OBJModel implements IModel
 				model.addVertex(currentPosition);
 				model.addTexCoord(currentTexCoord);
 
-				if (hasNormals)
+				if(hasNormals)
+				{
 					model.addNormal(currentNormal);
+				}
 
 				model.addTangent(new Vector3f(0.0f, 0.0f, 0.0f));
 			}
 
 			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertex);
 
-			if (normalModelIndex == null)
+			if(normalModelIndex == null)
 			{
 				normalModelIndex = normalModel.getPositions().length;
 				normalIndexMap.put(currentIndex.vertex, normalModelIndex);
@@ -160,35 +160,39 @@ public class OBJModel implements IModel
 			indexMap.put(modelVertexIndex, normalModelIndex);
 		}
 
-		if (!hasNormals)
+		if(!hasNormals)
 		{
 			normalModel.calcNormals();
 
-			for (int i = 0; i < model.getPositions().length; i++)
+			for(int i = 0; i < model.getPositions().length; i++)
+			{
 				model.addNormal(normalModel.getNormals()[indexMap.get(i)]);
+			}
 		}
 
 		normalModel.calcTangents();
 
-		for (int i = 0; i < model.getPositions().length; i++)
+		for(int i = 0; i < model.getPositions().length; i++)
+		{
 			model.setTangent(i, normalModel.getTangents()[indexMap.get(i)]);
+		}
 
 		return model;
 	}
 
-	private ObjIndex parseObjIndex(String token)
+	private OBJIndex parseObjIndex(String token)
 	{
 		String[] values = token.split("/");
 
-		ObjIndex result = new ObjIndex();
+		OBJIndex result = new OBJIndex();
 		result.vertex = Integer.parseInt(values[0]) - 1;
 
-		if (values.length > 1)
+		if(values.length > 1)
 		{
 			hasTexCoords = true;
 			result.texCoord = Integer.parseInt(values[1]) - 1;
 
-			if (values.length > 2)
+			if(values.length > 2)
 			{
 				hasNormals = true;
 				result.normal = Integer.parseInt(values[2]) - 1;

@@ -33,15 +33,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.snakybo.sengine.utils.ReferenceCounter;
+import com.snakybo.sengine.utils.IReferenceCounter;
 import com.snakybo.sengine.utils.Utils;
 
-public class ShaderData implements ReferenceCounter
+public class ShaderData implements IReferenceCounter
 {
 	public static final String SHADER_FOLDER = "./res/shaders/";
 	public static final String DEFAULT_SHADER = "/internal/default_shader.glsl";
 
-	private static int supportedOpenGlLevel = 0;
+	private static int supportedOpenGLLevel = 0;
 
 	private static String glslVersion = "";
 
@@ -66,21 +66,21 @@ public class ShaderData implements ReferenceCounter
 		program = glCreateProgram();
 		refCount = 0;
 
-		if (program == 0)
+		if(program == 0)
 		{
 			System.err.println("Error creating shader program");
 			System.exit(1);
 		}
 
-		if (supportedOpenGlLevel == 0)
-			determineOpenGlLevel();
+		if(supportedOpenGLLevel == 0)
+		{
+			determineOpenGLLevel();
+		}
 
 		String shaderText = loadShader(fileName + ".glsl");
-
-		String vertexShaderText = "#version " + glslVersion + "\n#define VS_BUILD\n#define GLSL_VERSION " + glslVersion
-				+ "\n" + shaderText;
-		String fragmentShaderText = "#version " + glslVersion + "\n#define FS_BUILD\n#define GLSL_VERSION "
-				+ glslVersion + "\n" + shaderText;
+		
+		String vertexShaderText = "#version " + glslVersion + "\n#define VS_BUILD\n#define GLSL_VERSION " + glslVersion + "\n" + shaderText;
+		String fragmentShaderText = "#version " + glslVersion + "\n#define FS_BUILD\n#define GLSL_VERSION " + glslVersion + "\n" + shaderText;
 
 		addVertexShader(vertexShaderText);
 		addFragmentShader(fragmentShaderText);
@@ -88,7 +88,6 @@ public class ShaderData implements ReferenceCounter
 		addAllAttributes(vertexShaderText, "attribute");
 
 		compileShader();
-
 		addShaderUniforms(shaderText);
 	}
 
@@ -97,7 +96,7 @@ public class ShaderData implements ReferenceCounter
 	{
 		try
 		{
-			for (int shader : shaders)
+			for(int shader : shaders)
 			{
 				glDetachShader(program, shader);
 				glDeleteShader(shader);
@@ -145,7 +144,7 @@ public class ShaderData implements ReferenceCounter
 	{
 		int shader = glCreateShader(type);
 
-		if (shader == 0)
+		if(shader == 0)
 		{
 			System.err.println("Error creating shader type " + type);
 			System.exit(1);
@@ -154,7 +153,7 @@ public class ShaderData implements ReferenceCounter
 		glShaderSource(shader, text);
 		glCompileShader(shader);
 
-		if (glGetShaderi(shader, GL_COMPILE_STATUS) == 0)
+		if(glGetShaderi(shader, GL_COMPILE_STATUS) == 0)
 		{
 			System.err.println("Error compiling shader\n" + glGetShaderInfoLog(shader, 1024));
 			System.exit(1);
@@ -170,20 +169,20 @@ public class ShaderData implements ReferenceCounter
 		int currentAttribLocation = 0;
 		int attributeLocation = Utils.indexOfWholeWord(shaderText, attributeKeyword);
 
-		while (attributeLocation != -1)
+		while(attributeLocation != -1)
 		{
 			boolean isCommented = false;
 
 			int lastLineEnd = shaderText.lastIndexOf('\n', attributeLocation);
 
-			if (lastLineEnd != -1)
+			if(lastLineEnd != -1)
 			{
 				String commentedLine = shaderText.substring(lastLineEnd, attributeLocation).trim();
 
 				isCommented = commentedLine.indexOf("//") != -1 || commentedLine.indexOf('#') != -1;
 			}
 
-			if (!isCommented)
+			if(!isCommented)
 			{
 				int begin = attributeLocation + attributeKeyword.length();
 				int end = shaderText.indexOf(';', begin);
@@ -210,20 +209,20 @@ public class ShaderData implements ReferenceCounter
 
 		int uniformLocation = Utils.indexOfWholeWord(shaderText, UNIFORM_KEY);
 
-		while (uniformLocation != -1)
+		while(uniformLocation != -1)
 		{
 			boolean isCommented = false;
 
 			int lastLineEnd = shaderText.lastIndexOf('\n', uniformLocation);
 
-			if (lastLineEnd != -1)
+			if(lastLineEnd != -1)
 			{
 				String commentedLine = shaderText.substring(lastLineEnd, uniformLocation).trim();
 
 				isCommented = commentedLine.indexOf("//") != -1 || commentedLine.indexOf('#') != -1;
 			}
 
-			if (!isCommented)
+			if(!isCommented)
 			{
 				int begin = uniformLocation + UNIFORM_KEY.length();
 				int end = shaderText.indexOf(';', begin);
@@ -249,9 +248,9 @@ public class ShaderData implements ReferenceCounter
 	{
 		boolean addThis = true;
 
-		for (int i = 0; i < structs.size(); i++)
+		for(int i = 0; i < structs.size(); i++)
 		{
-			if (structs.get(i).getName().compareTo(uniformType) == 0)
+			if(structs.get(i).getName().compareTo(uniformType) == 0)
 			{
 				addThis = false;
 
@@ -264,8 +263,10 @@ public class ShaderData implements ReferenceCounter
 			}
 		}
 
-		if (!addThis)
+		if(!addThis)
+		{
 			return;
+		}
 
 		int location = glGetUniformLocation(program, uniformName);
 
@@ -276,7 +277,7 @@ public class ShaderData implements ReferenceCounter
 	{
 		glLinkProgram(program);
 
-		if (glGetProgrami(program, GL_LINK_STATUS) == 0)
+		if(glGetProgrami(program, GL_LINK_STATUS) == 0)
 		{
 			System.err.println("Error while linking a shader program \n" + glGetProgramInfoLog(program, 1024));
 			System.exit(1);
@@ -284,7 +285,7 @@ public class ShaderData implements ReferenceCounter
 
 		glValidateProgram(program);
 
-		if (glGetProgrami(program, GL_VALIDATE_STATUS) == 0)
+		if(glGetProgrami(program, GL_VALIDATE_STATUS) == 0)
 		{
 			System.err.println("Shader failed to validate \n" + glGetProgramInfoLog(program, 1024));
 			System.exit(1);
@@ -316,41 +317,40 @@ public class ShaderData implements ReferenceCounter
 		return uniformMap;
 	}
 
-	private static void determineOpenGlLevel()
+	private static void determineOpenGLLevel()
 	{
 		int majorVersion = glGetInteger(GL_MAJOR_VERSION);
 		int minorVersion = glGetInteger(GL_MINOR_VERSION);
 
-		supportedOpenGlLevel = majorVersion * 100 + minorVersion * 10;
+		supportedOpenGLLevel = majorVersion * 100 + minorVersion * 10;
 
-		if (supportedOpenGlLevel >= 330)
+		if(supportedOpenGLLevel >= 330)
 		{
-			glslVersion = Integer.toString(supportedOpenGlLevel);
+			glslVersion = Integer.toString(supportedOpenGLLevel);
 		}
-		else if (supportedOpenGlLevel >= 320)
+		else if(supportedOpenGLLevel >= 320)
 		{
 			glslVersion = "150";
 		}
-		else if (supportedOpenGlLevel >= 310)
+		else if(supportedOpenGLLevel >= 310)
 		{
 			glslVersion = "140";
 		}
-		else if (supportedOpenGlLevel >= 300)
+		else if(supportedOpenGLLevel >= 300)
 		{
 			glslVersion = "130";
 		}
-		else if (supportedOpenGlLevel >= 210)
+		else if(supportedOpenGLLevel >= 210)
 		{
 			glslVersion = "120";
 		}
-		else if (supportedOpenGlLevel >= 200)
+		else if(supportedOpenGLLevel >= 200)
 		{
 			glslVersion = "110";
 		}
 		else
 		{
-			System.err.println(
-					"Error: OpenGL Version " + majorVersion + "." + minorVersion + " does not support shaders.");
+			System.err.println("OpenGL " + majorVersion + "." + minorVersion + " does not support shaders.");
 			System.exit(1);
 		}
 	}
@@ -367,9 +367,9 @@ public class ShaderData implements ReferenceCounter
 			shaderReader = new BufferedReader(new FileReader(SHADER_FOLDER + fileName));
 			String line;
 
-			while ((line = shaderReader.readLine()) != null)
+			while((line = shaderReader.readLine()) != null)
 			{
-				if (line.startsWith(INCLUDE_DIRECTIVE))
+				if(line.startsWith(INCLUDE_DIRECTIVE))
 				{
 					shaderSource.append(loadShader(line.substring(INCLUDE_DIRECTIVE.length() + 2, line.length() - 1)));
 				}
@@ -381,10 +381,9 @@ public class ShaderData implements ReferenceCounter
 
 			shaderReader.close();
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
-			System.err.println(
-					"Error loading shader: The shader " + fileName + " doesn't exist. Using the default shader");
+			System.err.println("Failed to load shader: The shader " + fileName + " doesn't exist. Using the default shader");
 			loadShader(DEFAULT_SHADER);
 		}
 
@@ -399,7 +398,7 @@ public class ShaderData implements ReferenceCounter
 
 		int structLocation = shaderText.indexOf(STRUCT_KEY);
 
-		while (structLocation != -1)
+		while(structLocation != -1)
 		{
 			structLocation += STRUCT_KEY.length() + 1;
 
@@ -424,44 +423,44 @@ public class ShaderData implements ReferenceCounter
 
 	private static List<TypedData> findUniformStructComponents(String struct)
 	{
-		final char[] charsToIgnore = {
-				' ', '\n', '\t', '{'
-		};
+		final char[] charsToIgnore = {' ', '\n', '\t', '{'};
 
 		List<TypedData> result = new ArrayList<TypedData>();
 		String[] structLines = struct.split(";");
 
-		for (int i = 0; i < structLines.length; i++)
+		for(int i = 0; i < structLines.length; i++)
 		{
 			int nameBegin = -1;
 			int nameEnd = -1;
 
-			for (int j = 0; j < structLines[i].length(); j++)
+			for(int j = 0; j < structLines[i].length(); j++)
 			{
 				boolean isIgnorableCharacter = false;
 
-				for (int k = 0; k < charsToIgnore.length; k++)
+				for(int k = 0; k < charsToIgnore.length; k++)
 				{
-					if (structLines[i].charAt(j) == charsToIgnore[k])
+					if(structLines[i].charAt(j) == charsToIgnore[k])
 					{
 						isIgnorableCharacter = true;
 						break;
 					}
 				}
 
-				if (nameBegin == -1 && !isIgnorableCharacter)
+				if(nameBegin == -1 && !isIgnorableCharacter)
 				{
 					nameBegin = j;
 				}
-				else if (nameBegin != -1 && isIgnorableCharacter)
+				else if(nameBegin != -1 && isIgnorableCharacter)
 				{
 					nameEnd = j;
 					break;
 				}
 			}
 
-			if (nameBegin == -1 || nameEnd == -1)
+			if(nameBegin == -1 || nameEnd == -1)
+			{
 				continue;
+			}
 
 			String name = structLines[i].substring(nameEnd + 1).trim();
 			String type = structLines[i].substring(nameBegin, nameEnd + 1).trim();

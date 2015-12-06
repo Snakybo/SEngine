@@ -23,11 +23,11 @@ import org.lwjgl.BufferUtils;
 
 import com.snakybo.sengine.resource.loading.IndexedModel;
 import com.snakybo.sengine.utils.Buffer;
-import com.snakybo.sengine.utils.ReferenceCounter;
+import com.snakybo.sengine.utils.IReferenceCounter;
 
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
-public class MeshData implements ReferenceCounter
+public class MeshData implements IReferenceCounter
 {
 	private static final int NUM_BUFFERS = 5;
 
@@ -47,10 +47,9 @@ public class MeshData implements ReferenceCounter
 	{
 		super();
 
-		if (!model.isValid())
+		if(!model.isValid())
 		{
-			System.err.println(
-					"Error: Invalid mesh! A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
+			System.err.println("A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
 			System.exit(1);
 		}
 
@@ -128,7 +127,6 @@ public class MeshData implements ReferenceCounter
 	public void draw()
 	{
 		glBindVertexArray(vertexArrayObject.get(0));
-
 		glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
 	}
 }

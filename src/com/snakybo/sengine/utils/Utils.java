@@ -10,9 +10,13 @@ public class Utils
 	{
 		ArrayList<String> result = new ArrayList<String>();
 
-		for (int i = 0; i < data.length; i++)
-			if (!data[i].equals(""))
+		for(int i = 0; i < data.length; i++)
+		{
+			if(!data[i].equals(""))
+			{
 				result.add(data[i]);
+			}
+		}
 
 		String[] res = new String[result.size()];
 		result.toArray(res);
@@ -24,8 +28,10 @@ public class Utils
 	{
 		int[] result = new int[data.length];
 
-		for (int i = 0; i < data.length; i++)
+		for(int i = 0; i < data.length; i++)
+		{
 			result[i] = data[i].intValue();
+		}
 
 		return result;
 	}
@@ -43,8 +49,10 @@ public class Utils
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(line);
 
-		if (matcher.find())
+		if(matcher.find())
+		{
 			return matcher.start();
+		}
 
 		return -1;
 	}
