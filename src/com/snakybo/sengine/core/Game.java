@@ -2,7 +2,6 @@ package com.snakybo.sengine.core;
 
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
 
 /** Base game class, your has to extend this class in order to work with the
  * engine
@@ -17,7 +16,7 @@ public abstract class Game
 	 * You should start everything here
 	 * </p>
 	*/
-	public void init(Window window)
+	public void init()
 	{
 	}
 
@@ -25,7 +24,6 @@ public abstract class Game
 	final void internalInit(RenderingEngine renderingEngine)
 	{
 		root = new GameObject();
-
 		root.addToRenderingEngine(renderingEngine);
 	}
 

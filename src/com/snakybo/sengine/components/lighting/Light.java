@@ -1,10 +1,13 @@
 package com.snakybo.sengine.components.lighting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
+import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.math.Matrix4f;
 
 /** Base class for every light in the game
  * <p>
@@ -13,8 +16,10 @@ import com.snakybo.sengine.utils.math.Matrix4f;
  * @author Kevin Krol
  * @since Apr 4, 2014
  * @see Component */
-public class BaseLight extends Component
+public class Light extends Component
 {
+	private static List<Light> lights = new ArrayList<Light>();
+	
 	private Color color;
 
 	private Shader shader;
@@ -26,7 +31,7 @@ public class BaseLight extends Component
 	 * @param color The color of the light
 	 * @param intensity The intensity of the light
 	 * @see Color */
-	public BaseLight(Color color, float intensity)
+	public Light(Color color, float intensity)
 	{
 		this.color = color;
 		this.intensity = intensity;
@@ -35,7 +40,7 @@ public class BaseLight extends Component
 	@Override
 	protected void onAddedToScene(RenderingEngine renderingEngine)
 	{
-		renderingEngine.addLight(this);
+		lights.add(this);
 	}
 
 	/** Set the color of the light
@@ -91,20 +96,9 @@ public class BaseLight extends Component
 	{
 		return intensity;
 	}
-
-	// TODO: JavaDocs for the ShadowInfo class
-	public class ShadowInfo
+	
+	public static Iterable<Light> getLights()
 	{
-		private Matrix4f projection;
-
-		public ShadowInfo(Matrix4f projection)
-		{
-			this.projection = projection;
-		}
-
-		public Matrix4f getProjection()
-		{
-			return projection;
-		}
+		return lights;
 	}
 }

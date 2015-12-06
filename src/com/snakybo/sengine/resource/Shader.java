@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.lighting.DirectionalLight;
 import com.snakybo.sengine.components.lighting.PointLight;
 import com.snakybo.sengine.components.lighting.SpotLight;
@@ -81,7 +82,7 @@ public class Shader
 	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f mvpMatrix = RenderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
+		Matrix4f mvpMatrix = Camera.getMainCamera().getViewProjection().mul(worldMatrix);
 
 		for (int i = 0; i < resource.getUniformNames().length; i++)
 		{
@@ -153,7 +154,7 @@ public class Shader
 			{
 				if (uniformName.equals("C_eyePos"))
 				{
-					setUniformVector3f(uniformName, RenderingEngine.getMainCamera().getTransform().getPosition());
+					setUniformVector3f(uniformName, Camera.getMainCamera().getTransform().getPosition());
 				}
 				else
 				{

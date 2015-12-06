@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
 import static org.lwjgl.opengl.GL11.GL_LESS;
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_ONE;
@@ -26,17 +27,16 @@ import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT16;
 import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.lighting.BaseLight;
-import com.snakybo.sengine.components.lighting.BaseLight.ShadowInfo;
+import com.snakybo.sengine.components.lighting.Light;
 import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.resource.Texture;
+import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.MappedValues;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
@@ -53,37 +53,31 @@ public class RenderingEngine extends MappedValues
 	private static final Shader AMBIENT_SHADER = new Shader("internal/forward-rendering/forward-ambient");
 	private static final Shader SHADOW_MAP_SHADER = new Shader("internal/shadowMapGenerator");
 
-	private static final Matrix4f biasMatrix = new Matrix4f().initScale(0.5f, 0.5f, 0.5f)
-			.mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
-
-	private static Camera mainCamera;
-	private static Camera altCamera;
+	private static final Matrix4f biasMatrix = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
+	
+	private static Color ambientColor;
 
 	private HashMap<String, Integer> samplerMap;
-
-	private List<BaseLight> baseLights;
-	private BaseLight activeLight;
-
-	private Window window;
-	private Matrix4f lightMatrix;
+	
+	private Light activeLight;
+	
+	private Camera shadowMapCamera;
+	private Matrix4f lightMatrix;	
 
 	/** Constructor for the rendering engine
 	 * @param window The window the rendering engine should render in */
-	public RenderingEngine(Window window)
+	public RenderingEngine()
 	{
-		this.window = window;
-
 		samplerMap = new HashMap<String, Integer>();
-		baseLights = new ArrayList<BaseLight>();
 
-		altCamera = new Camera(new Matrix4f().initIdentity());
+		shadowMapCamera = new Camera(new Matrix4f().initIdentity());
 
 		samplerMap.put(Material.DIFFUSE, SAMPLER_LAYER_DIFFUSE);
 		samplerMap.put(Material.NORMAL_MAP, SAMPLER_LAYER_NORMAL_MAP);
 		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
 		samplerMap.put(Material.SHADOW_MAP, SAMPLER_LAYER_SHADOW_MAP);
 
-		setVector3f("ambient", window.getAmbientColor());
+		setVector3f("ambient", ambientColor);
 		setTexture("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16,
 				GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
 
@@ -95,14 +89,15 @@ public class RenderingEngine extends MappedValues
 	 * @param object The object to render */
 	public void render(GameObject object)
 	{
-		window.bindAsRenderTarget();
+		Window.bindAsRenderTarget();
 
-		glClearColor(window.getClearColor().x, window.getClearColor().y, window.getClearColor().z, 1.0f);
+		Camera mainCamera = Camera.getMainCamera();		
+		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		object.renderAll(this, AMBIENT_SHADER);
 
-		for (BaseLight light : baseLights)
+		for(Light light : Light.getLights())
 		{
 			activeLight = light;
 			ShadowInfo shadowInfo = activeLight.getShadowInfo();
@@ -111,24 +106,26 @@ public class RenderingEngine extends MappedValues
 			getTexture("shadowMap").bindAsRenderTarget();
 			glClear(GL_DEPTH_BUFFER_BIT);
 
-			if (shadowInfo != null)
+			if(shadowInfo != null)
 			{
-				altCamera.setProjection(shadowInfo.getProjection());
-				altCamera.getTransform().getPosition().set(activeLight.getTransform().getPosition());
-				altCamera.getTransform().setRotation(activeLight.getTransform().getRotation());
+				shadowMapCamera.setProjection(shadowInfo.getProjection());
+				shadowMapCamera.getTransform().getPosition().set(activeLight.getTransform().getPosition());
+				shadowMapCamera.getTransform().setRotation(activeLight.getTransform().getRotation());
 
-				lightMatrix = biasMatrix.mul(altCamera.getViewProjection());
+				lightMatrix = biasMatrix.mul(shadowMapCamera.getViewProjection());
 
-				Camera temp = mainCamera;
-				mainCamera = altCamera;
+				Camera tempCamera = mainCamera;
+				Camera.setMainCamera(shadowMapCamera);
 
+				glCullFace(GL_FRONT);
 				object.renderAll(this, SHADOW_MAP_SHADER);
+				glCullFace(GL_BACK);
 
-				mainCamera = temp;
+				Camera.setMainCamera(tempCamera);
 			}
 
 			// Render the lighting
-			window.bindAsRenderTarget();
+			Window.bindAsRenderTarget();
 
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
@@ -154,25 +151,10 @@ public class RenderingEngine extends MappedValues
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
 	}
-
-	/** Add a light to the rendering engine
-	 * @param light The light to add to the rendering engine */
-	public final void addLight(BaseLight light)
+	
+	public final static void setAmbientColor(Color color)
 	{
-		baseLights.add(light);
-	}
-
-	/** Set the main camera
-	 * @param camera The camera to use */
-	public final static void setMainCamera(Camera camera)
-	{
-		mainCamera = camera;
-	}
-
-	/** @return The main camera */
-	public final static Camera getMainCamera()
-	{
-		return mainCamera;
+		ambientColor =  color;
 	}
 
 	/** @return The element in the sampler map with the name passed in
@@ -184,7 +166,7 @@ public class RenderingEngine extends MappedValues
 
 	/** @return The active light, this changes depending on which light is
 	 *         currently being used to render an object */
-	public final BaseLight getActiveLight()
+	public final Light getActiveLight()
 	{
 		return activeLight;
 	}

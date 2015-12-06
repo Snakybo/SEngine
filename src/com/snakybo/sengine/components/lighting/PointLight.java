@@ -4,11 +4,11 @@ import com.snakybo.sengine.rendering.Attenuation;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.utils.Color;
 
-/** This class extends the {@link BaseLight} class
+/** This class extends the {@link Light} class
  * @author Kevin Krol
  * @since Apr 4, 2014
- * @see BaseLight */
-public class PointLight extends BaseLight
+ * @see Light */
+public class PointLight extends Light
 {
 	private static final int COLOR_DEPTH = 256;
 

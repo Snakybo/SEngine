@@ -11,7 +11,6 @@ import com.snakybo.sengine.utils.Time;
 public class SEngine
 {
 	private RenderingEngine renderingEngine;
-	private Window window;
 	private Game game;
 
 	private double frameTime;
@@ -22,32 +21,31 @@ public class SEngine
 	 * @param game The base class for your game */
 	public SEngine(Game game)
 	{
-		this.isRunning = false;
-
+		if(!Window.isCreated())
+		{
+			Window.create(1280, 720, "SEngine");
+		}
+		
+		isRunning = false;
 		this.game = game;
+		
+		renderingEngine = new RenderingEngine();
 	}
 
 	/** Start the engine
-	 * @param window The window you've created
 	 * @param frameRate The desired frame rate of the game */
-	public void start(Window window, double frameRate)
+	public void start(double frameRate)
 	{
-		if (isRunning)
+		if(isRunning)
+		{
 			return;
-
-		if (!window.isCreated())
-			throw new IllegalStateException(
-					"The window has not been created, make sure you call window.create() prior to starting the engine");
-
-		this.window = window;
-		this.renderingEngine = new RenderingEngine(window);
-
+		}
+		
 		frameTime = 1.0 / frameRate;
-
 		isRunning = true;
 
 		game.internalInit(renderingEngine);
-		game.init(window);
+		game.init();
 
 		run();
 	}
@@ -64,7 +62,7 @@ public class SEngine
 
 		isRunning = false;
 
-		window.destroy();
+		Window.destroy();
 	}
 
 	/** Main loop of the engine, timing logic is handled here */
@@ -94,13 +92,13 @@ public class SEngine
 				frameCounter = 0.0;
 			}
 
-			while (unprocessedTime > frameTime)
+			while(unprocessedTime > frameTime)
 			{
 				render = true;
 
 				unprocessedTime -= frameTime;
 
-				if (window.isCloseRequested())
+				if(Window.isCloseRequested())
 				{
 					stop();
 					return;
@@ -115,7 +113,7 @@ public class SEngine
 			if (render)
 			{
 				game.render(renderingEngine);
-				window.render();
+				Window.update();
 				frames++;
 			}
 			else
