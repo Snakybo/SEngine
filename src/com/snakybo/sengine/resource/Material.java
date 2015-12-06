@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snakybo.sengine.resource.management.MaterialData;
-import com.snakybo.sengine.utils.MappedValues;
-import com.snakybo.sengine.utils.math.Vector3f;
 
-public class Material extends MappedValues
+public class Material
 {
 	public static final String DIFFUSE = "diffuse";
 	public static final String NORMAL_MAP = "normalMap";
@@ -91,17 +89,17 @@ public class Material extends MappedValues
 
 		if (dispMap == null)
 			dispMap = DEFAULT_DISP_TEXTURE;
+		
+		set(DIFFUSE, diffuse);
+		set(NORMAL_MAP, normalMap);
+		set(DISP_MAP, dispMap);
 
-		resource.setTexture(DIFFUSE, diffuse);
-		resource.setTexture(NORMAL_MAP, normalMap);
-		resource.setTexture(DISP_MAP, dispMap);
-
-		resource.setFloat(SPECULAR_INTENSITY, specularIntensity);
-		resource.setFloat(SPECULAR_POWER, specularPower);
+		set(SPECULAR_INTENSITY, specularIntensity);
+		set(SPECULAR_POWER, specularPower);
 
 		float baseBias = dispMapScale / 2.0f;
-		resource.setFloat(DISP_MAP_SCALE, dispMapScale);
-		resource.setFloat(DISP_MAP_BIAS, -baseBias + baseBias * dispMapOffset);
+		set(DISP_MAP_SCALE, dispMapScale);
+		set(DISP_MAP_BIAS, -baseBias + baseBias * dispMapOffset);
 	}
 
 	public Material(Material other)
@@ -126,43 +124,13 @@ public class Material extends MappedValues
 		}
 	}
 
-	public void setFloat(String name, float value)
+	public void set(String name, Object value)
 	{
-		resource.setFloat(name, value);
+		resource.set(name, value);
 	}
-
-	public void setVector3f(String name, Vector3f value)
+	
+	public <T extends Object> T get(Class<T> type, String name)
 	{
-		resource.setVector3f(name, value);
-	}
-
-	public void setTexture(String name, Texture value)
-	{
-		resource.setTexture(name, value);
-	}
-
-	public float getFloat(String name)
-	{
-		return resource.getFloat(name);
-	}
-
-	public Vector3f getVector3f(String name)
-	{
-		return resource.getVector3f(name);
-	}
-
-	public Texture getTexture(String name)
-	{
-		return resource.getTexture(name);
-	}
-
-	public static Texture getDefaultNormalMap()
-	{
-		return DEFAULT_NORMAL_TEXTURE;
-	}
-
-	public static Texture getDefaultDiffuseMap()
-	{
-		return DEFAULT_DISP_TEXTURE;
+		return resource.get(type, name);
 	}
 }

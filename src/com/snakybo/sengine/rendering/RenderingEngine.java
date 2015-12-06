@@ -28,6 +28,7 @@ import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.lighting.Light;
@@ -37,13 +38,13 @@ import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Shader;
 import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.MappedValues;
+import com.snakybo.sengine.utils.IDataContainer;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
 /** The rendering engine, this is the main renderer in the engine
  * @author Kevin
  * @since Apr 4, 2014 */
-public class RenderingEngine extends MappedValues
+public class RenderingEngine implements IDataContainer
 {
 	private static final int SAMPLER_LAYER_DIFFUSE = 0;
 	private static final int SAMPLER_LAYER_NORMAL_MAP = 1;
@@ -57,18 +58,20 @@ public class RenderingEngine extends MappedValues
 	
 	private static Color ambientColor;
 
-	private HashMap<String, Integer> samplerMap;
+	private Map<String, Integer> samplerMap;
+	private Map<String, Object> data;
 	
 	private Light activeLight;
 	
 	private Camera shadowMapCamera;
-	private Matrix4f lightMatrix;	
+	private Matrix4f lightMatrix;
 
 	/** Constructor for the rendering engine
 	 * @param window The window the rendering engine should render in */
 	public RenderingEngine()
 	{
 		samplerMap = new HashMap<String, Integer>();
+		data = new HashMap<String, Object>();
 
 		shadowMapCamera = new Camera(new Matrix4f().initIdentity());
 
@@ -76,10 +79,9 @@ public class RenderingEngine extends MappedValues
 		samplerMap.put(Material.NORMAL_MAP, SAMPLER_LAYER_NORMAL_MAP);
 		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
 		samplerMap.put(Material.SHADOW_MAP, SAMPLER_LAYER_SHADOW_MAP);
-
-		setVector3f("ambient", ambientColor);
-		setTexture("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16,
-				GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
+		
+		data.put("ambient", ambientColor);
+		data.put("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
 
 		initOpenGl();
 	}
@@ -103,7 +105,7 @@ public class RenderingEngine extends MappedValues
 			ShadowInfo shadowInfo = activeLight.getShadowInfo();
 
 			// Render the shadows
-			getTexture("shadowMap").bindAsRenderTarget();
+			get(Texture.class, "shadowMap").bindAsRenderTarget();
 			glClear(GL_DEPTH_BUFFER_BIT);
 
 			if(shadowInfo != null)
@@ -150,6 +152,23 @@ public class RenderingEngine extends MappedValues
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
+	}
+	
+	@Override
+	public void set(String name, Object value)
+	{
+		data.put(name, value);
+	}
+	
+	@Override
+	public <T extends Object> T get(Class<T> type, String name)
+	{
+		if(!data.containsKey(name))
+		{
+			throw new IllegalArgumentException("No data with the name: " + name + " found.");
+		}
+		
+		return type.cast(data.get(name));
 	}
 	
 	public final static void setAmbientColor(Color color)

@@ -101,16 +101,16 @@ public class Shader
 				{
 					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
 
-					renderingEngine.getTexture(unprefixedName).bind(samplerSlot);
+					renderingEngine.get(Texture.class, unprefixedName).bind(samplerSlot);
 					setUniformi(uniformName, samplerSlot);
 				}
 				else if (uniformType.equals("vec3"))
 				{
-					setUniformVector3f(uniformName, renderingEngine.getVector3f(unprefixedName));
+					setUniformVector3f(uniformName, renderingEngine.get(Vector3f.class, unprefixedName));
 				}
 				else if (uniformType.equals("float"))
 				{
-					setUniformf(uniformName, renderingEngine.getFloat(unprefixedName));
+					setUniformf(uniformName, renderingEngine.get(float.class, unprefixedName));
 				}
 				else if (uniformType.equals("DirectionalLight"))
 				{
@@ -132,7 +132,7 @@ public class Shader
 			else if (uniformType.equals("sampler2D"))
 			{
 				int samplerSlot = renderingEngine.getSamplerSlot(uniformName);
-				material.getTexture(uniformName).bind(samplerSlot);
+				material.get(Texture.class, uniformName).bind(samplerSlot);
 				setUniformi(uniformName, samplerSlot);
 			}
 			else if (uniformName.startsWith("T_"))
@@ -165,11 +165,11 @@ public class Shader
 			{
 				if (uniformType.equals("vec3"))
 				{
-					setUniformVector3f(uniformName, material.getVector3f(uniformName));
+					setUniformVector3f(uniformName, material.get(Vector3f.class, uniformName));
 				}
 				else if (uniformType.equals("float"))
 				{
-					setUniformf(uniformName, material.getFloat(uniformName));
+					setUniformf(uniformName, material.get(Float.class, uniformName));
 				}
 				else
 				{
