@@ -18,9 +18,6 @@ public class Material
 	public static final String DISP_MAP_SCALE = "dispMapScale";
 	public static final String DISP_MAP_BIAS = "dispMapBias";
 
-	private static final Texture DEFAULT_NORMAL_TEXTURE = new Texture("internal/default_normal.png");
-	private static final Texture DEFAULT_DISP_TEXTURE = new Texture("internal/default_disp.png");
-
 	private static Map<String, MaterialData> resourceMap = new HashMap<String, MaterialData>();
 
 	private MaterialData resource;
@@ -52,13 +49,13 @@ public class Material
 
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower)
 	{
-		this(materialName, diffuse, specularIntensity, specularPower, new Texture(DEFAULT_NORMAL_TEXTURE));
+		this(materialName, diffuse, specularIntensity, specularPower, new Texture());
 	}
 
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower,
 			Texture normalMap)
 	{
-		this(materialName, diffuse, specularIntensity, specularPower, normalMap, new Texture(DEFAULT_DISP_TEXTURE));
+		this(materialName, diffuse, specularIntensity, specularPower, normalMap, new Texture());
 	}
 
 	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower,
@@ -67,28 +64,17 @@ public class Material
 		this(materialName, diffuse, specularIntensity, specularPower, normalMap, dispMap, 0.0f);
 	}
 
-	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower,
-			Texture normalMap, Texture dispMap, float dispMapScale)
+	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower, Texture normalMap, Texture dispMap, float dispMapScale)
 	{
 		this(materialName, diffuse, specularIntensity, specularPower, normalMap, dispMap, dispMapScale, 0.0f);
 	}
 
-	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower,
-			Texture normalMap, Texture dispMap, float dispMapScale, float dispMapOffset)
+	public Material(String materialName, Texture diffuse, float specularIntensity, float specularPower, Texture normalMap, Texture dispMap, float dispMapScale, float dispMapOffset)
 	{
 		this.materialName = materialName;
 
 		resource = new MaterialData();
 		resourceMap.put(materialName, resource);
-
-		if (diffuse == null)
-			diffuse = Texture.getDefaultTexture();
-
-		if (normalMap == null)
-			normalMap = DEFAULT_NORMAL_TEXTURE;
-
-		if (dispMap == null)
-			dispMap = DEFAULT_DISP_TEXTURE;
 		
 		set(DIFFUSE, diffuse);
 		set(NORMAL_MAP, normalMap);
@@ -109,18 +95,12 @@ public class Material
 
 		resource.addReference();
 	}
-
-	@Override
-	protected void finalize() throws Throwable
+	
+	public void destroy()
 	{
-		try
+		if(resource.removeReference() && !materialName.isEmpty())
 		{
-			if (resource.removeReference() && !materialName.isEmpty())
-				resourceMap.remove(materialName);
-		}
-		finally
-		{
-			super.finalize();
+			resourceMap.remove(materialName);
 		}
 	}
 

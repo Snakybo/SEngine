@@ -15,25 +15,19 @@ import com.snakybo.sengine.resource.management.MeshData;
 public class Mesh
 {
 	private static final String MESH_FOLDER = "./res/models/";
-	private static final String DEFAULT_MESH = "internal/cube.obj";
 
 	private static Map<String, MeshData> resourceMap = new HashMap<String, MeshData>();
 
 	private MeshData resource;
 	private String fileName;
-
-	public Mesh()
-	{
-		this(DEFAULT_MESH);
-	}
-
+	
 	public Mesh(String fileName)
 	{
 		this.fileName = fileName;
 
 		MeshData existingResource = resourceMap.get(fileName);
 
-		if (existingResource != null)
+		if(existingResource != null)
 		{
 			resource = existingResource;
 			resource.addReference();
@@ -71,17 +65,11 @@ public class Mesh
 		resource.addReference();
 	}
 
-	@Override
-	protected void finalize() throws Throwable
+	public void destroy()
 	{
-		try
+		if(resource.removeReference() && !fileName.isEmpty())
 		{
-			if (resource.removeReference() && !fileName.isEmpty())
-				resourceMap.remove(fileName);
-		}
-		finally
-		{
-			super.finalize();
+			resourceMap.remove(fileName);
 		}
 	}
 
@@ -94,9 +82,10 @@ public class Mesh
 	{
 		try
 		{
-			if (fileName.lastIndexOf('.') == -1)
-				throw new IllegalArgumentException(
-						"Invalid file name passed: make sure to add the extension to the file name: " + fileName);
+			if(fileName.lastIndexOf('.') == -1)
+			{
+				throw new IllegalArgumentException("Invalid file name passed: make sure to add the extension to the file name: " + fileName);
+			}
 
 			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
 			IModel model = null;
@@ -113,10 +102,9 @@ public class Mesh
 
 			resource = new MeshData(model.toIndexedModel());
 		}
-		catch (FileNotFoundException e)
+		catch(FileNotFoundException e)
 		{
-			System.err.println("Error loading mesh: The mesh " + fileName + " doesn't exist. Using the default mesh");
-			loadMesh(DEFAULT_MESH);
+			System.err.println("Error loading mesh: The mesh " + fileName + " doesn't exist.");
 		}
 	}
 }

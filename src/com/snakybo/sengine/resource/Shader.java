@@ -60,17 +60,11 @@ public class Shader
 		resource.addReference();
 	}
 
-	@Override
-	protected void finalize() throws Throwable
+	public void destroy()
 	{
-		try
+		if(resource.removeReference() && !fileName.isEmpty())
 		{
-			if (resource.removeReference() && !fileName.isEmpty())
-				resourceMap.remove(fileName);
-		}
-		finally
-		{
-			super.finalize();
+			resourceMap.remove(fileName);
 		}
 	}
 

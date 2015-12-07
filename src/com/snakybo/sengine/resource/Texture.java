@@ -21,12 +21,10 @@ import com.snakybo.sengine.utils.Buffer;
 
 public class Texture
 {
-	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();
-
 	private static final String TEXTURE_FOLDER = "./res/textures/";
-
-	private static final Texture DEFAULT_TEXTURE = new Texture("internal/default_diffuse.png");
-
+	
+	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();	
+	
 	private TextureData resource;
 	private String fileName;
 
@@ -65,14 +63,12 @@ public class Texture
 		this(width, height, data, textureTarget, filters, internalFormat, GL_RGBA);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat,
-			int format)
+	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format)
 	{
 		this(width, height, data, textureTarget, filters, internalFormat, format, false);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat,
-			int format, boolean clamp)
+	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp)
 	{
 		this(width, height, data, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
 	}
@@ -138,19 +134,11 @@ public class Texture
 		resource.addReference();
 	}
 
-	@Override
-	protected void finalize() throws Throwable
+	public void destroy()
 	{
-		try
+		if(resource.removeReference() && !fileName.isEmpty())
 		{
-			if(resource.removeReference() && !fileName.isEmpty())
-			{
-				resourceMap.remove(fileName);
-			}
-		}
-		finally
-		{
-			super.finalize();
+			resourceMap.remove(fileName);
 		}
 	}
 
@@ -190,17 +178,7 @@ public class Texture
 		try
 		{
 			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
-			int[] flippedPixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
-			int[] pixels = new int[flippedPixels.length];
-
-			// Flip the image vertically
-			for(int i = 0; i < image.getWidth(); i++)
-			{	
-				for(int j = 0; j < image.getHeight(); j++)
-				{
-					pixels[i + j * image.getWidth()] = flippedPixels[i+ (image.getHeight() - j - 1) * image.getWidth()];
-				}
-			}
+			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
 
@@ -230,13 +208,7 @@ public class Texture
 		}
 		catch(IOException e)
 		{
-			System.err.println("Failed to load texture: " + fileName + " doesn't exist. Using the default texture");
-			resource = DEFAULT_TEXTURE.resource;
+			System.err.println("Failed to load texture: " + fileName + " doesn't exist");
 		}
-	}
-
-	public static Texture getDefaultTexture()
-	{
-		return DEFAULT_TEXTURE;
 	}
 }
