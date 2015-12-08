@@ -18,6 +18,16 @@ import com.snakybo.sengine.utils.math.Vector3f;
  */
 public abstract class ShaderUpdater
 {
+	/**
+	 * Attempt to update the uniforms of a shader, called by {@link Shader#updateUniforms(Transform, Material, RenderingEngine)}.
+	 * If it's unable to update an uniform, it will call {@link Shader#updateUniforms(Transform, Material, String, String)}.
+	 * @param shader The shader to update.
+	 * @param transform The transform of the object.
+	 * @param material The material currently being used.
+	 * @param renderingEngine The rendering engine.
+	 * @see Shader#updateUniforms(Transform, Material, RenderingEngine)
+	 * @see Shader#updateUniforms(Transform, Material, String, String)
+	 */
 	public static void updateUniforms(Shader shader, Transform transform, Material material, RenderingEngine renderingEngine)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
@@ -118,6 +128,13 @@ public abstract class ShaderUpdater
 		}
 	}
 	
+	/**
+	 * Convenience method to update a DirectionalLight uniform.
+	 * @param shader The shader to update.
+	 * @param name The name of the uniform.
+	 * @param light The DirectionalLight.
+	 * @see DirectionalLight
+	 */
 	private static void setUniform(Shader shader, String name, DirectionalLight light)
 	{
 		shader.setUniform(name + ".direction", light.getDirection());
@@ -126,6 +143,13 @@ public abstract class ShaderUpdater
 		shader.setUniformf(name + ".baseLight.intensity", light.getIntensity());
 	}
 
+	/**
+	 * Convenience method to update a PointLight uniform.
+	 * @param shader The shader to update.
+	 * @param name The name of the uniform.
+	 * @param light The PointLight.
+	 * @see PointLight
+	 */
 	private static void setUniform(Shader shader, String name, PointLight light)
 	{
 		shader.setUniform(name + ".position", light.getTransform().getPosition());
@@ -138,6 +162,13 @@ public abstract class ShaderUpdater
 		shader.setUniformf(name + ".range", light.getRange());
 	}
 
+	/**
+	 * Convenience method to update a SpotLight uniform.
+	 * @param shader The shader to update.
+	 * @param name The name of the uniform.
+	 * @param light The SpotLight.
+	 * @see SpotLight
+	 */
 	private static void setUniform(Shader shader, String name, SpotLight light)
 	{
 		shader.setUniform(name + ".pointLight.position", light.getTransform().getPosition());

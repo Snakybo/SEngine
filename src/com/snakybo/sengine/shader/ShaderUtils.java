@@ -21,6 +21,11 @@ import java.io.IOException;
  */
 public abstract class ShaderUtils
 {
+	/**
+	 * Container class for Shader uniforms.
+	 * @author Kevin
+	 * @since Dec 8, 2015
+	 */
 	public static class ShaderUniform
 	{
 		private String structName;
@@ -28,11 +33,22 @@ public abstract class ShaderUtils
 		private String type;		
 		private int location;
 		
+		/**
+		 * Create a new ShaderUniform.
+		 * @param name The name of the uniform.
+		 * @param type The type of the uniform.
+		 */
 		public ShaderUniform(String name, String type)
 		{
 			this(name, type, -1);
 		}
 		
+		/**
+		 * Create a new ShaderUniform.
+		 * @param name The name of the uniform.
+		 * @param type The type of the uniform.
+		 * @param location = The OpenGL location of the uniform.
+		 */
 		public ShaderUniform(String name, String type, int location)
 		{
 			this.structName = "";
@@ -41,55 +57,90 @@ public abstract class ShaderUtils
 			this.location = location;			
 		}
 		
+		/**
+		 * Set the name of the uniform's struct, only used when the uniform is part of a struct.
+		 * @param structName The name of the struct.
+		 */
 		void setStructName(String structName)
 		{
 			this.structName = structName;
 		}
 		
-		public String getStructName()
+		/**
+		 * @return The name of the uniform's struct.
+		 */
+		String getStructName()
 		{
 			return structName;
 		}
 		
+		/**
+		 * @return The name of the uniform.
+		 */
 		public String getName()
 		{
 			return name;
 		}
 		
+		/**
+		 * @return The type of the uniform.
+		 */
 		public String getType()
 		{
 			return type;
 		}
 		
+		/**
+		 * @return The OpenGL location of the uniform.
+		 */
 		public int getLocation()
 		{
 			return location;
 		}
 	}
 	
-	public static class ShaderUniformStruct
+	/**
+	 * Container class for Shader structs.
+	 * @author Kevin
+	 * @since Dec 8, 2015
+	 */
+	public static class ShaderStruct
 	{
 		private Iterable<ShaderUniform> uniforms;
 		private String name;
 		
-		public ShaderUniformStruct(String name, Iterable<ShaderUniform> uniforms)
+		/**
+		 * Create a new ShaderStruct.
+		 * @param name The name of the struct.
+		 * @param type A list containing all uniforms in this struct.
+		 */
+		public ShaderStruct(String name, Iterable<ShaderUniform> uniforms)
 		{
 			this.uniforms = uniforms;
 			this.name = name;
 		}
 		
+		/**
+		 * @return A list containing all uniforms in this struct.
+		 */
 		public Iterable<ShaderUniform> getUniforms()
 		{
 			return uniforms;
 		}
 		
+		/**
+		 * @return The name of the struct.
+		 */
 		public String getName()
 		{
 			return name;
 		}
 	}
 	
-	private static final String SHADER_FOLDER = "./res/shaders/";
+	/**
+	 * The default location for shaders.
+	 */
+	public static final String SHADER_FOLDER = "./res/shaders/";
 	
 	private static int openGLVersion;
 	private static int glslVersion;
@@ -132,6 +183,13 @@ public abstract class ShaderUtils
 		}
 	}
 	
+	/**
+	 * Create a new shader.
+	 * @param type The type of the shader.
+	 * @param programId The ID of the shader program.
+	 * @param source The source of the shader file.
+	 * @return The ID of the shader.
+	 */
 	public static int createShader(int type, int programId, String source)
 	{
 		int shaderId = glCreateShader(type);
@@ -156,6 +214,12 @@ public abstract class ShaderUtils
 		return shaderId;
 	}
 	
+	/**
+	 * Get the Start of a struct in a shader source.
+	 * @param source The source of the shader file.
+	 * @param begin The line to start seaching.
+	 * @return The line on which an opening bracket was found.
+	 */
 	public static int getUniformStructBegin(String source, int begin)
 	{
 		String[] lines = source.split("\n");
@@ -173,6 +237,12 @@ public abstract class ShaderUtils
 		return -1;
 	}
 	
+	/**
+	 * Get the ending of a struct in a shader source.
+	 * @param source The source of the shader file.
+	 * @param begin The line to start seaching.
+	 * @return The line on which an closing bracket was found.
+	 */
 	public static int getUniformStructEnd(String source, int begin)
 	{
 		String[] lines = source.split("\n");
@@ -190,6 +260,11 @@ public abstract class ShaderUtils
 		return -1;
 	}
 	
+	/**
+	 * Load a shader.
+	 * @param fileName The file name of the shader.
+	 * @return The contents of the shader file.
+	 */
 	public static String loadShaderFile(String fileName)
 	{
 		final String INCLUDE_DIRECTIVE = "#include";
@@ -225,11 +300,17 @@ public abstract class ShaderUtils
 		return result;
 	}
 	
+	/**
+	 * @return The OpenGL version.
+	 */
 	public static int getOpenGLVersion()
 	{
 		return openGLVersion;
 	}
 	
+	/**
+	 * @return The GLSL version.
+	 */
 	public static int getGLSLVersion()
 	{
 		return glslVersion;

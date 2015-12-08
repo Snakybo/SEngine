@@ -30,7 +30,7 @@ import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
-import com.snakybo.sengine.shader.ShaderUtils.ShaderUniformStruct;
+import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.utils.Buffer;
 import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector2f;
@@ -49,11 +49,18 @@ public class Shader
 	
 	private int programId;
 	
+	/**
+	 * Create a new shader from the default shader. 
+	 */
 	public Shader()
 	{
 		this("default/diffuse");
 	}
 	
+	/**
+	 * Create a new shader from the specified shader.
+	 * @param fileName The name of the shader, in a relative path from {@value ShaderUtils#SHADER_FOLDER}, and without {@code .glsl}.
+	 */
 	public Shader(String fileName)
 	{
 		uniforms = new ArrayList<ShaderUniform>();
@@ -78,6 +85,9 @@ public class Shader
 		addUniforms(source);
 	}
 	
+	/**
+	 * Destroy the shader, this will detach and destroy all shaders, as well as the program.
+	 */
 	public final void destroy()
 	{
 		for(int shaderId : shaderIds)
@@ -89,20 +99,41 @@ public class Shader
 		glDeleteProgram(programId);
 	}
 	
+	/**
+	 * Bind the shader program, allowing it to be used.
+	 */
 	public final void bind()
 	{
 		glUseProgram(programId);
 	}
 	
+	/**
+	 * Attempt to automatically update the shader's uniforms, this will invoke {@link #updateUniforms(Transform, Material, String, String)} if it's unable to do so.
+	 * @param transform The transform of the object.
+	 * @param material The material currently being used.
+	 * @param renderingEngine The rendering engine.
+	 * @see #updateUniforms(Transform, Material, String, String)
+	 */
 	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
 	{
 		ShaderUpdater.updateUniforms(this, transform, material, renderingEngine);
 	}
 	
+	/**
+	 * Fallback method for {@link #updateUniforms(Transform, Material, RenderingEngine)}, override this in your own class to add support for custom shader variables.
+	 * @param transform The transform of the object.
+	 * @param material The material currently being used.
+	 * @param name The name of the uniform.
+	 * @param type The type of the uniform.
+	 * @see #updateUniforms(Transform, Material, RenderingEngine)
+	 */
 	protected void updateUniforms(Transform transform, Material material, String name, String type)
 	{
 	}
 	
+	/**
+	 * Link the shader program.
+	 */
 	private void link()
 	{
 		glLinkProgram(programId);
@@ -122,6 +153,10 @@ public class Shader
 		}
 	}
 	
+	/**
+	 * Create shaders out of a source, and add them to the program.
+	 * @param source The source of the shader file.
+	 */
 	private void createShaders(String source)
 	{
 		if(source.contains("VS_BUILD"))
@@ -141,6 +176,10 @@ public class Shader
 		}
 	}
 	
+	/**
+	 * Find and add all attributes in a source.
+	 * @param source The source of the shader file.
+	 */
 	private void addAttributes(String source)
 	{
 		String[] lines = source.split("\n");		
@@ -163,9 +202,13 @@ public class Shader
 		}
 	}
 	
+	/**
+	 * Find and add all uniforms in a source.
+	 * @param source The source of the shader file.
+	 */
 	private void addUniforms(String source)
 	{	
-		Iterable<ShaderUniformStruct> structs = findUniformsFromStructs(source);	
+		Iterable<ShaderStruct> structs = findUniformsFromStructs(source);	
 		String[] lines = source.split("\n");
 		
 		for(String line : lines)
@@ -185,9 +228,14 @@ public class Shader
 		}
 	}
 	
-	private Iterable<ShaderUniformStruct> findUniformsFromStructs(String source)
+	/**
+	 * Find all structs in a source, this will scan the source for structs and return a list of the structs contents.
+	 * @param source The source of the shader file.
+	 * @return A list of struct data.
+	 */
+	private Iterable<ShaderStruct> findUniformsFromStructs(String source)
 	{
-		List<ShaderUniformStruct> result = new ArrayList<ShaderUniformStruct>();	
+		List<ShaderStruct> result = new ArrayList<ShaderStruct>();	
 		String[] lines = source.split("\n");
 		
 		for(int i = 0; i < lines.length; i++)
@@ -227,20 +275,34 @@ public class Shader
 				uniforms.add(uniform);
 			}
 			
-			result.add(new ShaderUniformStruct(structName, uniforms));			
+			result.add(new ShaderStruct(structName, uniforms));			
 		}
 		
 		return result;
 	}
 	
-	private void addUniform(String name, String type, Iterable<ShaderUniformStruct> structs)
+	/**
+	 * Add a single uniform.
+	 * @param name The name of the uniform.
+	 * @param type The type of the uniform.
+	 * @param structs A list of known structs, used to determine if the uniform is part of a struct.
+	 * @see #addUniform(String, String, Iterable, String)
+	 */
+	private void addUniform(String name, String type, Iterable<ShaderStruct> structs)
 	{
 		addUniform(name, type, structs, "");
 	}
 	
-	private void addUniform(String name, String type, Iterable<ShaderUniformStruct> structs, String structName)
+	/**
+	 * Add a single uniform.
+	 * @param name The name of the uniform.
+	 * @param type The type of the uniform.
+	 * @param structs A list of known structs, used to determine if the uniform is part of a struct.
+	 * @param structName The name of the struct.
+	 */
+	private void addUniform(String name, String type, Iterable<ShaderStruct> structs, String structName)
 	{		
-		for(ShaderUniformStruct struct : structs)
+		for(ShaderStruct struct : structs)
 		{
 			if(struct.getName().equals(type))
 			{
@@ -267,36 +329,67 @@ public class Shader
 		uniforms.add(uniform);
 	}
 	
+	/**
+	 * Set the {@code int} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
 	public final void setUniformi(String name, int value)
 	{
 		glUniform1i(uniformLookup.get(name), value);
 	}
 	
+	/**
+	 * Set the {@code float} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
 	public final void setUniformf(String name, float value)
 	{
 		glUniform1f(uniformLookup.get(name), value);
 	}
-	
+
+	/**
+	 * Set the {@code vec2} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
 	public final void setUniform(String name, Vector2f value)
 	{
 		glUniform2f(uniformLookup.get(name), value.x, value.y);
 	}
 	
+	/**
+	 * Set the {@code vec3} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
 	public final void setUniform(String name, Vector3f value)
 	{
 		glUniform3f(uniformLookup.get(name), value.x, value.y, value.z);
 	}
 	
+	/**
+	 * Set the {@code mat4} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
 	public final void setUniform(String name, Matrix4f value)
 	{
 		glUniformMatrix4(uniformLookup.get(name), true, Buffer.createFlippedBuffer(value));
 	}
 	
+	/**
+	 * @return A list containing all uniforms.
+	 */
 	public final Iterable<ShaderUniform> getUniforms()
 	{
 		return uniforms;
 	}
 	
+	/**
+	 * @return A list containing the names of all uniforms.
+	 */
 	public final Iterable<String> getUniformNames()
 	{
 		List<String> result = new ArrayList<String>();
@@ -309,6 +402,9 @@ public class Shader
 		return result;
 	}
 	
+	/**
+	 * @return A list containing the types of all uniforms.
+	 */
 	public final Iterable<String> getUniformTypes()
 	{
 		List<String> result = new ArrayList<String>();
