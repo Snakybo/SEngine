@@ -22,13 +22,13 @@ public class MeshRenderer extends Component
 	private Material material;
 
 	/** Constructor for the component
-	 * @param mesh_Old The mesh to render
+	 * @param mesh The mesh to render
 	 * @param material The material to render the mesh with
-	 * @see Mesh_Old
+	 * @see Mesh
 	 * @see Material */
-	public MeshRenderer(Mesh mesh_Old, Material material)
+	public MeshRenderer(Mesh mesh, Material material)
 	{
-		this.mesh = mesh_Old;
+		this.mesh = mesh;
 		this.material = material;
 	}
 
