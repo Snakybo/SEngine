@@ -4,7 +4,7 @@ import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Mesh;
-import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.shader.Shader;
 
 /** This class extends the {@link Component} class
  * <p>

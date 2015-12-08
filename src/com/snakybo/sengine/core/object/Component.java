@@ -1,7 +1,7 @@
 package com.snakybo.sengine.core.object;
 
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.shader.Shader;
 
 /** Base component class used by the engine, every component in the game has to
  * extend this class in order to work.

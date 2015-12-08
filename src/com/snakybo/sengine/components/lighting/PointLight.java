@@ -1,7 +1,7 @@
 package com.snakybo.sengine.components.lighting;
 
 import com.snakybo.sengine.rendering.Attenuation;
-import com.snakybo.sengine.resource.Shader;
+import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
 /** This class extends the {@link Light} class
