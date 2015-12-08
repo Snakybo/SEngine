@@ -15,7 +15,7 @@ import com.snakybo.sengine.resource.management.MeshData;
 public class Mesh
 {
 	private static final String MESH_FOLDER = "./res/models/";
-
+	
 	private static Map<String, MeshData> resourceMap = new HashMap<String, MeshData>();
 
 	private MeshData resource;
@@ -64,7 +64,7 @@ public class Mesh
 
 		resource.addReference();
 	}
-
+	
 	public void destroy()
 	{
 		if(resource.removeReference() && !fileName.isEmpty())
