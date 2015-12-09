@@ -35,19 +35,17 @@ public class Test extends Game
 		directionalLightObject.getTransform().setRotation(new Quaternion(new Vector3f(2, 1, 0), (float) Math.toRadians(-65)));
 		addChild(directionalLightObject);
 		
-		Material brickMaterial = new Material("bricks", new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);		
+		Material brickMaterial = new Material(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);		
 		addChild(new GameObject(new Vector3f(0, -1, 0), new Quaternion(), 10).addComponent(new MeshRenderer(Primitive.PLANE, brickMaterial)));
 		
-		Material cubeMaterial = new Material("box", new Texture("internal/default_diffuse.png"), 4, 8);
-		MeshRenderer cubeMesh = new MeshRenderer(Primitive.SPHERE, cubeMaterial);
+		Material diffuseMaterial = new Material(new Texture("internal/default_diffuse.png"), 4, 8);
+		
 		GameObject cubeObject = new GameObject(new Vector3f(-2, 0, -2), new Quaternion());
-		cubeObject.addComponent(cubeMesh);
+		cubeObject.addComponent(new MeshRenderer(Primitive.SPHERE, diffuseMaterial));
 		addChild(cubeObject);
 		
-		Material cubeMaterial2 = new Material("box", new Texture("internal/default_diffuse.png"), 4, 8);
-		MeshRenderer cubeMesh2 = new MeshRenderer(Primitive.CUBE, cubeMaterial2);
 		GameObject cubeObject2 = new GameObject(new Vector3f(2, 0, 2), new Quaternion());
-		cubeObject2.addComponent(cubeMesh2);
+		cubeObject2.addComponent(new MeshRenderer(Primitive.CUBE, diffuseMaterial));
 		addChild(cubeObject2);
 	};
 	

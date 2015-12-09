@@ -34,7 +34,6 @@ import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.lighting.Light;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
-import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
@@ -46,11 +45,6 @@ import com.snakybo.sengine.utils.math.Matrix4f;
  * @since Apr 4, 2014 */
 public class RenderingEngine implements IDataContainer
 {
-	private static final int SAMPLER_LAYER_DIFFUSE = 0;
-	private static final int SAMPLER_LAYER_NORMAL_MAP = 1;
-	private static final int SAMPLER_LAYER_DISPLACEMENT_MAP = 2;
-	private static final int SAMPLER_LAYER_SHADOW_MAP = 3;
-
 	private static final Shader AMBIENT_SHADER = new Shader("internal/forward-rendering/forward-ambient");
 	private static final Shader SHADOW_MAP_SHADER = new Shader("internal/shadowMapGenerator");
 
@@ -75,10 +69,10 @@ public class RenderingEngine implements IDataContainer
 
 		shadowMapCamera = new Camera(new Matrix4f().initIdentity());
 
-		samplerMap.put(Material.DIFFUSE, SAMPLER_LAYER_DIFFUSE);
-		samplerMap.put(Material.NORMAL_MAP, SAMPLER_LAYER_NORMAL_MAP);
-		samplerMap.put(Material.DISP_MAP, SAMPLER_LAYER_DISPLACEMENT_MAP);
-		samplerMap.put(Material.SHADOW_MAP, SAMPLER_LAYER_SHADOW_MAP);
+		samplerMap.put("diffuse", 0);
+		samplerMap.put("normalMap", 1);
+		samplerMap.put("dispMap", 2);
+		samplerMap.put("shadowMap", 3);
 		
 		data.put("ambient", ambientColor);
 		data.put("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
