@@ -25,13 +25,10 @@ public class Test extends Game
 	{
 		Matrix4f cameraProjection = new Matrix4f().initPerspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
-		CameraComponent cameraComponent = new CameraComponent(cameraProjection, new Color(0, 0, 0));
 		camera.addComponent(new FreeLook(Window.getCenter()));
 		camera.addComponent(new FreeMove());
-		camera.addComponent(cameraComponent);
+		camera.addComponent(new CameraComponent(cameraProjection, new Color(0, 0, 0)).setAsMainCamera());
 		addChild(camera);
-		
-		cameraComponent.setAsMainCamera();
 		
 		DirectionalLight directionalLight = new DirectionalLight(new Color(1f, 1f, 1f), 0.1f);
 		GameObject directionalLightObject = new GameObject().addComponent(directionalLight);

@@ -54,9 +54,10 @@ public class Camera
 		cameras.add(this);
 	}
 	
-	public void setAsMainCamera()
+	public Camera setAsMainCamera()
 	{
 		setMainCamera(this);
+		return this;
 	}
 	
 	public void setProjection(Matrix4f projection)
@@ -143,9 +144,10 @@ public class Camera
 			camera.setTransform(parent.getTransform());
 		}
 		
-		public void setAsMainCamera()
+		public CameraComponent setAsMainCamera()
 		{
-			Camera.setMainCamera(camera);
+			camera.setAsMainCamera();
+			return this;
 		}
 		
 		public void setProjection(Matrix4f projection)
