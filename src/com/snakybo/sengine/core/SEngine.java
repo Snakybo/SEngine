@@ -85,9 +85,16 @@ public class SEngine
 			unprocessedTime += passedTime;
 			frameCounter += passedTime;
 
-			if (frameCounter >= 1.0)
+			if(frameCounter >= 1.0)
 			{
-				System.out.println(frames);
+				String windowTitle = Window.getTitle();				
+				if(windowTitle.contains("(FPS"))
+				{
+					windowTitle = windowTitle.substring(0, windowTitle.lastIndexOf("(FPS") - 1);
+				}
+				
+				Window.setTitle(windowTitle + " (FPS: " + frames + ")");
+				
 				frames = 0;
 				frameCounter = 0.0;
 			}
