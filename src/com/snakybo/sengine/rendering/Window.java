@@ -25,7 +25,7 @@ public abstract class Window
 			Keyboard.create();
 			Mouse.create();
 		}
-		catch (LWJGLException e)
+		catch(LWJGLException e)
 		{
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public abstract class Window
 		Keyboard.destroy();
 		Display.destroy();
 	}
-
+	
 	public static boolean isCloseRequested()
 	{
 		return Display.isCloseRequested();
@@ -57,6 +57,11 @@ public abstract class Window
 	public static boolean isCreated()
 	{
 		return Display.isCreated();
+	}
+	
+	public static void setTitle(String title)
+	{
+		Display.setTitle(title);
 	}
 	
 	public static int getWidth()
