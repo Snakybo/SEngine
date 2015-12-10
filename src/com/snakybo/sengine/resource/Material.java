@@ -3,6 +3,7 @@ package com.snakybo.sengine.resource;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.snakybo.sengine.texture.Texture;
 import com.snakybo.sengine.utils.IDataContainer;
 
 public class Material implements IDataContainer

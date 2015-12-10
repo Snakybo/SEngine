@@ -36,7 +36,8 @@ import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
-import com.snakybo.sengine.resource.Texture;
+import com.snakybo.sengine.skybox.SkyBox;
+import com.snakybo.sengine.texture.Texture;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
 /**
@@ -46,6 +47,8 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 public class RenderingEngine implements IRenderingEngine
 {
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
+	
+	private static SkyBox skyBoxRenderer;
 	
 	private Map<String, Integer> samplerMap;
 	private Map<String, Object> dataContainer;
@@ -85,6 +88,12 @@ public class RenderingEngine implements IRenderingEngine
 		{
 			renderLighting(obj, light);
 		}
+	}
+	
+	@Override
+	public void postRenderObjects()
+	{
+		renderSkyBox();
 	}
 	
 	@Override
@@ -155,6 +164,14 @@ public class RenderingEngine implements IRenderingEngine
 		glDisable(GL_BLEND);
 	}
 	
+	private void renderSkyBox()
+	{
+		if(skyBoxRenderer != null)
+		{
+			skyBoxRenderer.render(this);
+		}
+	}
+	
 	/**
 	 * Initialize OpenGL.
 	 */
@@ -184,5 +201,10 @@ public class RenderingEngine implements IRenderingEngine
 		}
 		
 		return type.cast(dataContainer.get(name));
+	}
+	
+	public static void setSkyBox(SkyBox skyBox)
+	{
+		skyBoxRenderer = skyBox;
 	}
 }

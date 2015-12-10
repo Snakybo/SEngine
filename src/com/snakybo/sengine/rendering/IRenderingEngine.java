@@ -15,6 +15,8 @@ public interface IRenderingEngine extends IDataContainer
 	 */
 	void render(GameObject obj);
 	
+	void postRenderObjects();
+	
 	/**
 	 * Get the sampler slot of a texture.
 	 * @param samplerName The name of the sampler.

@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource;
+package com.snakybo.sengine.texture;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_NONE;
@@ -7,22 +7,14 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-
 import com.snakybo.sengine.resource.management.TextureData;
-import com.snakybo.sengine.utils.Buffer;
 
 public class Texture
 {
-	private static final String TEXTURE_FOLDER = "./res/textures/";
-	
 	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();	
 	
 	private TextureData resource;
@@ -175,40 +167,9 @@ public class Texture
 
 	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
-		try
-		{
-			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
-			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
-
-			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
-
-			boolean hasAlpha = image.getColorModel().hasAlpha();
-
-			// Put each pixel in a Byte Buffer
-			for(int y = 0; y < image.getHeight(); y++)
-			{
-				for(int x = 0; x < image.getWidth(); x++)
-				{
-					int pixel = pixels[y * image.getWidth() + x];
-
-					byte alphaByte = hasAlpha ? (byte) ((pixel >> 24) & 0xFF) : (byte) (0xFF);
-
-					data.put((byte) ((pixel >> 16) & 0xFF));
-					data.put((byte) ((pixel >> 8) & 0xFF));
-					data.put((byte) ((pixel) & 0xFF));
-					data.put(alphaByte);
-				}
-			}
-
-			data.flip();
-
-			resource = new TextureData(textureTarget, image.getWidth(), image.getHeight(), 1, data, filters, internalFormat, format, clamp, attachments);
-
-			resourceMap.put(fileName, resource);
-		}
-		catch(IOException e)
-		{
-			System.err.println("Failed to load texture: " + fileName + " doesn't exist");
-		}
+		OpenGLTexture texture = new OpenGLTexture(fileName);
+			
+		resource = new TextureData(textureTarget, texture.getWidth(), texture.getHeight(), 1, texture.getData(), filters, internalFormat, format, clamp, attachments);
+		resourceMap.put(fileName, resource);
 	}
 }

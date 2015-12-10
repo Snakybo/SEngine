@@ -9,10 +9,12 @@ import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Primitive;
-import com.snakybo.sengine.resource.Texture;
+import com.snakybo.sengine.skybox.SkyBox;
+import com.snakybo.sengine.texture.Texture;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Quaternion;
@@ -47,6 +49,9 @@ public class Test extends Game
 		GameObject cubeObject2 = new GameObject(new Vector3f(2, 0, 2), new Quaternion());
 		cubeObject2.addComponent(new MeshRenderer(Primitive.CUBE, diffuseMaterial));
 		addChild(cubeObject2);
+		
+		SkyBox skyBox = new SkyBox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
+		RenderingEngine.setSkyBox(skyBox);
 	};
 	
 	public static void main(String[] args)

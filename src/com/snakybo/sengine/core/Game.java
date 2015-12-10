@@ -45,6 +45,7 @@ public abstract class Game
 	final void render(RenderingEngine renderingEngine)
 	{
 		renderingEngine.render(root);
+		renderingEngine.postRenderObjects();
 	}
 
 	/** Add a game object to the scene
