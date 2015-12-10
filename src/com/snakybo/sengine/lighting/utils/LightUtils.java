@@ -1,5 +1,6 @@
-package com.snakybo.sengine.components.lighting;
+package com.snakybo.sengine.lighting.utils;
 
+import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
 /**

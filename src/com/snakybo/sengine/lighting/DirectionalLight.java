@@ -1,4 +1,4 @@
-package com.snakybo.sengine.components.lighting;
+package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;

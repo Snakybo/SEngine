@@ -1,8 +1,6 @@
-package com.snakybo.sengine.components.lighting;
+package com.snakybo.sengine.lighting.utils;
 
 import com.snakybo.sengine.utils.math.Vector3f;
-
-// TODO: Write proper JavaDocs for the meaning of attenuation values
 
 /** The attenuation class, this class holds information about lighting values *
  * @author Kevin

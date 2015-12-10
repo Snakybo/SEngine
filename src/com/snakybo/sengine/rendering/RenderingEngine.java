@@ -31,10 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.lighting.AmbientLight;
-import com.snakybo.sengine.components.lighting.Light;
-import com.snakybo.sengine.components.lighting.LightUtils;
 import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.lighting.AmbientLight;
+import com.snakybo.sengine.lighting.Light;
+import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.resource.Texture;
 import com.snakybo.sengine.utils.math.Matrix4f;

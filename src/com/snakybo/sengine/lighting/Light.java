@@ -1,4 +1,4 @@
-package com.snakybo.sengine.components.lighting;
+package com.snakybo.sengine.lighting;
 
 import java.util.ArrayList;
 import java.util.List;

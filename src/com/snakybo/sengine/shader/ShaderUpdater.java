@@ -1,11 +1,11 @@
 package com.snakybo.sengine.shader;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.components.lighting.DirectionalLight;
-import com.snakybo.sengine.components.lighting.LightUtils;
-import com.snakybo.sengine.components.lighting.PointLight;
-import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.lighting.DirectionalLight;
+import com.snakybo.sengine.lighting.PointLight;
+import com.snakybo.sengine.lighting.SpotLight;
+import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Texture;
