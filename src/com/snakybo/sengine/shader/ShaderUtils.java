@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
+ * A collection of shader utilities.
  * @author Kevin
  * @since Dec 8, 2015
  */

@@ -1,6 +1,5 @@
 package com.snakybo.sengine.components.lighting;
 
-import com.snakybo.sengine.rendering.Attenuation;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.math.Vector3f;

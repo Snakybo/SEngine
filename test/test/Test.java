@@ -4,11 +4,11 @@ import com.snakybo.sengine.components.Camera.CameraComponent;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
+import com.snakybo.sengine.components.lighting.AmbientLight;
 import com.snakybo.sengine.components.lighting.DirectionalLight;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.Material;
 import com.snakybo.sengine.resource.Primitive;
@@ -52,7 +52,7 @@ public class Test extends Game
 	public static void main(String[] args)
 	{
 		Window.create(1280, 720, "Test");
-		RenderingEngine.setAmbientColor(new Color(0.3f, 0.3f, 0.3f));
+		AmbientLight.setAmbientColor(new Color(0.3f, 0.3f, 0.3f));
 		
 		SEngine engine = new SEngine(new Test());
 		engine.start(60);

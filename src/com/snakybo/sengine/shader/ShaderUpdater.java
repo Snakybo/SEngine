@@ -2,6 +2,7 @@ package com.snakybo.sengine.shader;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.lighting.DirectionalLight;
+import com.snakybo.sengine.components.lighting.LightUtils;
 import com.snakybo.sengine.components.lighting.PointLight;
 import com.snakybo.sengine.components.lighting.SpotLight;
 import com.snakybo.sengine.core.object.Transform;
@@ -44,11 +45,11 @@ public abstract class ShaderUpdater
 				
 				if(unprefixedName.equals("lightMatrix"))
 				{
-					shader.setUniform(name, renderingEngine.getLightMatrix().mul(worldMatrix));
+					shader.setUniform(name, LightUtils.getCurrentLightMatrix().mul(worldMatrix));
 				}
 				else if(type.equals("sampler2D"))
 				{
-					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
+					int samplerSlot = renderingEngine.getTextureSamplerSlot(unprefixedName);
 
 					renderingEngine.get(Texture.class, unprefixedName).bind(samplerSlot);
 					shader.setUniformi(name, samplerSlot);
@@ -63,15 +64,15 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("DirectionalLight"))
 				{
-					setUniform(shader, name, (DirectionalLight)renderingEngine.getActiveLight());
+					setUniform(shader, name, (DirectionalLight)LightUtils.getCurrentLight());
 				}
 				else if(type.equals("PointLight"))
 				{
-					setUniform(shader, name, (PointLight)renderingEngine.getActiveLight());
+					setUniform(shader, name, (PointLight)LightUtils.getCurrentLight());
 				}
 				else if(type.equals("SpotLight"))
 				{
-					setUniform(shader, name, (SpotLight)renderingEngine.getActiveLight());
+					setUniform(shader, name, (SpotLight)LightUtils.getCurrentLight());
 				}
 				else
 				{
@@ -80,7 +81,7 @@ public abstract class ShaderUpdater
 			}
 			else if(type.startsWith("sampler2D"))
 			{
-				int samplerSlot = renderingEngine.getSamplerSlot(name);
+				int samplerSlot = renderingEngine.getTextureSamplerSlot(name);
 				material.get(Texture.class, name).bind(samplerSlot);
 				shader.setUniformi(name, samplerSlot);
 			}

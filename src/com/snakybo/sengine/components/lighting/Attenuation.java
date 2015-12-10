@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering;
+package com.snakybo.sengine.components.lighting;
 
 import com.snakybo.sengine.utils.math.Vector3f;
 

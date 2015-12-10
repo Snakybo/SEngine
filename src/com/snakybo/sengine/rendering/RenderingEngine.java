@@ -31,113 +31,134 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snakybo.sengine.components.Camera;
+import com.snakybo.sengine.components.lighting.AmbientLight;
 import com.snakybo.sengine.components.lighting.Light;
+import com.snakybo.sengine.components.lighting.LightUtils;
 import com.snakybo.sengine.core.object.GameObject;
-import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.resource.Texture;
-import com.snakybo.sengine.shader.Shader;
-import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.IDataContainer;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
-/** The rendering engine, this is the main renderer in the engine
+/**
  * @author Kevin
- * @since Apr 4, 2014 */
-public class RenderingEngine implements IDataContainer
+ * @since Apr 4, 2014
+ */
+public class RenderingEngine implements IRenderingEngine
 {
-	private static final Shader AMBIENT_SHADER = new Shader("internal/forward-rendering/forward-ambient");
-	private static final Shader SHADOW_MAP_SHADER = new Shader("internal/shadowMapGenerator");
-
-	private static final Matrix4f biasMatrix = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
+	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
 	
-	private static Color ambientColor;
-
 	private Map<String, Integer> samplerMap;
-	private Map<String, Object> data;
-	
-	private Light activeLight;
+	private Map<String, Object> dataContainer;
 	
 	private Camera shadowMapCamera;
-	private Matrix4f lightMatrix;
-
-	/** Constructor for the rendering engine
-	 * @param window The window the rendering engine should render in */
+	
 	public RenderingEngine()
 	{
 		samplerMap = new HashMap<String, Integer>();
-		data = new HashMap<String, Object>();
-
-		shadowMapCamera = new Camera(new Matrix4f().initIdentity());
-
 		samplerMap.put("diffuse", 0);
 		samplerMap.put("normalMap", 1);
 		samplerMap.put("dispMap", 2);
 		samplerMap.put("shadowMap", 3);
 		
-		data.put("ambient", ambientColor);
-		data.put("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
-
-		initOpenGl();
+		dataContainer = new HashMap<String, Object>();
+		dataContainer.put("ambient", AmbientLight.getAmbientColor());
+		dataContainer.put("shadowMap", new Texture(1024, 1024, null, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT));
+		
+		shadowMapCamera = new Camera(new Matrix4f().initIdentity());
+		
+		initializeGL();
 	}
-
-	/** Render the object passed in, calls {@link #renderLighting(GameObject)}
-	 * when the object has been rendered using the ambient shader
-	 * @param object The object to render */
-	public void render(GameObject object)
+	
+	@Override
+	public void render(GameObject obj)
 	{
+		Camera mainCamera = Camera.getMainCamera();	
+		
 		Window.bindAsRenderTarget();
-
-		Camera mainCamera = Camera.getMainCamera();		
+		
 		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		object.renderAll(this, AMBIENT_SHADER);
-
+		obj.renderAll(this, AmbientLight.getAmbientShader());
+		
 		for(Light light : Light.getLights())
 		{
-			activeLight = light;
-			ShadowInfo shadowInfo = activeLight.getShadowInfo();
-
-			// Render the shadows
-			get(Texture.class, "shadowMap").bindAsRenderTarget();
-			glClear(GL_DEPTH_BUFFER_BIT);
-
-			if(shadowInfo != null)
-			{
-				shadowMapCamera.setProjection(shadowInfo.getProjection());
-				shadowMapCamera.getTransform().getPosition().set(activeLight.getTransform().getPosition());
-				shadowMapCamera.getTransform().setRotation(activeLight.getTransform().getRotation());
-
-				lightMatrix = biasMatrix.mul(shadowMapCamera.getViewProjection());
-
-				Camera tempCamera = mainCamera;
-				Camera.setMainCamera(shadowMapCamera);
-
-				glCullFace(GL_FRONT);
-				object.renderAll(this, SHADOW_MAP_SHADER);
-				glCullFace(GL_BACK);
-
-				Camera.setMainCamera(tempCamera);
-			}
-
-			// Render the lighting
-			Window.bindAsRenderTarget();
-
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_ONE, GL_ONE);
-			glDepthMask(false);
-			glDepthFunc(GL_EQUAL);
-
-			object.renderAll(this, light.getShader());
-
-			glDepthMask(true);
-			glDepthFunc(GL_LESS);
-			glDisable(GL_BLEND);
+			renderLighting(obj, light);
 		}
 	}
+	
+	@Override
+	public int getTextureSamplerSlot(String samplerName)
+	{
+		if(samplerMap.containsKey(samplerName))
+		{
+			return samplerMap.get(samplerName);
+		}
+		
+		throw new IllegalArgumentException("[RenderingEngine] No texture sampler slot found for sampler with name: " + samplerName);
+	}
+	
+	/**
+	 * Render the shadows of an object.
+	 * @param obj The object to render.
+	 * @param light The current light.
+	 * @param shadowInfo The shadow info of the object.
+	 */
+	private void renderShadow(GameObject obj, Light light, ShadowInfo shadowInfo)
+	{
+		get(Texture.class, "shadowMap").bindAsRenderTarget();
+		
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-	/** Initialize OpenGL */
-	private final void initOpenGl()
+		if(shadowInfo != null)
+		{
+			shadowMapCamera.setProjection(shadowInfo.getProjection());
+			shadowMapCamera.getTransform().getPosition().set(light.getTransform().getPosition());
+			shadowMapCamera.getTransform().setRotation(light.getTransform().getRotation());
+
+			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(shadowMapCamera.getViewProjection()));
+
+			Camera tempCamera = Camera.getMainCamera();
+			Camera.setMainCamera(shadowMapCamera);
+
+			glCullFace(GL_FRONT);
+			obj.renderAll(this, ShadowMapUtils.getShadowMapShader());
+			glCullFace(GL_BACK);
+
+			Camera.setMainCamera(tempCamera);
+		}
+	}
+	
+	/**
+	 * Render the lighting of an object.
+	 * @param obj The object to render.
+	 * @param light The current light.
+	 */
+	private void renderLighting(GameObject obj, Light light)
+	{
+		LightUtils.setCurrentLight(light);
+		ShadowInfo shadowInfo = light.getShadowInfo();
+		
+		renderShadow(obj, light, shadowInfo);
+		
+		Window.bindAsRenderTarget();
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		glDepthMask(false);
+		glDepthFunc(GL_EQUAL);
+
+		obj.renderAll(this, light.getShader());
+
+		glDepthMask(true);
+		glDepthFunc(GL_LESS);
+		glDisable(GL_BLEND);
+	}
+	
+	/**
+	 * Initialize OpenGL.
+	 */
+	private void initializeGL()
 	{
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);
@@ -147,45 +168,21 @@ public class RenderingEngine implements IDataContainer
 		glEnable(GL_DEPTH_CLAMP);
 		glEnable(GL_TEXTURE_2D);
 	}
-	
+
 	@Override
 	public void set(String name, Object value)
 	{
-		data.put(name, value);
+		dataContainer.put(name, value);
 	}
-	
+
 	@Override
-	public <T extends Object> T get(Class<T> type, String name)
+	public <T> T get(Class<T> type, String name)
 	{
-		if(!data.containsKey(name))
+		if(!dataContainer.containsKey(name))
 		{
-			throw new IllegalArgumentException("No data with the name: " + name + " found.");
+			throw new IllegalArgumentException("[RenderingEngine] No data with the name: " + name + " found.");
 		}
 		
-		return type.cast(data.get(name));
-	}
-	
-	public final static void setAmbientColor(Color color)
-	{
-		ambientColor =  color;
-	}
-
-	/** @return The element in the sampler map with the name passed in
-	 * @param samplerName The name of the sampler slot */
-	public final int getSamplerSlot(String samplerName)
-	{
-		return samplerMap.get(samplerName);
-	}
-
-	/** @return The active light, this changes depending on which light is
-	 *         currently being used to render an object */
-	public final Light getActiveLight()
-	{
-		return activeLight;
-	}
-
-	public final Matrix4f getLightMatrix()
-	{
-		return lightMatrix;
+		return type.cast(dataContainer.get(name));
 	}
 }

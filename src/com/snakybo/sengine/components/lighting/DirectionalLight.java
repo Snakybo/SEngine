@@ -1,6 +1,6 @@
 package com.snakybo.sengine.components.lighting;
 
-import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.math.Matrix4f;

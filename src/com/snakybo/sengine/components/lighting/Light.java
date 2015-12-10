@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.ShadowMap.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
