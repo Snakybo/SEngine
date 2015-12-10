@@ -1,8 +1,8 @@
 #include "internal/common.glh"
 
-varying vec2 texCoord0;
-
 #if defined(VS_BUILD)
+
+out vec2 texCoord0;
 
 attribute vec3 position;
 attribute vec2 texCoord;
@@ -15,6 +15,8 @@ void main() {
 }
 
 #elif defined(FS_BUILD)
+
+in vec2 texCoord0;
 
 uniform sampler2D diffuse;
 

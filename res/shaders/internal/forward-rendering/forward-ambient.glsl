@@ -1,10 +1,10 @@
 #include "internal/common.glh"
 
-varying vec2 texCoord0;
-varying vec3 worldPos0;
-varying mat3 tbnMatrix;
-
 #if defined(VS_BUILD)
+
+out vec2 texCoord0;
+out vec3 worldPos0;
+out mat3 tbnMatrix;
 
 attribute vec3 position;
 attribute vec2 texCoord;
@@ -30,6 +30,10 @@ void main() {
 #elif defined(FS_BUILD)
 
 #include "internal/sampling.glh"
+
+in vec2 texCoord0;
+in vec3 worldPos0;
+in mat3 tbnMatrix;
 
 uniform vec3 R_ambient;
 uniform vec3 C_eyePos;
