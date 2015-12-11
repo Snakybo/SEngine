@@ -70,7 +70,7 @@ public class SEngine
 	{
 		int frames = 0;
 
-		double lastTime = Time.getTime();
+		double lastTime = Time.getCurrentTime();
 		double unprocessedTime = 0.0;
 		double frameCounter = 0.0;
 
@@ -78,7 +78,7 @@ public class SEngine
 		{
 			boolean render = false;
 
-			double startTime = Time.getTime();
+			double startTime = Time.getCurrentTime();
 			double passedTime = startTime - lastTime;
 			lastTime = startTime;
 

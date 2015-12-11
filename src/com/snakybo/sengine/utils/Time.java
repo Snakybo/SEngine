@@ -1,11 +1,16 @@
 package com.snakybo.sengine.utils;
 
+import org.lwjgl.glfw.GLFW;
+
 public class Time
 {
-	private static final long SECOND = 1000000000L;
-
-	public static double getTime()
+	public static double getCurrentTime()
 	{
-		return (double)System.nanoTime() / (double)SECOND;
+		return GLFW.glfwGetTime();
+	}
+	
+	public static double getCurrentTimeMillis()
+	{
+		return getCurrentTime() * 1000;
 	}
 }

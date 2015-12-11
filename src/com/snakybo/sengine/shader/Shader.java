@@ -17,7 +17,7 @@ import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUniform2f;
 import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
@@ -29,8 +29,8 @@ import java.util.Map;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.Material;
-import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
+import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.utils.Buffer;
 import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector2f;
@@ -376,7 +376,7 @@ public class Shader
 	 */
 	public final void setUniform(String name, Matrix4f value)
 	{
-		glUniformMatrix4(uniformLookup.get(name), true, Buffer.createFlippedBuffer(value));
+		glUniformMatrix4fv(uniformLookup.get(name), true, Buffer.createFlippedBuffer(value));
 	}
 	
 	/**
