@@ -26,7 +26,7 @@ public class SpotLight extends PointLight
 
 		this.cutoff = cutoff;
 
-		setShader(new Shader("internal/forward-rendering/forward-spot"));
+		setShader(new Shader("internal/forward-spot"));
 	}
 
 	/** Set the range at which the light should cut off

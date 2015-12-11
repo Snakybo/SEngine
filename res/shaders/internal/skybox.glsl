@@ -8,7 +8,8 @@ attribute vec3 position;
 
 uniform mat4 T_MVP;
 
-void main() {
+void main()
+{
 	gl_Position = T_MVP * vec4(position, 1.0);
 	texCoord0 = position; 
 }
@@ -20,7 +21,8 @@ in vec3 texCoord0;
 uniform samplerCube R_skyBoxTexture;
 
 DeclareFragOutput(0, vec4);
-void main() {
+void main()
+{
 	SetFragOutput(0, texture(R_skyBoxTexture, texCoord0));
 }
 #endif

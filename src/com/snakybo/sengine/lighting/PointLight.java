@@ -34,7 +34,7 @@ public class PointLight extends Light
 
 		this.range = (float) ((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
 
-		setShader(new Shader("internal/forward-rendering/forward-point"));
+		setShader(new Shader("internal/forward-point"));
 	}
 
 	/** Set the range of the light

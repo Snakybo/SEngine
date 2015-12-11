@@ -14,7 +14,8 @@ attribute vec3 tangent;
 uniform mat4 T_model;
 uniform mat4 T_MVP;
 
-void main() {
+void main()
+{
 	gl_Position = T_MVP * vec4(position, 1.0);
 	texCoord0 = texCoord; 
 	worldPos0 = (T_model * vec4(position, 1.0)).xyz;
@@ -45,7 +46,8 @@ uniform float dispMapScale;
 uniform float dispMapBias;
 
 DeclareFragOutput(0, vec4);
-void main() {
+void main()
+{
 	vec3 directionToEye = normalize(C_eyePos - worldPos0);
 	vec2 texCoords = CalcParallaxTexCoords(dispMap, tbnMatrix, directionToEye, texCoord0, dispMapScale, dispMapBias);
 	

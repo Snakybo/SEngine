@@ -23,7 +23,7 @@ import com.snakybo.sengine.utils.math.Vector3f;
  */
 public class SkyBox
 {
-	private static final String SKYBOX_SHADER_NAME = "internal/skybox/skybox";
+	private static final String SKYBOX_SHADER_NAME = "internal/skybox";
 	
 	private Transform transform;
 	private CubeMap cubeMap;

@@ -12,7 +12,7 @@ import com.snakybo.sengine.utils.Color;
  */
 public abstract class AmbientLight
 {
-	private static final String AMBIENT_SHADER_NAME = "internal/forward-rendering/forward-ambient";
+	private static final String AMBIENT_SHADER_NAME = "internal/forward-ambient";
 	
 	private static Color ambientColor;
 	private static Shader ambientShader;

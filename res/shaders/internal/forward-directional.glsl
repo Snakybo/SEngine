@@ -7,7 +7,7 @@ out vec3 worldPos0;
 out vec4 shadowMapCoords0;
 out mat3 tbnMatrix;
 
-#include "internal/forward-rendering/forwardlighting.vsh"
+#include "internal/forwardlighting.glsl"
 
 #elif defined(FS_BUILD)
 
@@ -24,7 +24,8 @@ uniform float specularPower;
 
 uniform DirectionalLight R_directionalLight;
 
-vec4 CalcLightingEffect(vec3 normal, vec3 worldPos) {
+vec4 CalcLightingEffect(vec3 normal, vec3 worldPos)
+{
 	return CalcLight(R_directionalLight.baseLight, -R_directionalLight.direction, normal, worldPos, specularIntensity, specularPower, C_eyePos);
 }
 

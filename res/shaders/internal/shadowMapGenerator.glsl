@@ -6,14 +6,16 @@ attribute vec3 position;
 
 uniform mat4 T_MVP;
 
-void main() {
+void main()
+{
 	gl_Position = T_MVP * vec4(position, 1.0);
 }
 
 #elif defined(FS_BUILD)
 
 DeclareFragOutput(0, vec4);
-void main() {
+void main()
+{
 	SetFragOutput(0, vec4(gl_FragCoord.z));
 }
 
