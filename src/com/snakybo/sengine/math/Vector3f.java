@@ -1,5 +1,9 @@
 package com.snakybo.sengine.math;
 
+/**
+ * @author Kevin
+ * @since Dec 12, 2015
+ */
 public class Vector3f
 {
 	public float x;
