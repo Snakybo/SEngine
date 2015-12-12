@@ -30,7 +30,7 @@ public class FreeMove extends Component
 	 * @see #FreeMove(float) */
 	public FreeMove()
 	{
-		this(10.0f);
+		this(10);
 	}
 
 	/** Constructor for the component

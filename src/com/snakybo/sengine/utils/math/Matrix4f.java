@@ -153,12 +153,12 @@ public class Matrix4f
 		float tanHalfFOV = (float) Math.tan(fov / 2);
 		float zRange = zNear - zFar;
 
-		m[0][0] = 1.0f / (tanHalfFOV * aspectRatio);
+		m[0][0] = 1f / (tanHalfFOV * aspectRatio);
 		m[0][1] = 0;
 		m[0][2] = 0;
 		m[0][3] = 0;
 		m[1][0] = 0;
-		m[1][1] = 1.0f / tanHalfFOV;
+		m[1][1] = 1f / tanHalfFOV;
 		m[1][2] = 0;
 		m[1][3] = 0;
 		m[2][0] = 0;

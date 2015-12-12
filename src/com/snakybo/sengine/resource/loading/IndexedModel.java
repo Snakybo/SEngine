@@ -52,7 +52,7 @@ public class IndexedModel
 
 		for(int i = 0; i < positions.size(); i++)
 		{
-			texCoords.add(new Vector2f(0.0f, 0.0f));
+			texCoords.add(new Vector2f(0, 0));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class IndexedModel
 
 		for(int i = 0; i < positions.size(); i++)
 		{
-			normals.add(new Vector3f(0.0f, 0.0f, 0.0f));
+			normals.add(new Vector3f(0, 0, 0));
 		}
 
 		for(int i = 0; i < indices.size(); i += 3)
@@ -93,7 +93,7 @@ public class IndexedModel
 
 		for(int i = 0; i < positions.size(); i++)
 		{
-			tangents.add(new Vector3f(0.0f, 0.0f, 0.0f));
+			tangents.add(new Vector3f(0, 0, 0));
 		}
 
 		for(int i = 0; i < indices.size(); i += 3)
@@ -111,7 +111,7 @@ public class IndexedModel
 			float deltaV2 = texCoords.get(i2).y - texCoords.get(i0).y;
 
 			float dividend = deltaU1 * deltaV2 - deltaU2 * deltaV1;
-			float f = dividend == 0 ? 0.0f : 1.0f / dividend;
+			float f = dividend == 0 ? 0 : 1 / dividend;
 
 			Vector3f tangent = new Vector3f();
 			tangent.x = f * (deltaV2 * edge1.x - deltaV1 * edge2.x);

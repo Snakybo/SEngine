@@ -156,8 +156,8 @@ public class TextureData implements IReferenceCounter
 			{
 				glGenerateMipmap(textureTarget);
 
-				float maxAnisotropic = MathUtils.clamp(glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0.0f, 8.0f);
-				assert (maxAnisotropic >= 0.0f && maxAnisotropic <= 8.0f);
+				float maxAnisotropic = MathUtils.clamp(glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0f, 8f);
+				assert (maxAnisotropic >= 0 && maxAnisotropic <= 8);
 
 				glTexParameterf(textureTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropic);
 			}

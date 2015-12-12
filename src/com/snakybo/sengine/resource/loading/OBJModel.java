@@ -120,8 +120,8 @@ public class OBJModel implements IModel
 			OBJIndex currentIndex = indices.get(i);
 
 			Vector3f currentPosition = positions.get(currentIndex.vertex);
-			Vector2f currentTexCoord = hasTexCoords ? texCoords.get(currentIndex.texCoord) : new Vector2f(0.0f, 0.0f);
-			Vector3f currentNormal = hasNormals ? normals.get(currentIndex.normal) : new Vector3f(0.0f, 0.0f, 0.0f);
+			Vector2f currentTexCoord = hasTexCoords ? texCoords.get(currentIndex.texCoord) : new Vector2f(0, 0);
+			Vector3f currentNormal = hasNormals ? normals.get(currentIndex.normal) : new Vector3f(0, 0, 0);
 
 			Integer modelVertexIndex = resultIndexMap.get(currentIndex);
 
@@ -138,7 +138,7 @@ public class OBJModel implements IModel
 					model.addNormal(currentNormal);
 				}
 
-				model.addTangent(new Vector3f(0.0f, 0.0f, 0.0f));
+				model.addTangent(new Vector3f(0, 0, 0));
 			}
 
 			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertex);
@@ -151,7 +151,7 @@ public class OBJModel implements IModel
 				normalModel.addVertex(currentPosition);
 				normalModel.addTexCoord(currentTexCoord);
 				normalModel.addNormal(currentNormal);
-				normalModel.addTangent(new Vector3f(0.0f, 0.0f, 0.0f));
+				normalModel.addTangent(new Vector3f(0, 0, 0));
 			}
 
 			model.addIndex(modelVertexIndex);

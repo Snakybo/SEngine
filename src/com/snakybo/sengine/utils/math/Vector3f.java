@@ -8,17 +8,17 @@ public class Vector3f
 
 	public Vector3f()
 	{
-		this(0.0f);
+		this(0);
 	}
 
 	public Vector3f(float x)
 	{
-		this(x, 0.0f);
+		this(x, 0);
 	}
 
 	public Vector3f(float x, float y)
 	{
-		this(x, y, 0.0f);
+		this(x, y, 0);
 	}
 
 	public Vector3f(float x, float y, float z)

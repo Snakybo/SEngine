@@ -8,7 +8,7 @@ import com.snakybo.sengine.utils.math.Vector3f;
 public class Attenuation extends Vector3f
 {
 	/** Constructor for the attenuation This constructor calls
-	 * {@link #Attenuation(float)} with the parameter {@code 0.0f}
+	 * {@link #Attenuation(float)} with the parameter {@code 0}
 	 * @see #Attenuation(float) */
 	public Attenuation()
 	{
@@ -16,7 +16,7 @@ public class Attenuation extends Vector3f
 	}
 
 	/** Constructor for the attenuation This constructor calls
-	 * {@link #Attenuation(float, float)} with the parameter {@code 0.0f}
+	 * {@link #Attenuation(float, float)} with the parameter {@code 0}
 	 * @param constant The constant value
 	 * @see #Attenuation(float, float) */
 	public Attenuation(float constant)
@@ -25,13 +25,13 @@ public class Attenuation extends Vector3f
 	}
 
 	/** Constructor for the attenuation This constructor calls
-	 * {@link #Attenuation(float, float, float)} with the parameter {@code 1.0f}
+	 * {@link #Attenuation(float, float, float)} with the parameter {@code 1}
 	 * @param constant The constant value
 	 * @param linear The linear value
 	 * @see #Attenuation(float, float, float) */
 	public Attenuation(float constant, float linear)
 	{
-		this(constant, linear, 1.0f);
+		this(constant, linear, 1);
 	}
 
 	/** Constructor for the attenuation

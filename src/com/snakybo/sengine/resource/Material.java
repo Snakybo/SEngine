@@ -36,7 +36,7 @@ public class Material implements IDataContainer
 		set("specularIntensity", specularIntensity);
 		set("specularPower", specularPower);
 		
-		float baseBias = dispMapScale / 2.0f;
+		float baseBias = dispMapScale / 2f;
 		set("dispMapScale", dispMapScale);
 		set("dispMapBias", -baseBias + baseBias * dispMapOffset);
 	}
