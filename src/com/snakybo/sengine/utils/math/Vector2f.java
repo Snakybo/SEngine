@@ -28,7 +28,7 @@ public class Vector2f
 
 	public float length()
 	{
-		return (float) Math.sqrt(x * x + y * y);
+		return (float)Math.sqrt(x * x + y * y);
 	}
 
 	public float max()
@@ -64,7 +64,7 @@ public class Vector2f
 		double cos = Math.cos(rad);
 		double sin = Math.sin(rad);
 
-		return new Vector2f((float) (x * cos - y * sin), (float) (x * sin + y * cos));
+		return new Vector2f((float)(x * cos - y * sin), (float)(x * sin + y * cos));
 	}
 
 	public Vector2f add(Vector2f r)

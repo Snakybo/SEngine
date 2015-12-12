@@ -35,7 +35,7 @@ public class Vector3f
 
 	public float length()
 	{
-		return (float) Math.sqrt(x * x + y * y + z * z);
+		return (float)Math.sqrt(x * x + y * y + z * z);
 	}
 
 	public float max()
@@ -66,8 +66,8 @@ public class Vector3f
 
 	public Vector3f rotate(Vector3f axis, float angle)
 	{
-		float sinAngle = (float) Math.sin(-angle);
-		float cosAngle = (float) Math.cos(-angle);
+		float sinAngle = (float)Math.sin(-angle);
+		float cosAngle = (float)Math.cos(-angle);
 
 		return this.cross(axis.mul(sinAngle)).add( // Rotation on local X
 				(this.mul(cosAngle)).add( // Rotation on local Z

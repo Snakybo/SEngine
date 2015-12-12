@@ -104,6 +104,6 @@ public class FreeLook extends Component
 	 * @param amount The amount of degrees to rotate the camera */
 	private void rotate(Vector3f axis, float amount)
 	{
-		getTransform().rotate(axis, (float) Math.toRadians(-amount * sensitivity));
+		getTransform().rotate(axis, (float)Math.toRadians(-amount * sensitivity));
 	}
 }

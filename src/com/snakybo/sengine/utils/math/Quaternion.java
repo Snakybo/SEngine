@@ -45,7 +45,7 @@ public class Quaternion
 
 		if(trace > 0)
 		{
-			float s = 0.5f / (float) Math.sqrt(trace + 1);
+			float s = 0.5f / (float)Math.sqrt(trace + 1);
 			w = 0.25f / s;
 			x = (rotation.get(1, 2) - rotation.get(2, 1)) * s;
 			y = (rotation.get(2, 0) - rotation.get(0, 2)) * s;
@@ -55,7 +55,7 @@ public class Quaternion
 		{
 			if(rotation.get(0, 0) > rotation.get(1, 1) && rotation.get(0, 0) > rotation.get(2, 2))
 			{
-				float s = 2 * (float) Math.sqrt(1 + rotation.get(0, 0) - rotation.get(1, 1) - rotation.get(2, 2));
+				float s = 2 * (float)Math.sqrt(1 + rotation.get(0, 0) - rotation.get(1, 1) - rotation.get(2, 2));
 				w = (rotation.get(1, 2) - rotation.get(2, 1)) / s;
 				x = 0.25f * s;
 				y = (rotation.get(1, 0) + rotation.get(0, 1)) / s;
@@ -63,7 +63,7 @@ public class Quaternion
 			}
 			else if (rotation.get(1, 1) > rotation.get(2, 2))
 			{
-				float s = 2 * (float) Math.sqrt(1 + rotation.get(1, 1) - rotation.get(0, 0) - rotation.get(2, 2));
+				float s = 2 * (float)Math.sqrt(1 + rotation.get(1, 1) - rotation.get(0, 0) - rotation.get(2, 2));
 				w = (rotation.get(2, 0) - rotation.get(0, 2)) / s;
 				x = (rotation.get(1, 0) + rotation.get(0, 1)) / s;
 				y = 0.25f * s;
@@ -71,7 +71,7 @@ public class Quaternion
 			}
 			else
 			{
-				float s = 2 * (float) Math.sqrt(1 + rotation.get(2, 2) - rotation.get(0, 0) - rotation.get(1, 1));
+				float s = 2 * (float)Math.sqrt(1 + rotation.get(2, 2) - rotation.get(0, 0) - rotation.get(1, 1));
 				w = (rotation.get(0, 1) - rotation.get(1, 0)) / s;
 				x = (rotation.get(2, 0) + rotation.get(0, 2)) / s;
 				y = (rotation.get(1, 2) + rotation.get(2, 1)) / s;
@@ -79,7 +79,7 @@ public class Quaternion
 			}
 		}
 
-		float length = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+		float length = (float)Math.sqrt(x * x + y * y + z * z + w * w);
 		x /= length;
 		y /= length;
 		z /= length;
@@ -88,8 +88,8 @@ public class Quaternion
 
 	public Quaternion(Vector3f axis, float angle)
 	{
-		float sinHalfAngle = (float) Math.sin(angle / 2);
-		float cosHalfAngle = (float) Math.cos(angle / 2);
+		float sinHalfAngle = (float)Math.sin(angle / 2);
+		float cosHalfAngle = (float)Math.cos(angle / 2);
 
 		this.x = axis.x * sinHalfAngle;
 		this.y = axis.y * sinHalfAngle;
@@ -208,7 +208,7 @@ public class Quaternion
 	
 	public final float length()
 	{
-		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
+		return (float)Math.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	public final float dot(Quaternion r)
@@ -246,12 +246,12 @@ public class Quaternion
 			return nlerp(correctedDest, lerpFactor, false);
 		}
 
-		float sin = (float) Math.sqrt(1 - cos * cos);
-		float angle = (float) Math.atan2(sin, cos);
+		float sin = (float)Math.sqrt(1 - cos * cos);
+		float angle = (float)Math.atan2(sin, cos);
 		float invSin = 1 / sin;
 
-		float srcFactor = (float) Math.sin((1 - lerpFactor) * angle) * invSin;
-		float destFactor = (float) Math.sin((lerpFactor) * angle) * invSin;
+		float srcFactor = (float)Math.sin((1 - lerpFactor) * angle) * invSin;
+		float destFactor = (float)Math.sin((lerpFactor) * angle) * invSin;
 
 		return this.mul(srcFactor).add(correctedDest.mul(destFactor));
 	}
