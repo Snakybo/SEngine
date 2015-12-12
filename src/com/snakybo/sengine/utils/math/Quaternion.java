@@ -1,5 +1,9 @@
 package com.snakybo.sengine.utils.math;
 
+/**
+ * @author Kevin
+ * @since Dec 12, 2015
+ */
 public class Quaternion
 {
 	public float x;
@@ -35,42 +39,42 @@ public class Quaternion
 		this.w = w;
 	}
 
-	public Quaternion(Matrix4f rot)
+	public Quaternion(Matrix4f rotation)
 	{
-		float trace = rot.get(0, 0) + rot.get(1, 1) + rot.get(2, 2);
+		float trace = rotation.get(0, 0) + rotation.get(1, 1) + rotation.get(2, 2);
 
-		if (trace > 0)
+		if(trace > 0)
 		{
 			float s = 0.5f / (float) Math.sqrt(trace + 1);
 			w = 0.25f / s;
-			x = (rot.get(1, 2) - rot.get(2, 1)) * s;
-			y = (rot.get(2, 0) - rot.get(0, 2)) * s;
-			z = (rot.get(0, 1) - rot.get(1, 0)) * s;
+			x = (rotation.get(1, 2) - rotation.get(2, 1)) * s;
+			y = (rotation.get(2, 0) - rotation.get(0, 2)) * s;
+			z = (rotation.get(0, 1) - rotation.get(1, 0)) * s;
 		}
 		else
 		{
-			if (rot.get(0, 0) > rot.get(1, 1) && rot.get(0, 0) > rot.get(2, 2))
+			if(rotation.get(0, 0) > rotation.get(1, 1) && rotation.get(0, 0) > rotation.get(2, 2))
 			{
-				float s = 2 * (float) Math.sqrt(1 + rot.get(0, 0) - rot.get(1, 1) - rot.get(2, 2));
-				w = (rot.get(1, 2) - rot.get(2, 1)) / s;
+				float s = 2 * (float) Math.sqrt(1 + rotation.get(0, 0) - rotation.get(1, 1) - rotation.get(2, 2));
+				w = (rotation.get(1, 2) - rotation.get(2, 1)) / s;
 				x = 0.25f * s;
-				y = (rot.get(1, 0) + rot.get(0, 1)) / s;
-				z = (rot.get(2, 0) + rot.get(0, 2)) / s;
+				y = (rotation.get(1, 0) + rotation.get(0, 1)) / s;
+				z = (rotation.get(2, 0) + rotation.get(0, 2)) / s;
 			}
-			else if (rot.get(1, 1) > rot.get(2, 2))
+			else if (rotation.get(1, 1) > rotation.get(2, 2))
 			{
-				float s = 2 * (float) Math.sqrt(1 + rot.get(1, 1) - rot.get(0, 0) - rot.get(2, 2));
-				w = (rot.get(2, 0) - rot.get(0, 2)) / s;
-				x = (rot.get(1, 0) + rot.get(0, 1)) / s;
+				float s = 2 * (float) Math.sqrt(1 + rotation.get(1, 1) - rotation.get(0, 0) - rotation.get(2, 2));
+				w = (rotation.get(2, 0) - rotation.get(0, 2)) / s;
+				x = (rotation.get(1, 0) + rotation.get(0, 1)) / s;
 				y = 0.25f * s;
-				z = (rot.get(2, 1) + rot.get(1, 2)) / s;
+				z = (rotation.get(2, 1) + rotation.get(1, 2)) / s;
 			}
 			else
 			{
-				float s = 2 * (float) Math.sqrt(1 + rot.get(2, 2) - rot.get(0, 0) - rot.get(1, 1));
-				w = (rot.get(0, 1) - rot.get(1, 0)) / s;
-				x = (rot.get(2, 0) + rot.get(0, 2)) / s;
-				y = (rot.get(1, 2) + rot.get(2, 1)) / s;
+				float s = 2 * (float) Math.sqrt(1 + rotation.get(2, 2) - rotation.get(0, 0) - rotation.get(1, 1));
+				w = (rotation.get(0, 1) - rotation.get(1, 0)) / s;
+				x = (rotation.get(2, 0) + rotation.get(0, 2)) / s;
+				y = (rotation.get(1, 2) + rotation.get(2, 1)) / s;
 				z = 0.25f * s;
 			}
 		}
@@ -98,29 +102,81 @@ public class Quaternion
 		this(r.x, r.y, r.z, r.w);
 	}
 
-	public float length()
+	@Override
+	public int hashCode()
 	{
-		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime * result + Float.floatToIntBits(w);
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		result = prime * result + Float.floatToIntBits(z);
+		
+		return result;
 	}
 
-	public Quaternion normalized()
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj)
+		{
+			return true;
+		}
+		
+		if(obj == null)
+		{
+			return false;
+		}
+		
+		if(!(obj instanceof Quaternion))
+		{
+			return false;
+		}
+		
+		Quaternion other = (Quaternion) obj;
+		
+		if(Float.floatToIntBits(w) != Float.floatToIntBits(other.w))
+		{
+			return false;
+		}
+		
+		if(Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+		{
+			return false;
+		}
+		
+		if(Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+		{
+			return false;
+		}
+		
+		if(Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
+	public final Quaternion normalized()
 	{
 		float length = length();
 
 		return new Quaternion(x / length, y / length, z / length, w / length);
 	}
 
-	public Quaternion conjugate()
+	public final Quaternion conjugate()
 	{
 		return new Quaternion(-x, -y, -z, w);
 	}
 
-	public Quaternion mul(float r)
+	public final Quaternion mul(float r)
 	{
 		return new Quaternion(x * r, y * r, z * r, w * r);
 	}
 
-	public Quaternion mul(Quaternion r)
+	public final Quaternion mul(Quaternion r)
 	{
 		float w_ = w * r.w - x * r.x - y * r.y - z * r.z;
 		float x_ = x * r.w + w * r.x + y * r.z - z * r.y;
@@ -130,7 +186,7 @@ public class Quaternion
 		return new Quaternion(x_, y_, z_, w_);
 	}
 
-	public Quaternion mul(Vector3f r)
+	public final Quaternion mul(Vector3f r)
 	{
 		float w_ = -x * r.x - y * r.y - z * r.z;
 		float x_ = w * r.x + y * r.z - z * r.y;
@@ -140,46 +196,55 @@ public class Quaternion
 		return new Quaternion(x_, y_, z_, w_);
 	}
 
-	public Quaternion sub(Quaternion r)
+	public final Quaternion sub(Quaternion r)
 	{
 		return new Quaternion(x - r.x, y - r.y, z - r.z, w - r.w);
 	}
 
-	public Quaternion add(Quaternion r)
+	public final Quaternion add(Quaternion r)
 	{
 		return new Quaternion(x + r.x, y + r.y, z + r.z, w + r.w);
 	}
 	
-	public float dot(Quaternion r)
+	public final float length()
+	{
+		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
+	}
+
+	public final float dot(Quaternion r)
 	{
 		return x * r.x + y * r.y + z * r.z + w * r.w;
 	}
 
-	public Quaternion nlerp(Quaternion dest, float lerpFactor, boolean shortest)
+	public final Quaternion nlerp(Quaternion dest, float lerpFactor, boolean shortest)
 	{
 		Quaternion correctedDest = dest;
 
-		if (shortest && this.dot(dest) < 0)
+		if(shortest && this.dot(dest) < 0)
+		{
 			correctedDest = new Quaternion(-dest.x, -dest.y, -dest.z, -dest.w);
+		}
 
 		return correctedDest.sub(this).mul(lerpFactor).add(this).normalized();
 	}
 
-	public Quaternion slerp(Quaternion dest, float lerpFactor, boolean shortest)
+	public final Quaternion slerp(Quaternion dest, float lerpFactor, boolean shortest)
 	{
 		final float EPSILON = 1e3f;
 
 		float cos = this.dot(dest);
 		Quaternion correctedDest = dest;
 
-		if (shortest && cos < 0)
+		if(shortest && cos < 0)
 		{
 			cos = -cos;
 			correctedDest = new Quaternion(-dest.x, -dest.y, -dest.z, -dest.w);
 		}
 
-		if (Math.abs(cos) >= 1 - EPSILON)
+		if(Math.abs(cos) >= 1 - EPSILON)
+		{
 			return nlerp(correctedDest, lerpFactor, false);
+		}
 
 		float sin = (float) Math.sqrt(1 - cos * cos);
 		float angle = (float) Math.atan2(sin, cos);
@@ -191,7 +256,7 @@ public class Quaternion
 		return this.mul(srcFactor).add(correctedDest.mul(destFactor));
 	}
 
-	public Quaternion set(float x, float y, float z, float w)
+	public final Quaternion set(float x, float y, float z, float w)
 	{
 		this.x = x;
 		this.y = y;
@@ -200,44 +265,39 @@ public class Quaternion
 		return this;
 	}
 
-	public Quaternion set(Quaternion r)
+	public final Quaternion set(Quaternion r)
 	{
 		set(r.x, r.y, r.z, r.w);
 		return this;
 	}
 
-	public Vector3f getForward()
+	public final Vector3f getForward()
 	{
 		return new Vector3f(0, 0, 1).rotate(this);
 	}
 
-	public Vector3f getBack()
+	public final Vector3f getBack()
 	{
 		return new Vector3f(0, 0, -1).rotate(this);
 	}
 
-	public Vector3f getUp()
+	public final Vector3f getUp()
 	{
 		return new Vector3f(0, 1, 0).rotate(this);
 	}
 
-	public Vector3f getDown()
+	public final Vector3f getDown()
 	{
 		return new Vector3f(0, -1, 0).rotate(this);
 	}
 
-	public Vector3f getRight()
+	public final Vector3f getRight()
 	{
 		return new Vector3f(1, 0, 0).rotate(this);
 	}
 
-	public Vector3f getLeft()
+	public final Vector3f getLeft()
 	{
 		return new Vector3f(-1, 0, 0).rotate(this);
-	}
-
-	public boolean equals(Quaternion r)
-	{
-		return x == r.x && y == r.y && z == r.z && w == r.w;
 	}
 }
