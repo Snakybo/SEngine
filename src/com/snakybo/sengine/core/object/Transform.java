@@ -42,7 +42,7 @@ public final class Transform
 		this.rotation = rotation;
 		this.scale = scale;
 		
-		parentMatrix = new Matrix4f().initIdentity();
+		parentMatrix = Matrix4f.identity();
 	}
 	
 	final void setGameObject(GameObject object)
@@ -131,9 +131,9 @@ public final class Transform
 
 	public final Matrix4f getTransformation()
 	{
-		Matrix4f translationMatrix = new Matrix4f().initTranslation(position.x, position.y, position.z);
-		Matrix4f rotationMatrix = rotation.toRotationMatrix();
-		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.x, scale.y, scale.z);
+		Matrix4f translationMatrix = Matrix4f.createTranslationMatrix(position);
+		Matrix4f rotationMatrix = Matrix4f.createRotationMatrix(rotation);
+		Matrix4f scaleMatrix = Matrix4f.createScaleMatrix(scale);
 
 		return getParentMatrix().mul(translationMatrix.mul(rotationMatrix.mul(scaleMatrix)));
 	}
@@ -192,6 +192,6 @@ public final class Transform
 
 	private final Quaternion getLookAtRotation(Vector3f point, Vector3f up)
 	{
-		return new Quaternion(new Matrix4f().initRotation(point.sub(position).normalized(), up));
+		return new Quaternion(Matrix4f.createRotationMatrix(point.sub(position).normalized(), up));
 	}
 }

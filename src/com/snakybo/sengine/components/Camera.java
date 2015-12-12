@@ -73,8 +73,8 @@ public class Camera
 	 * @see Matrix4f */
 	public Matrix4f getViewProjection()
 	{
-		Matrix4f cameraRotation = transform.getRotation().conjugate().toRotationMatrix();
-		Matrix4f cameraTranslation = new Matrix4f().initTranslation(transform.getPosition().mul(-1));
+		Matrix4f cameraRotation = Matrix4f.createRotationMatrix(transform.getRotation().conjugate());
+		Matrix4f cameraTranslation = Matrix4f.createTranslationMatrix(transform.getPosition().mul(-1));
 
 		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}

@@ -149,16 +149,7 @@ public class Quaternion
 	{
 		return new Quaternion(x + r.x, y + r.y, z + r.z, w + r.w);
 	}
-
-	public Matrix4f toRotationMatrix()
-	{
-		Vector3f forward = new Vector3f(2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y));
-		Vector3f up = new Vector3f(2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x));
-		Vector3f right = new Vector3f(1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y));
-
-		return new Matrix4f().initRotation(forward, up, right);
-	}
-
+	
 	public float dot(Quaternion r)
 	{
 		return x * r.x + y * r.y + z * r.z + w * r.w;

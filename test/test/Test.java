@@ -25,7 +25,7 @@ public class Test extends Game
 	@Override
 	public void init()
 	{
-		Matrix4f cameraProjection = new Matrix4f().initPerspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
+		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
 		camera.addComponent(new FreeLook(Window.getCenter()));
 		camera.addComponent(new FreeMove());

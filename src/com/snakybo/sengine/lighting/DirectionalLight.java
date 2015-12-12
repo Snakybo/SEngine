@@ -21,7 +21,7 @@ public class DirectionalLight extends Light
 		super(color, intensity);
 
 		setShader(new Shader("internal/forward-directional"));
-		setShadowInfo(new ShadowInfo(new Matrix4f().initOrthographic(-40, 40, -40, 40, -40, 40)));
+		setShadowInfo(new ShadowInfo(Matrix4f.orthographic(-40, 40, -40, 40, -40, 40)));
 	}
 
 	/** @return The direction the light is pointed at
