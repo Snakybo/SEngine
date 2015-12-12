@@ -1,5 +1,9 @@
 package com.snakybo.sengine.utils.math;
 
+/**
+ * @author Kevin
+ * @since Dec 12, 2015
+ */
 public class Vector2f
 {
 	public float x;
@@ -24,6 +28,57 @@ public class Vector2f
 	public Vector2f(Vector2f r)
 	{
 		set(r);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 132;
+		int result = 1;
+		
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj)
+		{
+			return true;
+		}
+		
+		if(obj == null)
+		{
+			return false;
+		}
+		
+		if(!(obj instanceof Vector2f))
+		{
+			return false;
+		}
+		
+		Vector2f other = (Vector2f)obj;
+		
+		if(Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+		{
+			return false;
+		}
+		
+		if(Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Vector2f(" + x + ", " + y + ")";
 	}
 
 	public float length()
@@ -112,11 +167,6 @@ public class Vector2f
 		return new Vector2f(Math.abs(x), Math.abs(y));
 	}
 
-	public String toString()
-	{
-		return "(" + x + " " + y + ")";
-	}
-
 	public Vector2f set(float x, float y)
 	{
 		this.x = x;
@@ -128,10 +178,5 @@ public class Vector2f
 	{
 		set(r.x, r.y);
 		return this;
-	}
-
-	public boolean equals(Vector2f r)
-	{
-		return x == r.x && y == r.y;
 	}
 }
