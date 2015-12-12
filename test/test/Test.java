@@ -17,7 +17,7 @@ import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
-import com.snakybo.sengine.skybox.SkyBox;
+import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.utils.Color;
 
 public class Test extends Game
@@ -50,7 +50,7 @@ public class Test extends Game
 		cubeObject2.addComponent(new MeshRenderer(Primitive.CUBE, diffuseMaterial));
 		addChild(cubeObject2);
 		
-		SkyBox skyBox = new SkyBox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
+		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
 		RenderingEngine.setSkyBox(skyBox);
 	};
 	

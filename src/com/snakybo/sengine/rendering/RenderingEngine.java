@@ -38,7 +38,7 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
-import com.snakybo.sengine.skybox.SkyBox;
+import com.snakybo.sengine.skybox.Skybox;
 
 /**
  * @author Kevin
@@ -48,7 +48,7 @@ public class RenderingEngine implements IRenderingEngine
 {
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
-	private static SkyBox skyBoxRenderer;
+	private static Skybox skyBoxRenderer;
 	
 	private Map<String, Integer> samplerMap;
 	private Map<String, Object> dataContainer;
@@ -203,7 +203,7 @@ public class RenderingEngine implements IRenderingEngine
 		return type.cast(dataContainer.get(name));
 	}
 	
-	public static void setSkyBox(SkyBox skyBox)
+	public static void setSkyBox(Skybox skyBox)
 	{
 		skyBoxRenderer = skyBox;
 	}
