@@ -1,5 +1,7 @@
 package com.snakybo.sengine.utils.math;
 
+import java.util.Arrays;
+
 /**
  * @author Kevin
  * @since Dec 12, 2015
@@ -18,16 +20,59 @@ public class Matrix4f
 		m = values;
 	}
 	
-	public final Vector3f transform(Vector3f r)
+	public Matrix4f(Matrix4f other)
 	{
-		float x = m[0][0] * r.x + m[0][1] * r.y + m[0][2] * r.z + m[0][3];
-		float y = m[1][0] * r.x + m[1][1] * r.y + m[1][2] * r.z + m[1][3];
-		float z = m[2][0] * r.x + m[2][1] * r.y + m[2][2] * r.z + m[2][3];
+		this(other.m);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		
+		result = prime * result + Arrays.deepHashCode(m);
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj)
+		{
+			return true;
+		}
+		
+		if(obj == null)
+		{
+			return false;
+		}
+		
+		if(!(obj instanceof Matrix4f))
+		{
+			return false;
+		}
+		
+		Matrix4f other = (Matrix4f)obj;
+		if(!Arrays.deepEquals(m, other.m))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
+	public final Vector3f transform(Vector3f amount)
+	{
+		float x = m[0][0] * amount.x + m[0][1] * amount.y + m[0][2] * amount.z + m[0][3];
+		float y = m[1][0] * amount.x + m[1][1] * amount.y + m[1][2] * amount.z + m[1][3];
+		float z = m[2][0] * amount.x + m[2][1] * amount.y + m[2][2] * amount.z + m[2][3];
 		
 		return new Vector3f(x, y, z);
 	}
 
-	public final Matrix4f mul(Matrix4f r)
+	public final Matrix4f mul(Matrix4f other)
 	{
 		Matrix4f res = new Matrix4f();
 
@@ -35,7 +80,7 @@ public class Matrix4f
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				float value = m[i][0] * r.get(0, j) + m[i][1] * r.get(1, j) + m[i][2] * r.get(2, j) + m[i][3] * r.get(3, j);
+				float value = m[i][0] * other.get(0, j) + m[i][1] * other.get(1, j) + m[i][2] * other.get(2, j) + m[i][3] * other.get(3, j);
 				res.set(i, j, value);
 			}
 		}
