@@ -67,7 +67,7 @@ public class FreeLook extends Component
 	}
 
 	@Override
-	protected void input(double delta)
+	protected void update(float delta)
 	{
 		if (Input.getKey(unlockMouseKey))
 		{

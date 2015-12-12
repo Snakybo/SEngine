@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
@@ -38,7 +37,7 @@ public class Light extends Component
 	}
 
 	@Override
-	protected void onAddedToScene(RenderingEngine renderingEngine)
+	protected void onAddedToScene()
 	{
 		lights.add(this);
 	}

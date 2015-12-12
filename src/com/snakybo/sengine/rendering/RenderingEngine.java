@@ -46,7 +46,7 @@ import com.snakybo.sengine.utils.math.Matrix4f;
  */
 public class RenderingEngine implements IRenderingEngine
 {
-	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1.0f, 1.0f, 1.0f));
+	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = new Matrix4f().initScale(0.5f, 0.5f, 0.5f).mul(new Matrix4f().initTranslation(1, 1, 1));
 	
 	private static SkyBox skyBoxRenderer;
 	
@@ -79,10 +79,10 @@ public class RenderingEngine implements IRenderingEngine
 		
 		Window.bindAsRenderTarget();
 		
-		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1.0f);
+		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		obj.renderAll(this, AmbientLight.getAmbientShader());
+		obj.render(this, AmbientLight.getAmbientShader());
 		
 		for(Light light : Light.getLights())
 		{
@@ -131,7 +131,7 @@ public class RenderingEngine implements IRenderingEngine
 			Camera.setMainCamera(shadowMapCamera);
 
 			glCullFace(GL_FRONT);
-			obj.renderAll(this, ShadowMapUtils.getShadowMapShader());
+			obj.render(this, ShadowMapUtils.getShadowMapShader());
 			glCullFace(GL_BACK);
 
 			Camera.setMainCamera(tempCamera);
@@ -157,7 +157,7 @@ public class RenderingEngine implements IRenderingEngine
 		glDepthMask(false);
 		glDepthFunc(GL_EQUAL);
 
-		obj.renderAll(this, light.getShader());
+		obj.render(this, light.getShader());
 
 		glDepthMask(true);
 		glDepthFunc(GL_LESS);

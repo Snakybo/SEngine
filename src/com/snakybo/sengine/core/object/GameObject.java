@@ -8,74 +8,103 @@ import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.math.Quaternion;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-/** The game object class, every object in the scene is a game object
+/**
  * @author Kevin Krol
- * @since Apr 4, 2014 */
-public class GameObject
+ * @since Apr 4, 2014 
+ */
+public final class GameObject
 {
 	private ArrayList<GameObject> children;
+	private ArrayList<GameObject> childrenToRemove;
+	
 	private ArrayList<Component> components;
-
-	private RenderingEngine renderingEngine;
+	private ArrayList<Component> componentsToRemove;
+	
 	private Transform transform;
-
-	/** Constructor for the game object This constructor will call
-	 * {@link #GameObject(Vector3f)}
-	 * @see #GameObject(Vector3f) */
+	
 	public GameObject()
 	{
 		this(new Vector3f());
 	}
-
-	/** Constructor for the game object This constructor will call
-	 * {@link #GameObject(Vector3f, Quaternion)}
-	 * @param position The position of the game object
-	 * @see #GameObject(Vector3f, Quaternion) */
+	
 	public GameObject(Vector3f position)
 	{
 		this(position, new Quaternion());
 	}
-
-	/** Constructor for the game object This constructor will call
-	 * {@link #GameObject(Vector3f, Quaternion, float)} with the parameter
-	 * {@code 1.0f}.
-	 * @param position The position of the game object
-	 * @param rotation The rotation of the game object
-	 * @see #GameObject(Vector3f, Quaternion, float) */
+	
 	public GameObject(Vector3f position, Quaternion rotation)
 	{
-		this(position, rotation, 1.0f);
+		this(position, rotation, new Vector3f(1, 1, 1));
 	}
-
-	/** Constructor for the game object
-	 * @param position The position of the game object
-	 * @param rotation The rotation of the game object
-	 * @param scale The scale of the game object */
-	public GameObject(Vector3f position, Quaternion rotation, float scale)
+	
+	public GameObject(Vector3f position, Quaternion rotation, Vector3f scale)
 	{
 		children = new ArrayList<GameObject>();
+		childrenToRemove = new ArrayList<GameObject>();
+		
 		components = new ArrayList<Component>();
+		componentsToRemove = new ArrayList<Component>();
+		
 		transform = new Transform(position, rotation, scale);
+		transform.setGameObject(this);
 	}
-
-	/** Set a game object as a child of this game object, the child object will
-	 * also receive any transformation this game object receives
-	 * @param child The game object to set as a child */
+	
+	public final void update(float delta)
+	{
+		updateInternal();
+		
+		for(Component component : components)
+		{
+			component.update(delta);
+		}
+		
+		for(GameObject child : children)
+		{
+			child.update(delta);
+		}
+	}
+	
+	public final void render(RenderingEngine renderingEngine, Shader shader)
+	{
+		for(Component component : components)
+		{
+			component.render(renderingEngine, shader);
+		}
+		
+		for(GameObject child : children)
+		{
+			child.render(renderingEngine, shader);
+		}
+	}
+	
 	public final void addChild(GameObject child)
 	{
 		children.add(child);
 
-		child.getTransform().setParent(transform);
-		child.addToRenderingEngine(renderingEngine);
+		child.transform.setParent(transform);
 
-		for (Component component : child.components)
-			component.onAddedToScene(renderingEngine);
+		for(Component component : child.components)
+		{
+			component.onAddedToScene();
+		}
 	}
-
-	/** Add a {@link Component} to the game object.
-	 * @param component The component to add to the game object
-	 * @return This game object, used for chaining
-	 * @see Component */
+	
+	public final void removeAllChildren()
+	{
+		for(GameObject child : children)
+		{
+			removeChild(child);
+		}
+	}
+	
+	public final void removeChild(GameObject child)
+	{
+		if(children.contains(child) && !childrenToRemove.contains(child))
+		{
+			childrenToRemove.add(child);
+		}
+	}
+	
 	public final GameObject addComponent(Component component)
 	{
 		components.add(component);
@@ -83,98 +112,158 @@ public class GameObject
 
 		return this;
 	}
-
-	/** Handle input for the game object, all it's components and it's children
-	 * @param delta The delta time */
-	public final void inputAll(double delta)
+	
+	public final <T extends Component> void removeComponents(Class<T> type)
 	{
-		input(delta);
-
-		for (GameObject child : children)
-			child.inputAll(delta);
+		for(Component component : components)
+		{
+			if(component.getClass() == type)
+			{				
+				removeComponent(component);
+			}
+		}
 	}
-
-	/** Update the game object, all it's components and it's children
-	 * @param delta The delta time */
-	public final void updateAll(double delta)
+	
+	public final <T extends Component> void removeComponent(Class<T> type)
 	{
-		update(delta);
-
-		for (GameObject child : children)
-			child.updateAll(delta);
+		for(Component component : components)
+		{
+			if(component.getClass() == type)
+			{				
+				removeComponent(component);
+				break;
+			}
+		}
 	}
-
-	/** Render the game object, all it's components and it's children
-	 * @param delta The delta time */
-	public final void renderAll(RenderingEngine renderingEngine, Shader shader)
+	
+	public final void removeComponents(Component... components)
 	{
-		render(renderingEngine, shader);
-
-		for (GameObject child : children)
-			child.renderAll(renderingEngine, shader);
+		for(Component component : components)
+		{
+			removeComponent(component);
+		}
 	}
-
-	/** Handle input for every component of this game object
-	 * @param delta The delta time */
-	public final void input(double delta)
+	
+	public final void removeComponent(Component component)
+	{
+		if(components.contains(component) && !componentsToRemove.contains(component))
+		{
+			componentsToRemove.add(component);
+		}
+	}
+	
+	private final void updateInternal()
 	{
 		transform.update();
-
-		for (Component component : components)
-			component.input(delta);
+		
+		for(GameObject child : childrenToRemove)
+		{
+			for(Component component : child.components)
+			{
+				component.onRemovedFromScene();
+			}
+			
+			child.transform.setParent(null);
+			children.remove(child);
+		}
+		
+		for(Component component : componentsToRemove)
+		{
+			component.onRemovedFromScene();
+			component.setParent(null);
+			components.remove(component);
+		}
+		
+		childrenToRemove.clear();
+		componentsToRemove.clear();
 	}
-
-	/** Update every component of the game object
-	 * @param delta The delta time */
-	public final void update(double delta)
-	{
-		for (Component component : components)
-			component.update(delta);
-	}
-
-	/** Render every component of the game object
-	 * @param delta The delta time */
-	public final void render(RenderingEngine renderingEngine, Shader shader)
-	{
-		for (Component component : components)
-			component.render(renderingEngine, shader);
-	}
-
-	/** Add the game object to the rendering engine
-	 * @param renderingEngine The rendering engine */
-	public final void addToRenderingEngine(RenderingEngine renderingEngine)
-	{
-		this.renderingEngine = renderingEngine;
-	}
-
-	/** This method creates an array, containing all the children of this game
-	 * object, and the children of every child
-	 * @return An array containing every game object that's attached to this
-	 *         one */
-	public final GameObject[] getAllAttached()
-	{
-		List<GameObject> result = getAllAttachedInternal();
-
-		return result.toArray(new GameObject[result.size()]);
-	}
-
-	/** @return The {@link Transform} of the game object */
-	public final Transform getTransform()
-	{
-		return transform;
-	}
-
-	/** This method is used internally by {@link #getAllAttached()}. But instead
-	 * of an array it returns a list
-	 * @return A list containing every game object attached to this one */
-	private final ArrayList<GameObject> getAllAttachedInternal()
+	
+	public final Iterable<GameObject> getChildren()
 	{
 		ArrayList<GameObject> result = new ArrayList<GameObject>();
 
-		for (GameObject child : children)
-			result.addAll(child.getAllAttachedInternal());
+		for(GameObject child : children)
+		{
+			Iterable<GameObject> childChildren = child.getChildren();
+			
+			for(GameObject childChild : childChildren)
+			{
+				result.add(childChild);
+			}
+		}
 
 		result.add(this);
 		return result;
+	}
+	
+	public final GameObject getChild(int index)
+	{
+		if(index >= children.size())
+		{
+			return null;
+		}
+		
+		return children.get(index);
+	}
+	
+	public <T extends Component> Iterable<T> getComponentsInChildren(Class<T> type)
+	{
+		List<T> result = new ArrayList<T>();
+		
+		for(GameObject child : children)
+		{
+			Iterable<T> childResults = child.getComponentsInChildren(type);
+			
+			for(T component : childResults)
+			{
+				result.add(component);
+			}
+		}
+		
+		Iterable<T> ownResults = getComponentsInChildren(type);		
+		for(T component : ownResults)
+		{
+			result.add(component);
+		}
+		
+		return result;
+	}
+	
+	public <T extends Component> Iterable<T> getComponents(Class<T> type)
+	{
+		List<T> result = new ArrayList<T>();
+		
+		for(Component component : components)
+		{
+			if(component.getClass() == type)
+			{
+				result.add(type.cast(component));
+			}
+		}
+		
+		return result;
+	}
+	
+	public <T extends Component> T getComponent(Class<T> type)
+	{
+		for(Component component : components)
+		{
+			if(component.getClass() == type)
+			{
+				return type.cast(component);
+			}
+		}
+		
+		return null;
+	}
+	
+	public final int getNumChildren()
+	{
+		return children.size();
+	}
+	
+	public final Transform getTransform()
+	{
+		return transform;
 	}
 }

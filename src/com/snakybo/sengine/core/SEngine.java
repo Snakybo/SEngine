@@ -44,7 +44,7 @@ public class SEngine
 		frameTime = 1.0 / frameRate;
 		isRunning = true;
 
-		game.internalInit(renderingEngine);
+		game.internalInit();
 		game.init();
 
 		run();
@@ -111,10 +111,8 @@ public class SEngine
 					return;
 				}
 
-				game.input(frameTime);
+				game.update((float)frameTime);
 				Input.update();
-
-				game.update(frameTime);
 			}
 
 			if (render)

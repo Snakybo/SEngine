@@ -9,49 +9,55 @@ import com.snakybo.sengine.rendering.RenderingEngine;
  * @since Apr 4, 2014 */
 public abstract class Game
 {
+	private static Game instance;
+	
 	private GameObject root;
-
-	/** Main initialization method for your game.
-	 * <p>
-	 * You should start everything here
-	 * </p>
-	*/
+	
 	public void init()
 	{
 	}
-
-	/** Internal initialization method for the game, used by the engine */
-	final void internalInit(RenderingEngine renderingEngine)
+	
+	final void internalInit()
 	{
-		root = new GameObject();
-		root.addToRenderingEngine(renderingEngine);
+		if(instance == null)
+		{
+			instance = this;
+			root = new GameObject();
+		}
 	}
-
-	/** Entry point for input handling
-	 * @param delta The delta time */
-	final void input(double delta)
+	
+	final void update(float delta)
 	{
-		root.inputAll(delta);
+		root.update(delta);
 	}
-
-	/** Entry point for updating
-	 * @param delta The delta time */
-	final void update(double delta)
-	{
-		root.updateAll(delta);
-	}
-
-	/** Entry point for rendering */
+	
 	final void render(RenderingEngine renderingEngine)
 	{
 		renderingEngine.render(root);
 		renderingEngine.postRenderObjects();
 	}
-
-	/** Add a game object to the scene
-	 * @param object The game object to add */
-	public final void addChild(GameObject object)
+	
+	public static void addChild(GameObject object)
 	{
-		root.addChild(object);
+		if(instance != null)
+		{
+			instance.root.addChild(object);
+		}
+	}
+	
+	public static void removeChild(GameObject object)
+	{
+		if(instance != null)
+		{
+			instance.root.removeChild(object);
+		}
+	}
+	
+	public static void clearScene()
+	{
+		if(instance != null)
+		{
+			instance.root.removeAllChildren();
+		}
 	}
 }

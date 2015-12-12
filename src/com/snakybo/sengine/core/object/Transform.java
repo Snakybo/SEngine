@@ -4,176 +4,194 @@ import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Quaternion;
 import com.snakybo.sengine.utils.math.Vector3f;
 
-/** The transform class, every game object has a transform by default
+/**
  * @author Kevin Krol
- * @since Apr 4, 2014 */
-public class Transform
-{
+ * @since Apr 4, 2014
+ */
+public final class Transform
+{	
+	private GameObject gameObject;
+	
 	private Transform parent;
 	private Matrix4f parentMatrix;
-
+	
 	private Vector3f position;
 	private Quaternion rotation;
-	private float scale;
-
-	private Vector3f oldPosition;
-	private Quaternion oldRotation;
-	private float oldScale;
-
-	/** Constructor for the transform This constructor will call
-	 * {@link #Transform(Vector3f)}
-	 * @see #Transform(Vector3f) */
+	private Vector3f scale;
+	
+	private boolean changed;
+	
 	public Transform()
 	{
 		this(new Vector3f());
 	}
-
-	/** Constructor for the transform This constructor will call
-	 * {@link #Transform(Vector3f, Quaternion)}
-	 * @param position The position of the transform
-	 * @see #Transform(Vector3f, Quaternion) */
+	
 	public Transform(Vector3f position)
 	{
 		this(position, new Quaternion());
 	}
-
-	/** Constructor for the transform This constructor will call
-	 * {@link #Transform(Vector3f, Quaternion, float)}
-	 * @param position The position of the transform
-	 * @param rotation The rotation of the transform
-	 * @see #Transform(Vector3f, Quaternion, float) */
+	
 	public Transform(Vector3f position, Quaternion rotation)
 	{
-		this(position, rotation, 1.0f);
+		this(position, rotation, new Vector3f(1, 1, 1));
 	}
-
-	/** Constructor for the transform
-	 * @param position The position of the transform
-	 * @param rotation The rotation of the transform
-	 * @param scale The scale of the transform */
-	public Transform(Vector3f position, Quaternion rotation, float scale)
+	
+	public Transform(Vector3f position, Quaternion rotation, Vector3f scale)
 	{
 		this.position = position;
 		this.rotation = rotation;
 		this.scale = scale;
-
+		
 		parentMatrix = new Matrix4f().initIdentity();
 	}
-
-	/** Update the transform, sets the old transform values to the current
-	 * values */
-	public final void update()
+	
+	final void setGameObject(GameObject object)
 	{
-		if (oldPosition != null)
+		gameObject = object;
+	}
+	
+	final void update()
+	{
+		changed = false;
+	}
+	
+	public final void translate(Vector3f direction)
+	{
+		setPosition(position.add(direction));
+	}
+
+	public final void rotate(Vector3f axis, float angle)
+	{
+		setRotation(new Quaternion(axis, angle).mul(rotation).normalized());
+	}
+
+	public final void lookAt(Vector3f point, Vector3f up)
+	{
+		setRotation(getLookAtRotation(point, up));
+	}
+
+	public final boolean hasChanged()
+	{
+		if(parent != null && parent.hasChanged())
 		{
-			oldPosition.set(position);
-			oldRotation.set(rotation);
-			oldScale = scale;
+			return true;
 		}
-		else
-		{
-			oldPosition = new Vector3f(position).add(1.0f);
-			oldRotation = new Quaternion(rotation).mul(0.5f);
-			oldScale = scale + 1.0f;
-		}
+
+		return changed;
 	}
 
-	public void rotate(Vector3f axis, float angle)
-	{
-		rotation = new Quaternion(axis, angle).mul(rotation).normalized();
-	}
-
-	public void lookAt(Vector3f point, Vector3f up)
-	{
-		rotation = getLookAtRotation(point, up);
-	}
-
-	public Quaternion getLookAtRotation(Vector3f point, Vector3f up)
-	{
-		return new Quaternion(new Matrix4f().initRotation(point.sub(position).normalized(), up));
-	}
-
-	public boolean hasChanged()
-	{
-		if (parent != null && parent.hasChanged())
-			return true;
-
-		if (!position.equals(oldPosition))
-			return true;
-
-		if (!rotation.equals(oldRotation))
-			return true;
-
-		if (scale != oldScale)
-			return true;
-
-		return false;
-	}
-
-	public void setParent(Transform parent)
+	public final void setParent(Transform parent)
 	{
 		this.parent = parent;
 	}
 
-	public void setPosition(Vector3f position)
+	public final void setPosition(Vector3f position)
 	{
 		this.position = position;
+		
+		if(!changed)
+		{
+			if(!position.equals(new Vector3f()))
+			{
+				changed = true;
+			}
+		}
 	}
 
-	public void setRotation(Quaternion rotation)
+	public final void setRotation(Quaternion rotation)
 	{
 		this.rotation = rotation;
+		
+		if(!changed)
+		{
+			if(!rotation.equals(new Quaternion()))
+			{
+				changed = true;
+			}
+		}
+	}
+	
+	public final void setScale(float scale)
+	{
+		setScale(new Vector3f(scale, scale, scale));
 	}
 
-	public void setScale(float scale)
+	public final void setScale(Vector3f scale)
 	{
 		this.scale = scale;
+		
+		if(!changed)
+		{
+			if(!scale.equals(new Vector3f()))
+			{
+				changed = true;
+			}
+		}
 	}
 
-	public Matrix4f getTransformation()
+	public final Matrix4f getTransformation()
 	{
 		Matrix4f translationMatrix = new Matrix4f().initTranslation(position.x, position.y, position.z);
 		Matrix4f rotationMatrix = rotation.toRotationMatrix();
-		Matrix4f scaleMatrix = new Matrix4f().initScale(scale, scale, scale);
+		Matrix4f scaleMatrix = new Matrix4f().initScale(scale.x, scale.y, scale.z);
 
 		return getParentMatrix().mul(translationMatrix.mul(rotationMatrix.mul(scaleMatrix)));
 	}
 
-	private Matrix4f getParentMatrix()
+	public final Transform getParent()
 	{
-		if (parent != null && parent.hasChanged())
-			parentMatrix = parent.getTransformation();
-
-		return parentMatrix;
+		return parent;
+	}
+	
+	public final GameObject getGameObject()
+	{
+		return gameObject;
 	}
 
-	public Vector3f getPosition()
+	public final Vector3f getPosition()
 	{
 		return getParentMatrix().transform(position);
 	}
 
-	public Quaternion getRotation()
+	public final Quaternion getRotation()
 	{
 		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
 
-		if (parent != null)
+		if(parent != null)
+		{
 			parentRotation = parent.getRotation();
+		}
 
 		return parentRotation.mul(rotation);
 	}
 
-	public Vector3f getLocalPosition()
+	public final Vector3f getLocalPosition()
 	{
 		return position;
 	}
 
-	public Quaternion getLocalRotation()
+	public final Quaternion getLocalRotation()
 	{
 		return rotation;
 	}
-
-	public float getLocalScale()
+	
+	public final Vector3f getLocalScale()
 	{
 		return scale;
+	}
+	
+	private final Matrix4f getParentMatrix()
+	{
+		if(parent != null && parent.hasChanged())
+		{
+			parentMatrix = parent.getTransformation();
+		}
+	
+		return parentMatrix;
+	}
+
+	private final Quaternion getLookAtRotation(Vector3f point, Vector3f up)
+	{
+		return new Quaternion(new Matrix4f().initRotation(point.sub(position).normalized(), up));
 	}
 }

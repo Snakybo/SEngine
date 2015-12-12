@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.core.object.Transform;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
@@ -131,17 +129,9 @@ public class Camera
 		}
 		
 		@Override
-		protected void onAddedToScene(RenderingEngine renderingEngine)
+		protected void onAddedToScene()
 		{		
 			camera.setTransform(getTransform());
-		}
-		
-		@Override
-		public void setParent(GameObject parent)
-		{
-			super.setParent(parent);
-			
-			camera.setTransform(parent.getTransform());
 		}
 		
 		public CameraComponent setAsMainCamera()

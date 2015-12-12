@@ -104,10 +104,10 @@ public class FreeMove extends Component
 	}
 
 	@Override
-	protected void input(double delta)
+	protected void update(float delta)
 	{
-		float moveAmount = speed * (float) delta;
-
+		float moveAmount = speed * delta;
+		
 		if (Input.getKey(keyForward))
 			move(getTransform().getLocalRotation().getForward(), moveAmount);
 
