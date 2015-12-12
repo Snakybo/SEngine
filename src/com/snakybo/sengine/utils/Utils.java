@@ -1,6 +1,7 @@
 package com.snakybo.sengine.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,20 +9,19 @@ public class Utils
 {
 	public static String[] removeEmptyStrings(String[] data)
 	{
-		ArrayList<String> result = new ArrayList<String>();
-
-		for(int i = 0; i < data.length; i++)
+		List<String> filtered = new ArrayList<String>();
+		
+		for(String checking : data)
 		{
-			if(!data[i].equals(""))
+			if(checking.isEmpty())
 			{
-				result.add(data[i]);
+				continue;
 			}
+			
+			filtered.add(checking);
 		}
-
-		String[] res = new String[result.size()];
-		result.toArray(res);
-
-		return res;
+		
+		return filtered.toArray(new String[0]);
 	}
 
 	public static int[] toIntArray(Integer[] data)
