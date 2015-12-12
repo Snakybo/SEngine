@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.GL_CULL_FACE_MODE;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_FUNC;
 import static org.lwjgl.opengl.GL11.GL_FRONT;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glCullFace;
 import static org.lwjgl.opengl.GL11.glDepthFunc;
 import static org.lwjgl.opengl.GL11.glGetInteger;
@@ -59,7 +60,7 @@ public final class Skybox
 		shader.updateUniforms(transform, null, renderingEngine);
 		
 		cubeMap.bind();
-		mesh.draw();
+		mesh.draw(GL_TRIANGLES);
 		
 		glCullFace(cullFaceMode);
 		glDepthFunc(depthFuncMode);

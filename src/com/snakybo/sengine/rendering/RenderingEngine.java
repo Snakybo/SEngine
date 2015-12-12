@@ -27,6 +27,7 @@ import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT16;
 import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +49,8 @@ public class RenderingEngine implements IRenderingEngine
 {
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
-	private static Skybox skyBoxRenderer;
+	private static Skybox skyBox;
+	private static EnumSet<RenderFlag> renderMode = EnumSet.of(RenderFlag.NORMAL);
 	
 	private Map<String, Integer> samplerMap;
 	private Map<String, Object> dataContainer;
@@ -56,7 +58,7 @@ public class RenderingEngine implements IRenderingEngine
 	private Camera shadowMapCamera;
 	
 	public RenderingEngine()
-	{
+	{		
 		samplerMap = new HashMap<String, Integer>();
 		samplerMap.put("diffuse", 0);
 		samplerMap.put("normalMap", 1);
@@ -84,16 +86,22 @@ public class RenderingEngine implements IRenderingEngine
 
 		obj.render(this, AmbientLight.getAmbientShader());
 		
-		for(Light light : Light.getLights())
+		if(!renderMode.contains(RenderFlag.WIREFRAME) && !renderMode.contains(RenderFlag.NO_LIGHTING))
 		{
-			renderLighting(obj, light);
+			for(Light light : Light.getLights())
+			{
+				renderLighting(obj, light);
+			}
 		}
 	}
 	
 	@Override
 	public void postRenderObjects()
 	{
-		renderSkyBox();
+		if(!renderMode.contains(RenderFlag.NO_SKYBOX))
+		{
+			renderSkyBox();
+		}
 	}
 	
 	@Override
@@ -127,14 +135,17 @@ public class RenderingEngine implements IRenderingEngine
 
 			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(shadowMapCamera.getViewProjection()));
 
-			Camera tempCamera = Camera.getMainCamera();
-			Camera.setMainCamera(shadowMapCamera);
-
-			glCullFace(GL_FRONT);
-			obj.render(this, ShadowMapUtils.getShadowMapShader());
-			glCullFace(GL_BACK);
-
-			Camera.setMainCamera(tempCamera);
+			if(!renderMode.contains(RenderFlag.NO_SHADOWS))
+			{
+				Camera tempCamera = Camera.getMainCamera();
+				Camera.setMainCamera(shadowMapCamera);
+	
+				glCullFace(GL_FRONT);
+				obj.render(this, ShadowMapUtils.getShadowMapShader());
+				glCullFace(GL_BACK);
+	
+				Camera.setMainCamera(tempCamera);
+			}
 		}
 	}
 	
@@ -166,9 +177,9 @@ public class RenderingEngine implements IRenderingEngine
 	
 	private void renderSkyBox()
 	{
-		if(skyBoxRenderer != null)
+		if(skyBox != null)
 		{
-			skyBoxRenderer.render(this);
+			skyBox.render(this);
 		}
 	}
 	
@@ -203,8 +214,23 @@ public class RenderingEngine implements IRenderingEngine
 		return type.cast(dataContainer.get(name));
 	}
 	
-	public static void setSkyBox(Skybox skyBox)
+	public static void setSkybox(Skybox skyBox)
 	{
-		skyBoxRenderer = skyBox;
+		RenderingEngine.skyBox = skyBox;
+	}
+	
+	public static void setRenderingMode(RenderFlag flag)
+	{
+		renderMode.add(flag);
+	}
+	
+	public static void removeRenderFlg(RenderFlag flag)
+	{
+		renderMode.remove(flag);
+	}
+	
+	public static EnumSet<RenderFlag> getRenderMode()
+	{
+		return renderMode;
 	}
 }

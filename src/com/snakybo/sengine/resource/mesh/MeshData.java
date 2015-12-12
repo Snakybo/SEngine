@@ -1,7 +1,6 @@
 package com.snakybo.sengine.resource.mesh;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
@@ -94,9 +93,9 @@ public class MeshData implements IResource
 		glDeleteVertexArrays(vertexArrayObject);
 	}
 
-	public void draw()
+	public void draw(int mode)
 	{
 		glBindVertexArray(vertexArrayObject.get(0));
-		glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
+		glDrawElements(mode, drawCount, GL_UNSIGNED_INT, 0);
 	}
 }

@@ -1,8 +1,13 @@
 package com.snakybo.sengine.resource.mesh;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import com.snakybo.sengine.rendering.RenderFlag;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.ResourceManager;
 import com.snakybo.sengine.resource.mesh.loading.IModel;
 import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
@@ -69,10 +74,15 @@ public class Mesh
 	{
 		ResourceManager.remove(fileName);
 	}
-
+	
 	public void draw()
 	{
-		resource.draw();
+		draw(RenderingEngine.getRenderMode().contains(RenderFlag.WIREFRAME) ? GL_LINES : GL_TRIANGLES);
+	}
+
+	public void draw(int mode)
+	{
+		resource.draw(mode);
 	}
 
 	private MeshData loadMesh(String fileName)

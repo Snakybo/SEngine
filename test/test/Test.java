@@ -12,6 +12,7 @@ import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.RenderFlag;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
@@ -51,7 +52,7 @@ public class Test extends Game
 		addChild(cubeObject2);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
-		RenderingEngine.setSkyBox(skyBox);
+		RenderingEngine.setSkybox(skyBox);
 	};
 	
 	public static void main(String[] args)
