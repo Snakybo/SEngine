@@ -59,6 +59,12 @@ public class Mesh
 		ResourceManager.add(fileName);
 	}
 	
+	@Override
+	public Mesh clone()
+	{
+		return new Mesh(this);
+	}
+	
 	public void destroy()
 	{
 		ResourceManager.remove(fileName);

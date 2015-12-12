@@ -121,6 +121,12 @@ public class Texture
 
 		ResourceManager.add(fileName);
 	}
+	
+	@Override
+	public Texture clone()
+	{
+		return new Texture(this);
+	}
 
 	public void destroy()
 	{

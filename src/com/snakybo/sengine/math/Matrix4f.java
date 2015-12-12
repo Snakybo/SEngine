@@ -62,6 +62,12 @@ public class Matrix4f
 		
 		return true;
 	}
+	
+	@Override
+	public Matrix4f clone()
+	{
+		return new Matrix4f(this);
+	}
 
 	public final Vector3f transform(Vector3f amount)
 	{

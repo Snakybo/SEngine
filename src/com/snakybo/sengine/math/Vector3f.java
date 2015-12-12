@@ -90,6 +90,12 @@ public class Vector3f
 		return "Vector3f(" + x + ", " + y + ", " + z + ")";
 	}
 	
+	@Override
+	public Vector3f clone()
+	{
+		return new Vector3f(this);
+	}
+
 	public float length()
 	{
 		return (float)Math.sqrt(x * x + y * y + z * z);

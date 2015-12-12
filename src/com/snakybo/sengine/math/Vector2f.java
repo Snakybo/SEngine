@@ -80,6 +80,12 @@ public class Vector2f
 	{
 		return "Vector2f(" + x + ", " + y + ")";
 	}
+	
+	@Override
+	public Vector2f clone()
+	{
+		return new Vector2f(this);
+	}
 
 	public float length()
 	{

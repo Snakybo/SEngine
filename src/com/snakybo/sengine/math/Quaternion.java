@@ -164,6 +164,12 @@ public class Quaternion
 	{
 		return "Quaternion(" + x + ", " + y + ", " + y + ", " + w + ")";
 	}
+	
+	@Override
+	public Quaternion clone()
+	{
+		return new Quaternion(this);
+	}
 
 	public final Quaternion normalized()
 	{
