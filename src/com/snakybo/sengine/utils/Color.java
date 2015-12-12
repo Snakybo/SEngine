@@ -1,6 +1,6 @@
 package com.snakybo.sengine.utils;
 
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.math.Vector3f;
 
 /** @author Kevin
  * @since Jul 6, 2014 */

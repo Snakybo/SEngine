@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.math.Matrix4f;
 
 /** A basic camera class that you could use for perspective and orthographic
  * projections

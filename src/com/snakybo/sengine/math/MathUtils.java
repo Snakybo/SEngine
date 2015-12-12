@@ -1,4 +1,4 @@
-package com.snakybo.sengine.utils.math;
+package com.snakybo.sengine.math;
 
 /** 
  * @author Kevin

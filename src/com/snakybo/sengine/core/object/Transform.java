@@ -1,8 +1,8 @@
 package com.snakybo.sengine.core.object;
 
-import com.snakybo.sengine.utils.math.Matrix4f;
-import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Quaternion;
+import com.snakybo.sengine.math.Vector3f;
 
 /**
  * @author Kevin Krol

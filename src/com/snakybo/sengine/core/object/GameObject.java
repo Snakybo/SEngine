@@ -3,10 +3,10 @@ package com.snakybo.sengine.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.snakybo.sengine.math.Quaternion;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.shader.Shader;
-import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 /**
  * @author Kevin Krol

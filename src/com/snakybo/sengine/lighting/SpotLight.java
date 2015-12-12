@@ -1,9 +1,9 @@
 package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.lighting.utils.Attenuation;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 /** This class extends the {@link PointLight} class
  * @author Kevin Krol

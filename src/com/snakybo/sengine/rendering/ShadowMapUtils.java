@@ -1,7 +1,7 @@
 package com.snakybo.sengine.rendering;
 
+import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.shader.Shader;
-import com.snakybo.sengine.utils.math.Matrix4f;
 
 /**
  * @author Kevin

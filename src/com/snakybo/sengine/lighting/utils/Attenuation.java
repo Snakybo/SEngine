@@ -1,6 +1,6 @@
 package com.snakybo.sengine.lighting.utils;
 
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.math.Vector3f;
 
 /** The attenuation class, this class holds information about lighting values *
  * @author Kevin

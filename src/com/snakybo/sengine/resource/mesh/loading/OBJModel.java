@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.utils.Utils;
-import com.snakybo.sengine.utils.math.Vector2f;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 public class OBJModel implements IModel
 {

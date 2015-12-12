@@ -9,6 +9,9 @@ import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
+import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Quaternion;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
@@ -16,9 +19,6 @@ import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.SkyBox;
 import com.snakybo.sengine.utils.Color;
-import com.snakybo.sengine.utils.math.Matrix4f;
-import com.snakybo.sengine.utils.math.Quaternion;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 public class Test extends Game
 {

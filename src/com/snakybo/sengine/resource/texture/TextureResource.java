@@ -50,8 +50,8 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
+import com.snakybo.sengine.math.MathUtils;
 import com.snakybo.sengine.resource.IResource;
-import com.snakybo.sengine.utils.math.MathUtils;
 
 public class TextureResource implements IResource
 {

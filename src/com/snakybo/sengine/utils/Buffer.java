@@ -6,9 +6,9 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.utils.math.Matrix4f;
-import com.snakybo.sengine.utils.math.Vector2f;
-import com.snakybo.sengine.utils.math.Vector3f;
+import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.math.Vector3f;
 
 public class Buffer
 {

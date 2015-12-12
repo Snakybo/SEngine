@@ -15,8 +15,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
+import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.utils.math.Vector2f;
 
 public class Input
 {

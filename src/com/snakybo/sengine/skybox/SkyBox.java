@@ -10,12 +10,12 @@ import static org.lwjgl.opengl.GL11.glGetInteger;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.CubeMap;
 import com.snakybo.sengine.shader.Shader;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 /**
  * @author Kevin

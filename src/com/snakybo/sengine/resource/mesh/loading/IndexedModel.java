@@ -3,9 +3,9 @@ package com.snakybo.sengine.resource.mesh.loading;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.utils.Utils;
-import com.snakybo.sengine.utils.math.Vector2f;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 /** @author Kevin Krol
  * @since Jul 8, 2014 */

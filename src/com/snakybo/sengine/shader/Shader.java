@@ -27,14 +27,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.snakybo.sengine.core.object.Transform;
+import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.utils.Buffer;
-import com.snakybo.sengine.utils.math.Matrix4f;
-import com.snakybo.sengine.utils.math.Vector2f;
-import com.snakybo.sengine.utils.math.Vector3f;
 
 /**
  * @author Kevin
