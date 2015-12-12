@@ -21,7 +21,7 @@ import com.snakybo.sengine.shader.Shader;
  * @author Kevin
  * @since Dec 10, 2015
  */
-public class Skybox1
+public class Skybox
 {
 	private static final String SKYBOX_SHADER_NAME = "internal/skybox";
 	
@@ -30,7 +30,7 @@ public class Skybox1
 	private Shader shader;
 	private Mesh mesh;
 	
-	public Skybox1(CubeMap cubeMap)
+	public Skybox(CubeMap cubeMap)
 	{
 		this.transform = new Transform();
 		this.cubeMap = cubeMap;
@@ -38,7 +38,7 @@ public class Skybox1
 		this.mesh = Primitive.CUBE;
 	}
 	
-	public Skybox1(String front, String back, String left, String right, String top, String bottom)
+	public Skybox(String front, String back, String left, String right, String top, String bottom)
 	{
 		this(new CubeMap(front, back, left, right, top, bottom));
 	}
