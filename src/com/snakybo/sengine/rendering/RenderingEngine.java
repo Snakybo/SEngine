@@ -50,7 +50,7 @@ public class RenderingEngine implements IRenderingEngine
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
 	private static Skybox skyBox;
-	private static EnumSet<RenderFlag> renderMode = EnumSet.of(RenderFlag.NORMAL);
+	private static EnumSet<RenderFlag> renderflags = EnumSet.of(RenderFlag.NORMAL);
 	
 	private Map<String, Integer> samplerMap;
 	private Map<String, Object> dataContainer;
@@ -86,7 +86,7 @@ public class RenderingEngine implements IRenderingEngine
 
 		obj.render(this, AmbientLight.getAmbientShader());
 		
-		if(!renderMode.contains(RenderFlag.WIREFRAME) && !renderMode.contains(RenderFlag.NO_LIGHTING))
+		if(!renderflags.contains(RenderFlag.WIREFRAME) && !renderflags.contains(RenderFlag.NO_LIGHTING))
 		{
 			for(Light light : Light.getLights())
 			{
@@ -98,7 +98,7 @@ public class RenderingEngine implements IRenderingEngine
 	@Override
 	public void postRenderObjects()
 	{
-		if(!renderMode.contains(RenderFlag.NO_SKYBOX))
+		if(!renderflags.contains(RenderFlag.NO_SKYBOX))
 		{
 			renderSkyBox();
 		}
@@ -135,7 +135,7 @@ public class RenderingEngine implements IRenderingEngine
 
 			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(shadowMapCamera.getViewProjection()));
 
-			if(!renderMode.contains(RenderFlag.NO_SHADOWS))
+			if(!renderflags.contains(RenderFlag.NO_SHADOWS))
 			{
 				Camera tempCamera = Camera.getMainCamera();
 				Camera.setMainCamera(shadowMapCamera);
@@ -219,18 +219,23 @@ public class RenderingEngine implements IRenderingEngine
 		RenderingEngine.skyBox = skyBox;
 	}
 	
-	public static void setRenderingMode(RenderFlag flag)
+	public static void addRenderFlag(RenderFlag flag)
 	{
-		renderMode.add(flag);
+		renderflags.add(flag);
 	}
 	
 	public static void removeRenderFlg(RenderFlag flag)
 	{
-		renderMode.remove(flag);
+		renderflags.remove(flag);
 	}
 	
-	public static EnumSet<RenderFlag> getRenderMode()
+	public static void setRenderFlag(RenderFlag flag)
 	{
-		return renderMode;
+		renderflags = EnumSet.of(flag);
+	}
+	
+	public static EnumSet<RenderFlag> getRenderFlags()
+	{
+		return renderflags;
 	}
 }

@@ -77,7 +77,7 @@ public class Mesh
 	
 	public void draw()
 	{
-		draw(RenderingEngine.getRenderMode().contains(RenderFlag.WIREFRAME) ? GL_LINES : GL_TRIANGLES);
+		draw(RenderingEngine.getRenderFlags().contains(RenderFlag.WIREFRAME) ? GL_LINES : GL_TRIANGLES);
 	}
 
 	public void draw(int mode)
