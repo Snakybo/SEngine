@@ -6,17 +6,17 @@ package com.snakybo.sengine.utils.math;
  */
 public class MathUtils
 {
-	public static <T extends Comparable<T>> T clamp(T val, T min, T max)
+	public static <T extends Comparable<T>> T clamp(T value, T min, T max)
 	{
-		if(val.compareTo(min) < 0)
+		if(value.compareTo(min) < 0)
 		{
 			return min;
 		}
-		else if(val.compareTo(max) > 0)
+		else if(value.compareTo(max) > 0)
 		{
 			return max;
 		}
 		
-		return val;
+		return value;
 	}
 }
