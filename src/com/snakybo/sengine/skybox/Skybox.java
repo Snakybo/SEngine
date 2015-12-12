@@ -21,7 +21,7 @@ import com.snakybo.sengine.shader.Shader;
  * @author Kevin
  * @since Dec 10, 2015
  */
-public class Skybox
+public final class Skybox
 {
 	private static final String SKYBOX_SHADER_NAME = "internal/skybox";
 	
@@ -43,7 +43,7 @@ public class Skybox
 		this(new CubeMap(front, back, left, right, top, bottom));
 	}
 	
-	public void render(RenderingEngine renderingEngine)
+	public final void render(RenderingEngine renderingEngine)
 	{
 		int cullFaceMode = glGetInteger(GL_CULL_FACE_MODE);
 		int depthFuncMode = glGetInteger(GL_DEPTH_FUNC);
