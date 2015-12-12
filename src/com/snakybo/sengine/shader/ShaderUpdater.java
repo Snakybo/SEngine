@@ -64,7 +64,7 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("DirectionalLight"))
 				{
-					setUniform(shader, name, (DirectionalLight)LightUtils.getCurrentLight());
+					setUniform(shader, name,(DirectionalLight)LightUtils.getCurrentLight());
 				}
 				else if(type.equals("PointLight"))
 				{
@@ -87,7 +87,7 @@ public abstract class ShaderUpdater
 			}
 			else if(name.startsWith("T_"))
 			{
-				if (name.equals("T_MVP"))
+				if(name.equals("T_MVP"))
 				{
 					shader.setUniform(name, mvpMatrix);
 				}
@@ -102,7 +102,7 @@ public abstract class ShaderUpdater
 			}
 			else if(name.startsWith("C_"))
 			{
-				if (name.equals("C_eyePos"))
+				if(name.equals("C_eyePos"))
 				{
 					shader.setUniform(name, Camera.getMainCamera().getTransform().getPosition());
 				}
@@ -117,7 +117,7 @@ public abstract class ShaderUpdater
 				{
 					shader.setUniform(name, material.get(Vector3f.class, name));
 				}
-				else if (type.equals("float"))
+				else if(type.equals("float"))
 				{
 					shader.setUniformf(name, material.get(Float.class, name));
 				}

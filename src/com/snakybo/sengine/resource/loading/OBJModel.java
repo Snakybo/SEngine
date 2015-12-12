@@ -99,7 +99,7 @@ public class OBJModel implements IModel
 
 			bufferedReader.close();
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			e.printStackTrace();
 			System.exit(1);

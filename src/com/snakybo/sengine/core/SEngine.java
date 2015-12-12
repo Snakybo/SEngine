@@ -57,7 +57,7 @@ public class SEngine
 	*/
 	public void stop()
 	{
-		if (!isRunning)
+		if(!isRunning)
 			return;
 
 		isRunning = false;
@@ -74,7 +74,7 @@ public class SEngine
 		double unprocessedTime = 0.0;
 		double frameCounter = 0.0;
 
-		while (isRunning)
+		while(isRunning)
 		{
 			boolean render = false;
 
@@ -115,7 +115,7 @@ public class SEngine
 				Input.update();
 			}
 
-			if (render)
+			if(render)
 			{
 				game.render(renderingEngine);
 				Window.update();
@@ -127,7 +127,7 @@ public class SEngine
 				{
 					Thread.sleep(1);
 				}
-				catch (InterruptedException e)
+				catch(InterruptedException e)
 				{
 					e.printStackTrace();
 				}

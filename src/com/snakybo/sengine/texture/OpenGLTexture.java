@@ -42,11 +42,11 @@ public class OpenGLTexture
 				{
 					int pixel = pixels[y * image.getWidth() + x];
 
-					byte alphaByte = hasAlpha ? (byte) ((pixel >> 24) & 0xFF) : (byte) (0xFF);
+					byte alphaByte = hasAlpha ? (byte)((pixel >> 24) & 0xFF) : (byte)(0xFF);
 
-					data.put((byte) ((pixel >> 16) & 0xFF));
-					data.put((byte) ((pixel >> 8) & 0xFF));
-					data.put((byte) ((pixel) & 0xFF));
+					data.put((byte)((pixel >> 16) & 0xFF));
+					data.put((byte)((pixel >> 8) & 0xFF));
+					data.put((byte)((pixel) & 0xFF));
 					data.put(alphaByte);
 				}
 			}

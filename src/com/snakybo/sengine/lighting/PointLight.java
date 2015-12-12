@@ -32,7 +32,7 @@ public class PointLight extends Light
 		float b = attenuation.getLinear();
 		float c = attenuation.getConstant() - COLOR_DEPTH * getIntensity() * getColor().max();
 
-		this.range = (float) ((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+		this.range = (float)((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
 
 		setShader(new Shader("internal/forward-point"));
 	}

@@ -108,16 +108,16 @@ public class FreeMove extends Component
 	{
 		float moveAmount = speed * delta;
 		
-		if (Input.getKey(keyForward))
+		if(Input.getKey(keyForward))
 			move(getTransform().getLocalRotation().getForward(), moveAmount);
 
-		if (Input.getKey(keyBackward))
+		if(Input.getKey(keyBackward))
 			move(getTransform().getLocalRotation().getForward(), -moveAmount);
 
-		if (Input.getKey(keyLeft))
+		if(Input.getKey(keyLeft))
 			move(getTransform().getLocalRotation().getLeft(), moveAmount);
 
-		if (Input.getKey(keyRight))
+		if(Input.getKey(keyRight))
 			move(getTransform().getLocalRotation().getRight(), moveAmount);
 	}
 

@@ -157,7 +157,7 @@ public class TextureData implements IReferenceCounter
 				glGenerateMipmap(textureTarget);
 
 				float maxAnisotropic = MathUtils.clamp(glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0f, 8f);
-				assert (maxAnisotropic >= 0 && maxAnisotropic <= 8);
+				assert(maxAnisotropic >= 0 && maxAnisotropic <= 8);
 
 				glTexParameterf(textureTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropic);
 			}
@@ -177,7 +177,7 @@ public class TextureData implements IReferenceCounter
 		}
 
 		IntBuffer drawBuffers = BufferUtils.createIntBuffer(32);
-		assert (numTextures <= 32);
+		assert(numTextures <= 32);
 
 		boolean hasDepth = false;
 

@@ -45,7 +45,7 @@ public class Mesh
 
 		MeshData existingResource = resourceMap.get(fileName);
 
-		if (existingResource != null)
+		if(existingResource != null)
 		{
 			resource = existingResource;
 			resource.addReference();
@@ -90,7 +90,7 @@ public class Mesh
 			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
 			IModel model = null;
 
-			switch (ext)
+			switch(ext)
 			{
 			case ".obj":
 				model = new OBJModel(new FileReader(MESH_FOLDER + fileName));

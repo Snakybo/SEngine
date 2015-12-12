@@ -69,29 +69,29 @@ public class FreeLook extends Component
 	@Override
 	protected void update(float delta)
 	{
-		if (Input.getKey(unlockMouseKey))
+		if(Input.getKey(unlockMouseKey))
 		{
 			Input.setCursor(true);
 			mouseLocked = false;
 		}
 
-		if (mouseLocked)
+		if(mouseLocked)
 		{
 			Vector2f deltaPos = Input.getMousePosition().sub(windowCenter);
 
 			boolean rotY = deltaPos.x != 0;
 			boolean rotX = deltaPos.y != 0;
 
-			if (rotY)
+			if(rotY)
 				rotate(yAxis, -deltaPos.x);
-			if (rotX)
+			if(rotX)
 				rotate(getTransform().getLocalRotation().getRight(), deltaPos.y);
 
-			if (rotY || rotX)
+			if(rotY || rotX)
 				Input.setMousePosition(windowCenter);
 		}
 
-		if (Input.getMouseDown(0))
+		if(Input.getMouseDown(0))
 		{
 			Input.setMousePosition(windowCenter);
 			Input.setCursor(false);
