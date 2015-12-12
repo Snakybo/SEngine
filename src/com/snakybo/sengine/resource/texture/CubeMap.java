@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.snakybo.sengine.texture;
+package com.snakybo.sengine.resource.texture;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_RGB;
@@ -63,7 +63,7 @@ public class CubeMap
 		
 		for(int i = 0; i < CUBE_MAP_AXIS.length; i++)
 		{
-			OpenGLTexture texture = new OpenGLTexture(textures[i]);
+			OpenGLTextureLoader texture = new OpenGLTextureLoader(textures[i]);
 			
 			glTexImage2D(CUBE_MAP_AXIS[i], 0, GL_RGB, texture.getWidth(), texture.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.getData());
 			

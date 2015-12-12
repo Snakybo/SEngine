@@ -1,24 +1,19 @@
-package com.snakybo.sengine.texture;
+package com.snakybo.sengine.resource.texture;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_NONE;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.snakybo.sengine.resource.management.TextureData;
+import com.snakybo.sengine.resource.ResourceManager;
+import com.snakybo.sengine.utils.Time;
 
 public class Texture
 {
-	private static Map<String, TextureData> resourceMap = new HashMap<String, TextureData>();	
-	
-	private TextureData resource;
-	private String fileName;
+	private final String fileName;	
+	private final TextureResource resource;
 
 	public Texture()
 	{
@@ -67,8 +62,9 @@ public class Texture
 
 	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
-		fileName = "";
-		resource = new TextureData(textureTarget, width, height, 1, data, filters, internalFormat, format, clamp, attachments);
+		fileName = "texture_" + Time.getCurrentTimeMillis();		
+		resource = new TextureResource(textureTarget, width, height, 1, data, filters, internalFormat, format, clamp, attachments);
+		ResourceManager.add(fileName, resource);
 	}
 
 	public Texture(String fileName)
@@ -101,20 +97,20 @@ public class Texture
 		this(fileName, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
+	public Texture(String fileName, int target, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		this.fileName = fileName;
-
-		TextureData existingResource = resourceMap.get(fileName);
-
-		if(existingResource != null)
+		
+		if(ResourceManager.has(fileName))
 		{
-			resource = existingResource;
-			resource.addReference();
+			ResourceManager.add(fileName);
+			resource = ResourceManager.get(TextureResource.class, fileName);
 		}
 		else
 		{
-			loadTexture(fileName, textureTarget, filters, internalFormat, format, clamp, attachments);
+			OpenGLTextureLoader textureData = new OpenGLTextureLoader(fileName);
+			resource = new TextureResource(target, textureData.getWidth(), textureData.getHeight(), 1, textureData.getData(), filters, internalFormat, format, clamp, attachments);
+			ResourceManager.add(fileName, resource);
 		}
 	}
 
@@ -123,15 +119,12 @@ public class Texture
 		fileName = other.fileName;
 		resource = other.resource;
 
-		resource.addReference();
+		ResourceManager.add(fileName);
 	}
 
 	public void destroy()
 	{
-		if(resource.removeReference() && !fileName.isEmpty())
-		{
-			resourceMap.remove(fileName);
-		}
+		ResourceManager.remove(fileName);
 	}
 
 	public void bind()
@@ -141,13 +134,7 @@ public class Texture
 
 	public void bind(int unit)
 	{
-		if(unit < 0 || unit >= 32)
-		{
-			throw new IllegalArgumentException("The unit " + unit + " is out of bounds\n");
-		}
-
-		glActiveTexture(GL_TEXTURE0 + unit);
-		resource.bind(0);
+		resource.bind(unit);
 	}
 
 	public void bindAsRenderTarget()
@@ -163,13 +150,5 @@ public class Texture
 	public int getHeight()
 	{
 		return resource.getHeight();
-	}
-
-	private void loadTexture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
-	{
-		OpenGLTexture texture = new OpenGLTexture(fileName);
-			
-		resource = new TextureData(textureTarget, texture.getWidth(), texture.getHeight(), 1, texture.getData(), filters, internalFormat, format, clamp, attachments);
-		resourceMap.put(fileName, resource);
 	}
 }

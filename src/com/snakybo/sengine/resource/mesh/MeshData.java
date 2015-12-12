@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.management;
+package com.snakybo.sengine.resource.mesh;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -21,13 +21,13 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.resource.loading.IndexedModel;
+import com.snakybo.sengine.resource.IResource;
+import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
 import com.snakybo.sengine.utils.Buffer;
-import com.snakybo.sengine.utils.IReferenceCounter;
 
 /** @author Kevin Krol
  * @since Jul 8, 2014 */
-public class MeshData implements IReferenceCounter
+public class MeshData implements IResource
 {
 	private static final int NUM_BUFFERS = 5;
 
@@ -41,12 +41,9 @@ public class MeshData implements IReferenceCounter
 	private IntBuffer vertexArrayBuffers;
 
 	private int drawCount;
-	private int refCount;
 
 	public MeshData(IndexedModel model)
 	{
-		super();
-
 		if(!model.isValid())
 		{
 			System.err.println("A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
@@ -91,37 +88,10 @@ public class MeshData implements IReferenceCounter
 	}
 
 	@Override
-	protected void finalize() throws Throwable
+	public void destroy()
 	{
-		try
-		{
-			glDeleteBuffers(vertexArrayBuffers);
-			glDeleteVertexArrays(vertexArrayObject);
-		}
-		finally
-		{
-			super.finalize();
-		}
-	}
-
-	@Override
-	public void addReference()
-	{
-		refCount++;
-	}
-
-	@Override
-	public boolean removeReference()
-	{
-		refCount--;
-
-		return refCount == 0;
-	}
-
-	@Override
-	public int getReferenceCount()
-	{
-		return refCount;
+		glDeleteBuffers(vertexArrayBuffers);
+		glDeleteVertexArrays(vertexArrayObject);
 	}
 
 	public void draw()

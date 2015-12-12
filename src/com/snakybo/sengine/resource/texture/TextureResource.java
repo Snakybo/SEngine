@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.management;
+package com.snakybo.sengine.resource.texture;
 
 import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
 import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
@@ -24,6 +24,8 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL12.GL_TEXTURE_BASE_LEVEL;
 import static org.lwjgl.opengl.GL12.GL_TEXTURE_MAX_LEVEL;
 import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL20.glDrawBuffers;
 import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
@@ -48,80 +50,56 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.utils.IReferenceCounter;
+import com.snakybo.sengine.resource.IResource;
 import com.snakybo.sengine.utils.math.MathUtils;
 
-public class TextureData implements IReferenceCounter
+public class TextureResource implements IResource
 {
-	private IntBuffer textureIds;
+	private IntBuffer id;
 
-	private int textureTarget;
+	private int target;
 	private int frameBuffer;
 	private int renderBuffer;
 	private int numTextures;
 	private int width;
 	private int height;
 
-	private int refCount;
-
-	public TextureData(int textureTarget, int width, int height, int numTextures, ByteBuffer data, int filters, int internalFormat, int format, boolean clamp, int attachments)
+	public TextureResource(int target, int width, int height, int numTextures, ByteBuffer data, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
-		this.textureIds = BufferUtils.createIntBuffer(numTextures);
-		this.textureTarget = textureTarget;
+		this.id = BufferUtils.createIntBuffer(numTextures);		
+		this.target = target;
 		this.numTextures = numTextures;
 		this.width = width;
 		this.height = height;
-
+		
 		frameBuffer = 0;
 		renderBuffer = 0;
-		refCount = 0;
-
+		
 		initTextures(data, filters, internalFormat, format, clamp);
 		initRenderTargets(attachments);
 	}
-
+	
 	@Override
-	protected void finalize() throws Throwable
+	public void destroy()
 	{
-		try
-		{
-			glDeleteFramebuffers(frameBuffer);
-			glDeleteRenderbuffers(renderBuffer);
+		glDeleteFramebuffers(frameBuffer);
+		glDeleteRenderbuffers(renderBuffer);
 
-			for(int textureId : textureIds.array())
-			{
-				glDeleteBuffers(textureId);
-			}
-		}
-		finally
+		for(int textureId : id.array())
 		{
-			super.finalize();
+			glDeleteBuffers(textureId);
 		}
 	}
-
-	@Override
-	public void addReference()
+	
+	public void bind(int unit)
 	{
-		refCount++;
-	}
+		if(unit < 0 || unit >= 32)
+		{
+			throw new IllegalArgumentException("[Texture] The unit " + unit + " is out of bounds\n");
+		}
 
-	@Override
-	public boolean removeReference()
-	{
-		refCount--;
-
-		return refCount == 0;
-	}
-
-	@Override
-	public int getReferenceCount()
-	{
-		return refCount;
-	}
-
-	public void bind(int textureNum)
-	{
-		glBindTexture(textureTarget, textureIds.get(textureNum));
+		glActiveTexture(GL_TEXTURE0 + unit);
+		glBindTexture(target, id.get(0));
 	}
 
 	public void bindAsRenderTarget()
@@ -129,42 +107,46 @@ public class TextureData implements IReferenceCounter
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 		glViewport(0, 0, width, height);
 	}
-
+	
 	private void initTextures(ByteBuffer data, int filters, int internalFormat, int format, boolean clamp)
 	{
-		glGenTextures(textureIds);
+		glGenTextures(id);
 
 		for(int i = 0; i < numTextures; i++)
 		{
-			glBindTexture(textureTarget, textureIds.get(i));
+			glBindTexture(target, id.get(i));
 
-			glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, filters);
-			glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, filters);
+			glTexParameterf(target, GL_TEXTURE_MIN_FILTER, filters);
+			glTexParameterf(target, GL_TEXTURE_MAG_FILTER, filters);
 
 			if(clamp)
 			{
-				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glTexParameteri(textureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 			}
 
-			glTexImage2D(textureTarget, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 			boolean mipmapEnabled = filters == GL_NEAREST_MIPMAP_NEAREST || filters == GL_NEAREST_MIPMAP_LINEAR	|| filters == GL_LINEAR_MIPMAP_NEAREST || filters == GL_LINEAR_MIPMAP_LINEAR;
 
 			if(mipmapEnabled)
 			{
-				glGenerateMipmap(textureTarget);
+				glGenerateMipmap(target);
 
 				float maxAnisotropic = MathUtils.clamp(glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0f, 8f);
-				assert(maxAnisotropic >= 0 && maxAnisotropic <= 8);
+				
+				if(maxAnisotropic < 0 || maxAnisotropic > 8)
+				{
+					throw new IllegalStateException("[Texture] Invalid anisotropic level: " + maxAnisotropic);
+				}
 
-				glTexParameterf(textureTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropic);
+				glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropic);
 			}
 			else
 			{
-				glTexParameteri(textureTarget, GL_TEXTURE_BASE_LEVEL, 0);
-				glTexParameteri(textureTarget, GL_TEXTURE_MAX_LEVEL, 0);
+				glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(target, GL_TEXTURE_MAX_LEVEL, 0);
 			}
 		}
 	}
@@ -204,7 +186,7 @@ public class TextureData implements IReferenceCounter
 				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 			}
 
-			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachments, textureTarget, textureIds.get(i), 0);
+			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachments, target, id.get(i), 0);
 		}
 
 		if(frameBuffer == 0)
@@ -231,12 +213,12 @@ public class TextureData implements IReferenceCounter
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-
+	
 	public int getWidth()
 	{
 		return width;
 	}
-
+	
 	public int getHeight()
 	{
 		return height;

@@ -28,7 +28,7 @@ import java.util.Map;
 
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.resource.Material;
+import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.utils.Buffer;

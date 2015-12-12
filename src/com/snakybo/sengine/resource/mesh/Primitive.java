@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.snakybo.sengine.resource;
+package com.snakybo.sengine.resource.mesh;
 
 /**
  * @author Kevin

@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.loading;
+package com.snakybo.sengine.resource.mesh.loading;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

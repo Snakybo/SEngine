@@ -7,9 +7,9 @@ import com.snakybo.sengine.lighting.PointLight;
 import com.snakybo.sengine.lighting.SpotLight;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.resource.Material;
+import com.snakybo.sengine.resource.material.Material;
+import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
-import com.snakybo.sengine.texture.Texture;
 import com.snakybo.sengine.utils.math.Matrix4f;
 import com.snakybo.sengine.utils.math.Vector3f;
 

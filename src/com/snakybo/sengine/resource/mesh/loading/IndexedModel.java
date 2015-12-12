@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.loading;
+package com.snakybo.sengine.resource.mesh.loading;
 
 import java.util.ArrayList;
 import java.util.List;

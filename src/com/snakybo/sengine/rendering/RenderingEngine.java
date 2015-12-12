@@ -36,8 +36,8 @@ import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
+import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.SkyBox;
-import com.snakybo.sengine.texture.Texture;
 import com.snakybo.sengine.utils.math.Matrix4f;
 
 /**

@@ -1,9 +1,9 @@
-package com.snakybo.sengine.resource;
+package com.snakybo.sengine.resource.material;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.snakybo.sengine.texture.Texture;
+import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.utils.IDataContainer;
 
 public class Material implements IDataContainer

@@ -1,4 +1,4 @@
-package com.snakybo.sengine.texture;
+package com.snakybo.sengine.resource.texture;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,7 +13,7 @@ import com.snakybo.sengine.utils.Buffer;
  * @author Kevin
  * @since Dec 10, 2015
  */
-public class OpenGLTexture
+class OpenGLTextureLoader
 {
 	private static final String TEXTURE_FOLDER = "./res/textures/";
 	
@@ -22,7 +22,7 @@ public class OpenGLTexture
 	private int width;
 	private int height;
 	
-	public OpenGLTexture(String fileName)
+	public OpenGLTextureLoader(String fileName)
 	{
 		try
 		{
