@@ -2,16 +2,22 @@ package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.lighting.utils.Attenuation;
 import com.snakybo.sengine.math.Matrix4f;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
 /**
  * @author Kevin Krol
  * @since Apr 4, 2014
+ * TODO: Make SpotLight extend PointLight, currently the shader system doesn't support it.
  */
-public class SpotLight extends PointLight
+public class SpotLight extends Light
 {
+	private static final int COLOR_DEPTH = 256;
+	
+	private Attenuation attenuation;
+
+	private float range;
 	private float cutoff;
 	
 	public SpotLight()
@@ -56,19 +62,34 @@ public class SpotLight extends PointLight
 
 	public SpotLight(Color color, float intensity, Attenuation attenuation, float viewAngle, int shadowMapSize, float shadowSoftness, float lightBleedReductionAmount, float minVariance)
 	{
-		super(color, intensity, attenuation);
+		super(color, intensity, new Shader("internal/forward-spot"));
 		
-		shader = new Shader("internal/forward-spot");
-		cutoff = (float)Math.cos(viewAngle / 2);
+		float a = attenuation.getExponent();
+		float b = attenuation.getLinear();
+		float c = attenuation.getConstant() - COLOR_DEPTH * getIntensity() * getColor().max();
+
+		this.range = (float)((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
+		this.attenuation = attenuation;		
+		this.cutoff = (float)Math.cos(viewAngle / 2);
 		
 		if(shadowMapSize > 0)
 		{
-			Matrix4f projection = Matrix4f.perspective(viewAngle, 1f, 0.1f, getRange());
+			Matrix4f projection = Matrix4f.perspective(viewAngle, 1f, 0.1f, range);
 			shadowInfo = new ShadowInfo(projection, false, shadowMapSize, shadowSoftness, lightBleedReductionAmount, minVariance);
 		}
 	}
+	
+	public final Attenuation getAttenuation()
+	{
+		return attenuation;
+	}
+	
+	public final float getRange()
+	{
+		return range;
+	}
 
-	public float getCutoff()
+	public final float getCutoff()
 	{
 		return cutoff;
 	}

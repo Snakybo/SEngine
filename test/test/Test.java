@@ -9,13 +9,15 @@ import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
+import com.snakybo.sengine.lighting.PointLight;
+import com.snakybo.sengine.lighting.SpotLight;
+import com.snakybo.sengine.lighting.utils.Attenuation;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
-import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
@@ -37,6 +39,18 @@ public class Test extends Game
 		GameObject directionalLightObject = new GameObject().addComponent(directionalLight);
 		directionalLightObject.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
 		addChild(directionalLightObject);
+		
+		SpotLight spotLight = new SpotLight(new Color(0, 1, 1), 0.8f, new Attenuation(0, 0, 0.02f), (float)Math.toRadians(91.1f), 7, 1, 0.5f);
+		GameObject spotLightObject = new GameObject().addComponent(spotLight);
+		spotLightObject.getTransform().rotate(new Vector3f(0, 1, 0), Math.toRadians(90));
+		spotLightObject.getTransform().rotate(new Vector3f(1, 0, 0), Math.toRadians(-60));
+		spotLightObject.getTransform().setPosition(new Vector3f(-4, 1, 2));
+		addChild(spotLightObject);
+		
+		PointLight pointLight = new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f));
+		GameObject pointLightObject = new GameObject().addComponent(pointLight);
+		pointLightObject.getTransform().setPosition(new Vector3f(12, 1, 12));
+		addChild(pointLightObject);
 		
 		Material brickMaterial = new Material(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);		
 		addChild(new GameObject(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20)).addComponent(new MeshRenderer(Primitive.PLANE, brickMaterial)));

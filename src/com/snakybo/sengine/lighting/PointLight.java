@@ -43,13 +43,13 @@ public class PointLight extends Light
 		this.attenuation = attenuation;
 	}
 	
-	public float getRange()
-	{
-		return range;
-	}
-	
-	public Attenuation getAttenuation()
+	public final Attenuation getAttenuation()
 	{
 		return attenuation;
 	}
+	
+	public final float getRange()
+	{
+		return range;
+	}	
 }

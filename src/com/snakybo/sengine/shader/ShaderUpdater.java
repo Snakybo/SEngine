@@ -172,15 +172,15 @@ public abstract class ShaderUpdater
 	 */
 	private static void setUniform(Shader shader, String name, SpotLight light)
 	{
-		shader.setUniform(name + ".pointLight.position", light.getTransform().getPosition());
+		shader.setUniform(name + ".position", light.getTransform().getPosition());
 		shader.setUniform(name + ".direction", light.getTransform().getRotation().getForward());
-		shader.setUniform(name + ".pointLight.baseLight.color", light.getColor());
+		shader.setUniform(name + ".baseLight.color", light.getColor());
 
-		shader.setUniformf(name + ".pointLight.baseLight.intensity", light.getIntensity());
-		shader.setUniformf(name + ".pointLight.attenuation.constant", light.getAttenuation().getConstant());
-		shader.setUniformf(name + ".pointLight.attenuation.linear", light.getAttenuation().getLinear());
-		shader.setUniformf(name + ".pointLight.attenuation.exponent", light.getAttenuation().getExponent());
+		shader.setUniformf(name + ".baseLight.intensity", light.getIntensity());
+		shader.setUniformf(name + ".attenuation.constant", light.getAttenuation().getConstant());
+		shader.setUniformf(name + ".attenuation.linear", light.getAttenuation().getLinear());
+		shader.setUniformf(name + ".attenuation.exponent", light.getAttenuation().getExponent());
 		shader.setUniformf(name + ".cutoff", light.getCutoff());
-		shader.setUniformf(name + ".pointLight.range", light.getRange());
+		shader.setUniformf(name + ".range", light.getRange());
 	}
 }

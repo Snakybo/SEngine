@@ -39,8 +39,10 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.utils.FilterUtils;
+import com.snakybo.sengine.rendering.utils.ShadowUtils;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.skybox.Skybox;
@@ -49,7 +51,7 @@ import com.snakybo.sengine.skybox.Skybox;
  * @author Kevin
  * @since Apr 4, 2014
  */
-public class RenderingEngine implements IRenderingEngine
+public class RenderingEngine
 {
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
@@ -87,7 +89,6 @@ public class RenderingEngine implements IRenderingEngine
 		initializeGL();
 	}
 	
-	@Override
 	public void render(GameObject obj)
 	{
 		Camera mainCamera = Camera.getMainCamera();	
@@ -108,24 +109,12 @@ public class RenderingEngine implements IRenderingEngine
 		}
 	}
 	
-	@Override
 	public void postRenderObjects()
 	{
 		if(!renderFlags.contains(RenderFlag.NO_SKYBOX))
 		{
 			renderSkyBox();
 		}
-	}
-	
-	@Override
-	public int getTextureSamplerSlot(String samplerName)
-	{
-		if(samplerMap.containsKey(samplerName))
-		{
-			return samplerMap.get(samplerName);
-		}
-		
-		throw new IllegalArgumentException("[RenderingEngine] No texture sampler slot found for sampler with name: " + samplerName);
 	}
 	
 	/**
@@ -157,10 +146,7 @@ public class RenderingEngine implements IRenderingEngine
 		
 		if(shadowInfo.getSize() > 0 && !renderFlags.contains(RenderFlag.NO_SHADOWS))
 		{
-			Vector3f mainCameraPosition = Camera.getMainCamera().getTransform().getPosition();
-			Quaternion mainCameraRotation = Camera.getMainCamera().getTransform().getRotation();
-			
-			ShadowCameraTransform shadowCameraTransform = light.calculateShadowCameraTransform(mainCameraPosition, mainCameraRotation);
+			ShadowCameraTransform shadowCameraTransform = light.calculateShadowCameraTransform();
 			
 			shadowMapCamera.setProjection(shadowInfo.getProjection());
 			shadowMapCamera.getTransform().setPosition(shadowCameraTransform.getPosition());
@@ -184,8 +170,11 @@ public class RenderingEngine implements IRenderingEngine
 			{
 				glCullFace(GL_BACK);
 			}		
-			
-			blurShadowMap(shadowMapIndex, 0.25f);
+				
+			if(shadowInfo.getSoftness() > 0)
+			{
+				blurShadowMap(shadowMapIndex, shadowInfo.getSoftness());
+			}
 		}
 		else
 		{
@@ -233,12 +222,10 @@ public class RenderingEngine implements IRenderingEngine
 		Texture shadowMap = ShadowUtils.getShadowMaps()[shadowMapIndex];
 		Texture tempShadowMap = ShadowUtils.getTempShadowMaps()[shadowMapIndex];
 		
-		set("blurScale", new Vector3f(1f / (shadowMap.getWidth() * amount), 0, 0));
-		//set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
+		set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
 		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
 		
-		set("blurScale", new Vector3f(0, 1f / (shadowMap.getWidth() * amount), 0));
-		//set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
+		set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
 		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
 	}
 	
@@ -284,14 +271,12 @@ public class RenderingEngine implements IRenderingEngine
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 	}
-
-	@Override
+	
 	public void set(String name, Object value)
 	{
 		dataContainer.put(name, value);
 	}
-
-	@Override
+	
 	public <T> T get(Class<T> type, String name)
 	{
 		if(!dataContainer.containsKey(name))
@@ -300,6 +285,16 @@ public class RenderingEngine implements IRenderingEngine
 		}
 		
 		return type.cast(dataContainer.get(name));
+	}
+	
+	public int getTextureSamplerSlot(String samplerName)
+	{
+		if(samplerMap.containsKey(samplerName))
+		{
+			return samplerMap.get(samplerName);
+		}
+		
+		throw new IllegalArgumentException("[RenderingEngine] No texture sampler slot found for sampler with name: " + samplerName);
 	}
 	
 	public static void setSkybox(Skybox skyBox)

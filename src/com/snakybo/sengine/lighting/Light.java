@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.math.Quaternion;
-import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
@@ -47,9 +45,9 @@ public abstract class Light extends Component
 		lights.add(this);
 	}
 	
-	public ShadowCameraTransform calculateShadowCameraTransform(Vector3f mainCameraPosition, Quaternion mainCameraRotation)
+	public ShadowCameraTransform calculateShadowCameraTransform()
 	{
-		return null;
+		return new ShadowCameraTransform(getTransform().getPosition(), getTransform().getRotation());
 	}
 
 	/** @return The shader the light uses

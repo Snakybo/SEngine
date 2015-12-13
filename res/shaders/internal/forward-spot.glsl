@@ -26,12 +26,12 @@ uniform SpotLight R_spotLight;
 
 vec4 CalcLightingEffect(vec3 normal, vec3 worldPos)
 {
-	vec3 lightDirection = normalize(worldPos - R_spotLight.pointLight.position);
+	vec3 lightDirection = normalize(worldPos - R_spotLight.position);
 	float spotFactor = dot(lightDirection, R_spotLight.direction);
 	
 	if(spotFactor > R_spotLight.cutoff)
 	{
-		return CalcPointLight(R_spotLight.pointLight, normal, worldPos, specularIntensity, specularPower, C_eyePos) * (1.0 - (1.0 - spotFactor) / (1.0 - R_spotLight.cutoff));
+		return CalcSpotLight(R_spotLight, normal, worldPos, specularIntensity, specularPower, C_eyePos) * (1.0 - (1.0 - spotFactor) / (1.0 - R_spotLight.cutoff));
 	}
 	
 	return vec4(0, 0, 0, 0);

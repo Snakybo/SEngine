@@ -20,8 +20,6 @@ float CalcShadowAmount(sampler2D shadowMap, vec4 initialShadowMapCoords)
 {
 	vec3 shadowMapCoords = (initialShadowMapCoords.xyz / initialShadowMapCoords.w);
 	
-	//return SampleShadowMap(shadowMap, shadowMapCoords.xy, shadowMapCoords.z - (2.0 / 1024.0));
-	
 	if(InRange(shadowMapCoords.z) && InRange(shadowMapCoords.x) && InRange(shadowMapCoords.y))
 	{
 		return SampleVarianceShadowMap(shadowMap, shadowMapCoords.xy, shadowMapCoords.z, R_shadowVarianceMin, R_shadowLightBleedingReduction);

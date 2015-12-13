@@ -27,8 +27,11 @@ struct PointLight
 
 struct SpotLight
 {
-	PointLight pointLight;
+	BaseLight baseLight;
+	Attenuation attenuation;
+	vec3 position;
 	vec3 direction;
+	float range;	
 	float cutoff;
 };
 
@@ -70,6 +73,25 @@ vec4 CalcPointLight(PointLight pointLight, vec3 normal, vec3 worldPos, float spe
 	
 	vec4 color = CalcLight(pointLight.baseLight, lightDirection, normal, worldPos, specularIntensity, specularPower, eyePos);
 	float attenuation = pointLight.attenuation.constant + pointLight.attenuation.linear * distanceToPoint + pointLight.attenuation.exponent * distanceToPoint * distanceToPoint + 0.0001;
+				 
+	return color / attenuation;
+}
+
+vec4 CalcSpotLight(SpotLight spotLight, vec3 normal, vec3 worldPos, float specularIntensity, float specularPower, vec3 eyePos)
+{
+	vec3 lightDirection = worldPos - spotLight.position;
+
+	float distanceToPoint = length(lightDirection);
+
+	if(distanceToPoint > spotLight.range)
+	{
+		return vec4(0, 0, 0, 0);
+	}
+
+	lightDirection = normalize(lightDirection);
+	
+	vec4 color = CalcLight(spotLight.baseLight, lightDirection, normal, worldPos, specularIntensity, specularPower, eyePos);
+	float attenuation = spotLight.attenuation.constant + spotLight.attenuation.linear * distanceToPoint + spotLight.attenuation.exponent * distanceToPoint * distanceToPoint + 0.0001;
 				 
 	return color / attenuation;
 }

@@ -1,10 +1,11 @@
 package com.snakybo.sengine.lighting;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
@@ -65,8 +66,11 @@ public class DirectionalLight extends Light
 	}
 	
 	@Override
-	public ShadowCameraTransform calculateShadowCameraTransform(Vector3f mainCameraPosition, Quaternion mainCameraRotation)
+	public ShadowCameraTransform calculateShadowCameraTransform()
 	{
+		Vector3f mainCameraPosition = Camera.getMainCamera().getTransform().getPosition();
+		Quaternion mainCameraRotation = Camera.getMainCamera().getTransform().getRotation();
+		
 		Vector3f resultPosition = mainCameraPosition.add(mainCameraRotation.getForward().mul(halfShadowArea));
 		Quaternion resultRotation = getTransform().getRotation();
 		

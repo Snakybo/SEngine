@@ -88,11 +88,6 @@ public class Quaternion
 	
 	public Quaternion(Vector3f axis, double angle)
 	{
-		this(axis, (float)angle);
-	}
-
-	public Quaternion(Vector3f axis, float angle)
-	{
 		float sinHalfAngle = (float)Math.sin(angle / 2);
 		float cosHalfAngle = (float)Math.cos(angle / 2);
 
@@ -101,7 +96,7 @@ public class Quaternion
 		this.z = axis.z * sinHalfAngle;
 		this.w = cosHalfAngle;
 	}
-
+	
 	public Quaternion(Quaternion r)
 	{
 		this(r.x, r.y, r.z, r.w);
