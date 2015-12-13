@@ -1,33 +1,89 @@
 package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
-/** This class extends the {@link Light} class
+/**
  * @author Kevin Krol
  * @since Apr 4, 2014
- * @see Light */
+ */
 public class DirectionalLight extends Light
 {
-	/** Constructor for the component
-	 * @param color The color of the light
-	 * @param intensity The intensity of the light
-	 * @see Color */
+	private float halfShadowArea;
+	
+	public DirectionalLight()
+	{
+		this(new Color());
+	}
+	
+	public DirectionalLight(Color color)
+	{
+		this(color, 0);
+	}
+	
 	public DirectionalLight(Color color, float intensity)
 	{
-		super(color, intensity);
-
-		setShader(new Shader("internal/forward-directional"));
-		setShadowInfo(new ShadowInfo(Matrix4f.orthographic(-40, 40, -40, 40, -40, 40)));
+		this(color, intensity, 0);
 	}
-
-	/** @return The direction the light is pointed at
-	 * @see Vector3f */
-	public Vector3f getDirection()
+	
+	public DirectionalLight(Color color, float intensity, int shadowMapSize)
 	{
-		return getTransform().getRotation().getForward();
+		this(color, intensity, shadowMapSize, 80);
+	}
+	
+	public DirectionalLight(Color color, float intensity, int shadowMapSize, float shadowArea)
+	{
+		this(color, intensity, shadowMapSize, shadowArea, 1);
+	}
+	
+	public DirectionalLight(Color color, float intensity, int shadowMapSize, float shadowArea, float shadowSoftness)
+	{
+		this(color, intensity, shadowMapSize, shadowArea, shadowSoftness, 0.2f);
+	}
+	
+	public DirectionalLight(Color color, float intensity, int shadowMapSize, float shadowArea, float shadowSoftness, float lightBleedReductionAmount)
+	{
+		this(color, intensity, shadowMapSize, shadowArea, shadowSoftness, lightBleedReductionAmount, 0.00002f);
+	}
+	
+	public DirectionalLight(Color color, float intensity, int shadowMapSize, float shadowArea, float shadowSoftness, float lightBleedReductionAmount, float minVariance)
+	{
+		super(color, intensity, new Shader("internal/forward-directional"));
+		
+		halfShadowArea = shadowArea / 2f;
+		
+		if(shadowMapSize > 0)
+		{
+			Matrix4f projection = Matrix4f.orthographic(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);			
+			shadowInfo = new ShadowInfo(projection, true, shadowMapSize, shadowSoftness, lightBleedReductionAmount, minVariance);
+		}
+	}
+	
+	@Override
+	public ShadowCameraTransform calculateShadowCameraTransform(Vector3f mainCameraPosition, Quaternion mainCameraRotation)
+	{
+		Vector3f resultPosition = mainCameraPosition.add(mainCameraRotation.getForward().mul(halfShadowArea));
+		Quaternion resultRotation = getTransform().getRotation();
+		
+		float worldTexelSize = (halfShadowArea * 2) / (float)(1 << shadowInfo.getSize());
+		
+		Vector3f lightSpaceCameraPosition = resultPosition.rotate(resultRotation.conjugate());
+		
+		lightSpaceCameraPosition.x = worldTexelSize * (float)Math.floor(lightSpaceCameraPosition.x / worldTexelSize);
+		lightSpaceCameraPosition.y = worldTexelSize * (float)Math.floor(lightSpaceCameraPosition.y / worldTexelSize);
+		
+		resultPosition = lightSpaceCameraPosition.rotate(resultRotation);
+		
+		return new ShadowCameraTransform(resultPosition, resultRotation);
+	}
+	
+	public final float getHalfShadowArea()
+	{
+		return halfShadowArea;
 	}
 }

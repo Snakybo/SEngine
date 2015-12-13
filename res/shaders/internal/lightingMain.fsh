@@ -1,18 +1,33 @@
 #include "internal/sampling.glh"
 
+uniform float R_shadowVarianceMin;
+uniform float R_shadowLightBleedingReduction;
+
+uniform float dispMapScale;
+uniform float dispMapBias;
+
 uniform sampler2D diffuse;
 uniform sampler2D normalMap;
 uniform sampler2D dispMap;
 uniform sampler2D R_shadowMap;
 
-uniform float dispMapScale;
-uniform float dispMapBias;
+bool InRange(float value)
+{
+	return value >= 0.0 && value <= 1.0;
+}
 
 float CalcShadowAmount(sampler2D shadowMap, vec4 initialShadowMapCoords)
 {
 	vec3 shadowMapCoords = (initialShadowMapCoords.xyz / initialShadowMapCoords.w);
 	
-	return SampleShadowMap(shadowMap, shadowMapCoords.xy, shadowMapCoords.z - (2.0 / 1024.0));
+	//return SampleShadowMap(shadowMap, shadowMapCoords.xy, shadowMapCoords.z - (2.0 / 1024.0));
+	
+	if(InRange(shadowMapCoords.z) && InRange(shadowMapCoords.x) && InRange(shadowMapCoords.y))
+	{
+		return SampleVarianceShadowMap(shadowMap, shadowMapCoords.xy, shadowMapCoords.z, R_shadowVarianceMin, R_shadowLightBleedingReduction);
+	}
+	
+	return 1.0;
 }
 
 DeclareFragOutput(0, vec4);

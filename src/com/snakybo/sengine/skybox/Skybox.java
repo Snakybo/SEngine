@@ -7,16 +7,21 @@ import static org.lwjgl.opengl.GL11.GL_LEQUAL;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glCullFace;
 import static org.lwjgl.opengl.GL11.glDepthFunc;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glGetInteger;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
+import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.CubeMap;
 import com.snakybo.sengine.shader.Shader;
+
+import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 /**
  * @author Kevin
@@ -46,21 +51,27 @@ public final class Skybox
 	
 	public final void render(RenderingEngine renderingEngine)
 	{
+		Window.bindAsRenderTarget();
+		
 		int cullFaceMode = glGetInteger(GL_CULL_FACE_MODE);
 		int depthFuncMode = glGetInteger(GL_DEPTH_FUNC);
 		
 		glCullFace(GL_FRONT);
 		glDepthFunc(GL_LEQUAL);
 		
+		glEnable(GL_DEPTH_CLAMP);
+		
 		Vector3f cameraPosition = Camera.getMainCamera().getTransform().getPosition();
 		transform.setPosition(new Vector3f(cameraPosition.x, cameraPosition.y, cameraPosition.z));
 		transform.setScale(5000);
 		
 		shader.bind();
-		shader.updateUniforms(transform, null, renderingEngine);
+		shader.updateUniforms(transform, null, renderingEngine, Camera.getMainCamera());
 		
 		cubeMap.bind();
 		mesh.draw(GL_TRIANGLES);
+		
+		glDisable(GL_DEPTH_CLAMP);
 		
 		glCullFace(cullFaceMode);
 		glDepthFunc(depthFuncMode);

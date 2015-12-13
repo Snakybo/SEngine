@@ -59,6 +59,11 @@ public final class Transform
 	{
 		setPosition(position.add(direction));
 	}
+	
+	public final void rotate(Vector3f axis, double angle)
+	{
+		rotate(axis, (float)angle);
+	}
 
 	public final void rotate(Vector3f axis, float angle)
 	{

@@ -15,9 +15,9 @@ public class Vector3f
 		this(0);
 	}
 
-	public Vector3f(float x)
+	public Vector3f(float xyz)
 	{
-		this(x, 0);
+		this(xyz, xyz, xyz);
 	}
 
 	public Vector3f(float x, float y)

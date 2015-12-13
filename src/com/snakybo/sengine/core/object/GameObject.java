@@ -3,6 +3,7 @@ package com.snakybo.sengine.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
@@ -64,16 +65,16 @@ public final class GameObject
 		}
 	}
 	
-	public final void render(RenderingEngine renderingEngine, Shader shader)
+	public final void render(RenderingEngine renderingEngine, Shader shader, Camera camera)
 	{
 		for(Component component : components)
 		{
-			component.render(renderingEngine, shader);
+			component.render(renderingEngine, shader, camera);
 		}
 		
 		for(GameObject child : children)
 		{
-			child.render(renderingEngine, shader);
+			child.render(renderingEngine, shader, camera);
 		}
 	}
 	

@@ -29,10 +29,10 @@ public abstract class ShaderUpdater
 	 * @see Shader#updateUniforms(Transform, Material, RenderingEngine)
 	 * @see Shader#updateUniforms(Transform, Material, String, String)
 	 */
-	public static void updateUniforms(Shader shader, Transform transform, Material material, RenderingEngine renderingEngine)
+	public static void updateUniforms(Shader shader, Transform transform, Material material, RenderingEngine renderingEngine, Camera camera)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f mvpMatrix = Camera.getMainCamera().getViewProjection().mul(worldMatrix);
+		Matrix4f mvpMatrix = camera.getViewProjection().mul(worldMatrix);
 		
 		for(ShaderUniform uniform : shader.getUniforms())
 		{
@@ -60,7 +60,7 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("float"))
 				{
-					shader.setUniformf(name, renderingEngine.get(float.class, unprefixedName));
+					shader.setUniformf(name, renderingEngine.get(Float.class, unprefixedName));
 				}
 				else if(type.equals("DirectionalLight"))
 				{
@@ -76,7 +76,7 @@ public abstract class ShaderUpdater
 				}
 				else
 				{
-					shader.updateUniforms(transform, material, name, type);
+					shader.updateUniforms(transform, material, camera, name, type);
 				}
 			}
 			else if(type.startsWith("sampler2D"))
@@ -138,7 +138,7 @@ public abstract class ShaderUpdater
 	 */
 	private static void setUniform(Shader shader, String name, DirectionalLight light)
 	{
-		shader.setUniform(name + ".direction", light.getDirection());
+		shader.setUniform(name + ".direction", light.getTransform().getRotation().getForward());
 		shader.setUniform(name + ".baseLight.color", light.getColor());
 
 		shader.setUniformf(name + ".baseLight.intensity", light.getIntensity());
@@ -173,7 +173,7 @@ public abstract class ShaderUpdater
 	private static void setUniform(Shader shader, String name, SpotLight light)
 	{
 		shader.setUniform(name + ".pointLight.position", light.getTransform().getPosition());
-		shader.setUniform(name + ".direction", light.getDirection());
+		shader.setUniform(name + ".direction", light.getTransform().getRotation().getForward());
 		shader.setUniform(name + ".pointLight.baseLight.color", light.getColor());
 
 		shader.setUniformf(name + ".pointLight.baseLight.intensity", light.getIntensity());

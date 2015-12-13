@@ -1,5 +1,6 @@
 package com.snakybo.sengine.core.object;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.shader.Shader;
 
@@ -23,7 +24,7 @@ public abstract class Component
 	{
 	}
 	
-	protected void render(RenderingEngine renderingEngine, Shader shader)
+	protected void render(RenderingEngine renderingEngine, Shader shader, Camera camera)
 	{
 	}
 	

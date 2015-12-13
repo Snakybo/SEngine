@@ -33,10 +33,10 @@ public class MeshRenderer extends Component
 	}
 
 	@Override
-	protected void render(RenderingEngine renderingEngine, Shader shader)
+	protected void render(RenderingEngine renderingEngine, Shader shader, Camera camera)
 	{
 		shader.bind();
-		shader.updateUniforms(getTransform(), material, renderingEngine);
+		shader.updateUniforms(getTransform(), material, renderingEngine, camera);
 		mesh.draw();
 	}
 }

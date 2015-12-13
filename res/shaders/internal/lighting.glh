@@ -1,27 +1,32 @@
-struct BaseLight {
+struct BaseLight
+{
 	vec3 color;
 	float intensity;
 };
 
-struct Attenuation {
+struct Attenuation
+{
 	float constant;
 	float linear;
 	float exponent;
 };
 
-struct DirectionalLight {
+struct DirectionalLight
+{
 	BaseLight baseLight;
 	vec3 direction;
 };
 
-struct PointLight {
+struct PointLight
+{
 	BaseLight baseLight;
 	Attenuation attenuation;
 	vec3 position;
 	float range;
 };
 
-struct SpotLight {
+struct SpotLight
+{
 	PointLight pointLight;
 	vec3 direction;
 	float cutoff;

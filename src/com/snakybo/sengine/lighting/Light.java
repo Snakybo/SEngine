@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.rendering.ShadowMapUtils.ShadowInfo;
+import com.snakybo.sengine.math.Quaternion;
+import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 
@@ -15,25 +18,27 @@ import com.snakybo.sengine.utils.Color;
  * @author Kevin Krol
  * @since Apr 4, 2014
  * @see Component */
-public class Light extends Component
+public abstract class Light extends Component
 {
 	private static List<Light> lights = new ArrayList<Light>();
 	
-	private Color color;
+	protected ShadowInfo shadowInfo;
+	
+	protected Shader shader;
+	protected Color color;	
 
-	private Shader shader;
-	private ShadowInfo shadowInfo;
-
-	private float intensity;
+	protected float intensity;
 
 	/** Constructor for the component
 	 * @param color The color of the light
 	 * @param intensity The intensity of the light
 	 * @see Color */
-	public Light(Color color, float intensity)
+	public Light(Color color, float intensity, Shader shader)
 	{
 		this.color = color;
 		this.intensity = intensity;
+		this.shader = shader;
+		this.shadowInfo = new ShadowInfo();
 	}
 
 	@Override
@@ -41,33 +46,10 @@ public class Light extends Component
 	{
 		lights.add(this);
 	}
-
-	/** Set the color of the light
-	 * @param color The new color to use */
-	public void setColor(Color color)
+	
+	public ShadowCameraTransform calculateShadowCameraTransform(Vector3f mainCameraPosition, Quaternion mainCameraRotation)
 	{
-		this.color = color;
-	}
-
-	/** Set the intensity of the light
-	 * @param intensity The new intensity */
-	public void setIntensity(float intensity)
-	{
-		this.intensity = intensity;
-	}
-
-	/** Set the shader of the light
-	 * @param shader The new shader to use */
-	protected void setShader(Shader shader)
-	{
-		this.shader = shader;
-	}
-
-	/** Set the shadow info of the light
-	 * @param shadowInfo The new shadow information */
-	protected void setShadowInfo(ShadowInfo shadowInfo)
-	{
-		this.shadowInfo = shadowInfo;
+		return null;
 	}
 
 	/** @return The shader the light uses

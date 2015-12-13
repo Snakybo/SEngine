@@ -18,11 +18,11 @@ void main()
 
 in vec3 texCoord0;
 
-uniform samplerCube R_skyBoxTexture;
+uniform samplerCube R_skyboxTexture;
 
 DeclareFragOutput(0, vec4);
 void main()
 {
-	SetFragOutput(0, texture(R_skyBoxTexture, texCoord0));
+	SetFragOutput(0, texture(R_skyboxTexture, texCoord0));
 }
 #endif

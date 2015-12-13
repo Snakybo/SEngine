@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector2f;
@@ -114,9 +115,9 @@ public class Shader
 	 * @param renderingEngine The rendering engine.
 	 * @see #updateUniforms(Transform, Material, String, String)
 	 */
-	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
+	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine, Camera camera)
 	{
-		ShaderUpdater.updateUniforms(this, transform, material, renderingEngine);
+		ShaderUpdater.updateUniforms(this, transform, material, renderingEngine, camera);
 	}
 	
 	/**
@@ -127,7 +128,7 @@ public class Shader
 	 * @param type The type of the uniform.
 	 * @see #updateUniforms(Transform, Material, RenderingEngine)
 	 */
-	protected void updateUniforms(Transform transform, Material material, String name, String type)
+	protected void updateUniforms(Transform transform, Material material, Camera camera, String name, String type)
 	{
 	}
 	

@@ -85,6 +85,11 @@ public class Quaternion
 		z /= length;
 		w /= length;
 	}
+	
+	public Quaternion(Vector3f axis, double angle)
+	{
+		this(axis, (float)angle);
+	}
 
 	public Quaternion(Vector3f axis, float angle)
 	{

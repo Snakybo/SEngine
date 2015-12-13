@@ -6,6 +6,11 @@ import com.snakybo.sengine.math.Vector3f;
  * @since Jul 6, 2014 */
 public class Color extends Vector3f
 {
+	public Color()
+	{
+		this(0, 0, 0);
+	}
+	
 	/** Constructor for the color
 	 * @param red The value of the red component
 	 * @param green The value of the green component
