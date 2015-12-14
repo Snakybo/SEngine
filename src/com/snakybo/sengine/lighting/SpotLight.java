@@ -69,7 +69,7 @@ public class SpotLight extends Light
 		float c = attenuation.getConstant() - COLOR_DEPTH * getIntensity() * getColor().max();
 
 		this.range = (float)((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
-		this.attenuation = attenuation;		
+		this.attenuation = attenuation;
 		this.cutoff = (float)Math.cos(viewAngle / 2);
 		
 		if(shadowMapSize > 0)
