@@ -43,6 +43,7 @@ public final class Transform
 		this.scale = scale;
 		
 		parentMatrix = Matrix4f.identity();
+		changed = true;
 	}
 	
 	final void setGameObject(GameObject object)
@@ -92,28 +93,28 @@ public final class Transform
 
 	public final void setPosition(Vector3f position)
 	{
-		this.position = position;
-		
 		if(!changed)
 		{
-			if(!position.equals(new Vector3f()))
+			if(!position.equals(this.position))
 			{
 				changed = true;
 			}
 		}
+		
+		this.position = position;		
 	}
 
 	public final void setRotation(Quaternion rotation)
 	{
-		this.rotation = rotation;
-		
 		if(!changed)
 		{
-			if(!rotation.equals(new Quaternion()))
+			if(!rotation.equals(this.rotation))
 			{
 				changed = true;
 			}
 		}
+		
+		this.rotation = rotation;
 	}
 	
 	public final void setScale(float scale)
@@ -123,15 +124,15 @@ public final class Transform
 
 	public final void setScale(Vector3f scale)
 	{
-		this.scale = scale;
-		
 		if(!changed)
 		{
-			if(!scale.equals(new Vector3f()))
+			if(!scale.equals(this.scale))
 			{
 				changed = true;
 			}
 		}
+		
+		this.scale = scale;
 	}
 
 	public final Matrix4f getTransformation()
