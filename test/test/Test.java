@@ -58,7 +58,7 @@ public class Test extends Game
 		Material brick2Material = new Material(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
 		addChild(new GameObject(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5)).addComponent(new MeshRenderer(Primitive.PLANE, brick2Material)));
 		
-		Material diffuseMaterial = new Material(new Texture("internal/default_diffuse.png"), 4, 8);		
+		Material diffuseMaterial = new Material(new Texture("default/default_diffuse.png"), 4, 8);		
 		GameObject sphereObject = new GameObject(new Vector3f(-2, 0, -2), new Quaternion());
 		sphereObject.addComponent(new MeshRenderer(Primitive.SPHERE, diffuseMaterial));
 		addChild(sphereObject);
