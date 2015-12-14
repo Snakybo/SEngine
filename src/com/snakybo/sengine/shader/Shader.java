@@ -42,7 +42,7 @@ import com.snakybo.sengine.utils.Buffer;
  * @since Dec 8, 2015
  */
 public class Shader
-{
+{	
 	private List<ShaderUniform> uniforms;
 	private List<Integer> shaderIds;
 	
@@ -55,7 +55,7 @@ public class Shader
 	 */
 	public Shader()
 	{
-		this("default/diffuse");
+		this("default/default_shader");
 	}
 	
 	/**
