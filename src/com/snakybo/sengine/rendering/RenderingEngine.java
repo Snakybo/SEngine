@@ -75,12 +75,10 @@ public class RenderingEngine
 		dataContainer = new HashMap<String, Object>();
 		dataContainer.put("ambient", AmbientLight.getAmbientColor());
 		
-		for(int i = 0; i < ShadowUtils.getShadowMaps().length; i++)
+		for(int i = 0; i < ShadowUtils.getNumShadowMaps(); i++)
 		{
-			int size = 1 << (i + 1);
-			
-			ShadowUtils.getShadowMaps()[i] = new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0);
-			ShadowUtils.getTempShadowMaps()[i] = new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0);
+			int size = 1 << (i + 1);			
+			ShadowUtils.setShadowMapAt(i, new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0));
 		}
 		
 		shadowMapCamera = new Camera(Matrix4f.identity());
@@ -133,13 +131,13 @@ public class RenderingEngine
 			shadowMapIndex = shadowInfo.getSize() - 1;
 		}
 		
-		if(shadowMapIndex < 0 && shadowMapIndex >= ShadowUtils.getShadowMaps().length)
+		if(shadowMapIndex < 0 && shadowMapIndex >= ShadowUtils.getNumShadowMaps())
 		{
 			throw new RuntimeException("[RenderingEngine] Invalid shadow map index: " + shadowMapIndex);
 		}
 		
-		set("shadowMap", ShadowUtils.getShadowMaps()[shadowMapIndex]);
-		ShadowUtils.getShadowMaps()[shadowMapIndex].bindAsRenderTarget();
+		set("shadowMap", ShadowUtils.getShadowMapAt(shadowMapIndex));
+		ShadowUtils.getShadowMapAt(shadowMapIndex).bindAsRenderTarget();
 		
 		glClearColor(1, 1, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -155,7 +153,7 @@ public class RenderingEngine
 			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(shadowMapCamera.getViewProjection()));
 			
 			set("shadowVarianceMin", shadowInfo.getMinVariance());
-			set("shadowLightBleedingReduction", shadowInfo.getLightBleedReductionAmount());
+			set("shadowLightBleedingReduction", shadowInfo.getLightBleedingReductionAmount());
 			
 			if(shadowInfo.getFlipFaces())
 			{
@@ -169,7 +167,7 @@ public class RenderingEngine
 			if(shadowInfo.getFlipFaces())
 			{
 				glCullFace(GL_BACK);
-			}		
+			}
 				
 			if(shadowInfo.getSoftness() > 0)
 			{
@@ -219,8 +217,8 @@ public class RenderingEngine
 	
 	private void blurShadowMap(int shadowMapIndex, float amount)
 	{
-		Texture shadowMap = ShadowUtils.getShadowMaps()[shadowMapIndex];
-		Texture tempShadowMap = ShadowUtils.getTempShadowMaps()[shadowMapIndex];
+		Texture shadowMap = ShadowUtils.getShadowMapAt(shadowMapIndex);
+		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
 		
 		set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
 		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);

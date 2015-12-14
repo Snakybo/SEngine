@@ -28,19 +28,30 @@ public class ShadowUtils
 		shadowMapShader = new Shader(SHADOW_MAP_SHADER_NAME);
 	}
 	
-	public static Texture[] getShadowMaps()
+	public static void setShadowMapAt(int index, Texture texture)
 	{
-		return shadowMaps;
+		shadowMaps[index] = texture;
+		tempShadowMaps[index] = new Texture(texture);
 	}
 	
-	public static Texture[] getTempShadowMaps()
+	public static Texture getShadowMapAt(int index)
 	{
-		return tempShadowMaps;
+		return shadowMaps[index];
+	}
+	
+	public static Texture getTempShadowMapAt(int index)
+	{
+		return tempShadowMaps[index];
 	}
 	
 	public static Shader getShadowMapShader()
 	{
 		return shadowMapShader;
+	}
+	
+	public static int getNumShadowMaps()
+	{
+		return NUM_SHADOW_MAPS;
 	}
 	
 	public static final class ShadowCameraTransform
@@ -70,7 +81,7 @@ public class ShadowUtils
 		private Matrix4f projection;
 		
 		private float softness;
-		private float lightBleedReductionAmount;
+		private float lightBleedingReductionAmount;
 		private float minVariance;
 		
 		private int size;		
@@ -82,14 +93,19 @@ public class ShadowUtils
 			this(Matrix4f.identity(), false, 0, 1, 0.2f, 0.00002f);
 		}
 
-		public ShadowInfo(Matrix4f projection, boolean flipFaces, int size, float softness, float lightBleedReductionAmount, float minVariance)
+		public ShadowInfo(Matrix4f projection, boolean flipFaces, int size, float softness, float lightBleedingReductionAmount, float minVariance)
 		{
 			this.projection = projection;
 			this.flipFaces = flipFaces;
 			this.size = size;
 			this.softness = softness;
-			this.lightBleedReductionAmount = lightBleedReductionAmount;
+			this.lightBleedingReductionAmount = lightBleedingReductionAmount;
 			this.minVariance = minVariance;
+		}
+		
+		@Override
+		public String toString() {
+			return "flipFaces: " + flipFaces + ", size: " + size + ", softness: " + softness + ", lightBleedingReductionAmount: " + lightBleedingReductionAmount + ", minVariance: " + minVariance;
 		}
 
 		public final Matrix4f getProjection()
@@ -102,9 +118,9 @@ public class ShadowUtils
 			return softness;
 		}
 		
-		public final float getLightBleedReductionAmount()
+		public final float getLightBleedingReductionAmount()
 		{
-			return lightBleedReductionAmount;
+			return lightBleedingReductionAmount;
 		}
 		
 		public final float getMinVariance()
@@ -112,12 +128,12 @@ public class ShadowUtils
 			return minVariance;
 		}
 		
-		public int getSize()
+		public final int getSize()
 		{
 			return size;
 		}
 		
-		public boolean getFlipFaces()
+		public final boolean getFlipFaces()
 		{
 			return flipFaces;
 		}
