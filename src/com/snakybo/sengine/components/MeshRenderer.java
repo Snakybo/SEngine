@@ -15,12 +15,12 @@ public class MeshRenderer extends Component
 {
 	private Mesh mesh;
 	private Material material;
-
-	/** Constructor for the component
-	 * @param mesh The mesh to render
-	 * @param material The material to render the mesh with
-	 * @see Mesh
-	 * @see Material */
+	
+	public MeshRenderer(Primitive primitive, Material material)
+	{
+		this(primitive.get(), material);
+	}
+	
 	public MeshRenderer(Mesh mesh, Material material)
 	{
 		this.mesh = mesh;

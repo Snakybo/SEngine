@@ -43,7 +43,7 @@ public final class Skybox
 		this.transform = new Transform();
 		this.cubeMap = cubeMap;
 		this.shader = new Shader(SKYBOX_SHADER_NAME);
-		this.mesh = Primitive.CUBE;
+		this.mesh = Primitive.CUBE.get();
 	}
 	
 	public Skybox(String front, String back, String left, String right, String top, String bottom)
