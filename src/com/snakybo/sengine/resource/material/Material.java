@@ -17,12 +17,12 @@ public class Material implements IDataContainer
 	
 	public Material(Texture diffuse, float specularIntensity, float specularPower)
 	{
-		this(diffuse, specularIntensity, specularPower, new Texture("default/default_normal.png"));
+		this(diffuse, specularIntensity, specularPower, new Texture("default/normal.png"));
 	}
 	
 	public Material(Texture diffuse, float specularIntensity, float specularPower, Texture normal)
 	{
-		this(diffuse, specularIntensity, specularPower, normal, new Texture("default/default_disp.png"), 0, 0);
+		this(diffuse, specularIntensity, specularPower, normal, new Texture("default/displacement.png"), 0, 0);
 	}
 	
 	public Material(Texture diffuse, float specularIntensity, float specularPower, Texture normal, Texture disp, float dispMapScale, float dispMapOffset)
