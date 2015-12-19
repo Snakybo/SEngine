@@ -65,7 +65,6 @@ public class Test extends Game
 		
 		GameObject cubeObject = new GameObject(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
 		cubeObject.addComponent(new MeshRenderer(Primitive.CUBE, diffuseMaterial));
-		cubeObject.addComponent(new TestComponent());
 		addChild(cubeObject);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
