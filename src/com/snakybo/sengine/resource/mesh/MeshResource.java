@@ -16,17 +16,23 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
+import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.resource.IResource;
 import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
 import com.snakybo.sengine.utils.Buffer;
 
-/** @author Kevin Krol
- * @since Jul 8, 2014 */
-public class MeshData implements IResource
+/**
+ * @author Kevin Krol
+ * @since Jul 8, 2014
+ */
+public class MeshResource implements IResource
 {
 	private static final int NUM_BUFFERS = 5;
 
@@ -41,49 +47,58 @@ public class MeshData implements IResource
 
 	private int drawCount;
 
-	public MeshData(IndexedModel model)
+	public MeshResource(IndexedModel model)
 	{
-		if(!model.isValid())
-		{
-			System.err.println("A mesh mush have the same number of positions, texCoords, normals and tangents! (Maybe you forgot to finish() your indexedModel?)");
-			System.exit(1);
-		}
-
-		vertexArrayObject = BufferUtils.createIntBuffer(1);
-		vertexArrayBuffers = BufferUtils.createIntBuffer(NUM_BUFFERS);
-		drawCount = model.getIndices().length;
-
+		this(model.getPositions(), model.getTexCoords(), model.getNormals(), model.getTangents(), model.getIndices());
+	}
+	
+	public MeshResource(List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals, List<Vector3f> tangents, List<Integer> indices)
+	{
+		this(	Buffer.createFlippedBuffer3f(positions, positions.size()),
+				Buffer.createFlippedBuffer2f(texCoords, texCoords.size()),
+				Buffer.createFlippedBuffer3f(normals, normals.size()),
+				Buffer.createFlippedBuffer3f(tangents, tangents.size()),
+				Buffer.createFlippedBufferi(indices, indices.size()),
+				indices.size());
+	}
+	
+	public MeshResource(FloatBuffer positions, FloatBuffer texCoords, FloatBuffer normals, FloatBuffer tangents, IntBuffer indices, int drawCount)
+	{
+		this.vertexArrayObject = BufferUtils.createIntBuffer(1);
+		this.vertexArrayBuffers = BufferUtils.createIntBuffer(NUM_BUFFERS);
+		this.drawCount = drawCount;
+		
 		glGenVertexArrays(vertexArrayObject);
 		glBindVertexArray(vertexArrayObject.get(0));
-
+		
 		glGenBuffers(vertexArrayBuffers);
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(POSITION_VB));
-		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getPositions()), GL_STATIC_DRAW);
-
+		glBufferData(GL_ARRAY_BUFFER, positions, GL_STATIC_DRAW);
+		
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TEXCOORD_VB));
-		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getTexCoords()), GL_STATIC_DRAW);
-
+		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
+		
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0L);
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(NORMAL_VB));
-		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getNormals()), GL_STATIC_DRAW);
-
+		glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+		
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0L);
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers.get(TANGENT_VB));
-		glBufferData(GL_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getTangents()), GL_STATIC_DRAW);
-
+		glBufferData(GL_ARRAY_BUFFER, tangents, GL_STATIC_DRAW);
+		
 		glEnableVertexAttribArray(3);
 		glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0L);
-
+		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexArrayBuffers.get(INDEX_VB));
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Buffer.createFlippedBuffer(model.getIndices()), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 	}
 
 	@Override

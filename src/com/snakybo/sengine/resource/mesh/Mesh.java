@@ -3,15 +3,11 @@ package com.snakybo.sengine.resource.mesh;
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
 import com.snakybo.sengine.rendering.RenderFlag;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.ResourceManager;
-import com.snakybo.sengine.resource.mesh.loading.IModel;
+import com.snakybo.sengine.resource.mesh.loader.MeshLoader;
 import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
-import com.snakybo.sengine.resource.mesh.loading.OBJModel;
 
 /** 
  * @author Kevin Krol
@@ -19,10 +15,8 @@ import com.snakybo.sengine.resource.mesh.loading.OBJModel;
  */
 public class Mesh
 {
-	private static final String MESH_FOLDER = "./res/models/";
-	
 	private final String fileName;
-	private final MeshData resource;
+	private final MeshResource resource;
 	
 	public Mesh(String fileName)
 	{
@@ -31,15 +25,15 @@ public class Mesh
 		if(ResourceManager.has(fileName))
 		{
 			ResourceManager.add(fileName);
-			resource = ResourceManager.get(MeshData.class, fileName);
+			resource = ResourceManager.get(MeshResource.class, fileName);
 		}
 		else
 		{
-			resource = loadMesh(fileName);
+			resource = MeshLoader.loadMesh(fileName);
 			ResourceManager.add(fileName, resource);
 		}
 	}
-
+	
 	public Mesh(String meshName, IndexedModel model)
 	{
 		this.fileName = meshName;
@@ -47,15 +41,15 @@ public class Mesh
 		if(ResourceManager.has(fileName))
 		{
 			ResourceManager.add(fileName);
-			resource = ResourceManager.get(MeshData.class, fileName);
+			resource = ResourceManager.get(MeshResource.class, fileName);
 		}
 		else
 		{
-			resource = new MeshData(model);
+			resource = new MeshResource(model);
 			ResourceManager.add(fileName, resource);
 		}
 	}
-
+	
 	public Mesh(Mesh other)
 	{
 		fileName = other.fileName;
@@ -83,35 +77,5 @@ public class Mesh
 	public void draw(int mode)
 	{
 		resource.draw(mode);
-	}
-
-	private MeshData loadMesh(String fileName)
-	{
-		try
-		{
-			if(fileName.lastIndexOf('.') == -1)
-			{
-				throw new IllegalArgumentException("[Mesh] Invalid file name passed: make sure to add the extension to the file name: " + fileName);
-			}
-
-			String ext = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
-			IModel model = null;
-
-			switch(ext)
-			{
-			case ".obj":
-				model = new OBJModel(new FileReader(MESH_FOLDER + fileName));
-				break;
-			default:
-				System.err.println("[Mesh] The file extension of the model " + fileName + " is not supported by the engine");
-				System.exit(1);
-			}
-
-			return new MeshData(model.toIndexedModel());
-		}
-		catch(FileNotFoundException e)
-		{
-			throw new IllegalArgumentException("[Mesh] Error loading mesh: The mesh " + fileName + " doesn't exist.");
-		}
-	}
+	}	
 }

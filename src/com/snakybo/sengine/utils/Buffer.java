@@ -27,45 +27,45 @@ public class Buffer
 		return BufferUtils.createByteBuffer(size);
 	}
 
-	public static IntBuffer createFlippedBuffer(int... values)
+	public static IntBuffer createFlippedBufferi(Iterable<Integer> values, int count)
 	{
-		IntBuffer buffer = createIntBuffer(values.length);
-		buffer.put(values);
+		IntBuffer buffer = createIntBuffer(count);
+		
+		for(Integer value : values)
+		{
+			buffer.put(value);
+		}
+		
 		buffer.flip();
-
 		return buffer;
 	}
 
-	public static FloatBuffer createFlippedBuffer(Vector2f[] values)
+	public static FloatBuffer createFlippedBuffer2f(Iterable<Vector2f> values, int count)
 	{
-		FloatBuffer buffer = createFloatBuffer(values.length * 2);
-
-		for(int i = 0; i < values.length; i++)
+		FloatBuffer buffer = createFloatBuffer(count * 2);
+		
+		for(Vector2f value : values)
 		{
-			Vector2f value = values[i];
 			buffer.put(value.x);
 			buffer.put(value.y);
 		}
 
 		buffer.flip();
-
 		return buffer;
 	}
 
-	public static FloatBuffer createFlippedBuffer(Vector3f[] values)
+	public static FloatBuffer createFlippedBuffer3f(Iterable<Vector3f> values, int count)
 	{
-		FloatBuffer buffer = createFloatBuffer(values.length * 3);
-
-		for(int i = 0; i < values.length; i++)
+		FloatBuffer buffer = createFloatBuffer(count * 3);
+		
+		for(Vector3f value : values)
 		{
-			Vector3f value = values[i];
 			buffer.put(value.x);
 			buffer.put(value.y);
 			buffer.put(value.z);
 		}
-
+		
 		buffer.flip();
-
 		return buffer;
 	}
 
@@ -82,7 +82,6 @@ public class Buffer
 		}
 
 		buffer.flip();
-
 		return buffer;
 	}
 }

@@ -127,7 +127,7 @@ public class OBJModel implements IModel
 
 			if(modelVertexIndex == null)
 			{
-				modelVertexIndex = model.getPositions().length;
+				modelVertexIndex = model.getPositions().size();
 				resultIndexMap.put(currentIndex, modelVertexIndex);
 
 				model.addVertex(currentPosition);
@@ -145,7 +145,7 @@ public class OBJModel implements IModel
 
 			if(normalModelIndex == null)
 			{
-				normalModelIndex = normalModel.getPositions().length;
+				normalModelIndex = normalModel.getPositions().size();
 				normalIndexMap.put(currentIndex.vertex, normalModelIndex);
 
 				normalModel.addVertex(currentPosition);
@@ -164,17 +164,17 @@ public class OBJModel implements IModel
 		{
 			normalModel.calcNormals();
 
-			for(int i = 0; i < model.getPositions().length; i++)
+			for(int i = 0; i < model.getPositions().size(); i++)
 			{
-				model.addNormal(normalModel.getNormals()[indexMap.get(i)]);
+				model.addNormal(normalModel.getNormals().get(indexMap.get(i)));
 			}
 		}
 
 		normalModel.calcTangents();
 
-		for(int i = 0; i < model.getPositions().length; i++)
+		for(int i = 0; i < model.getPositions().size(); i++)
 		{
-			model.setTangent(i, normalModel.getTangents()[indexMap.get(i)]);
+			model.setTangent(i, normalModel.getTangents().get(indexMap.get(i)));
 		}
 
 		return model;
