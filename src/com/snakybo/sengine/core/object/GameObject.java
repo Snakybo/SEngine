@@ -17,11 +17,14 @@ public final class GameObject
 {
 	private ArrayList<GameObject> children;
 	private ArrayList<GameObject> childrenToRemove;
+	private ArrayList<GameObject> childrenToDestroy;
 	
 	private ArrayList<Component> components;
 	private ArrayList<Component> componentsToRemove;
 	
 	private Transform transform;
+	
+	private boolean destroyed;
 	
 	public GameObject()
 	{
@@ -42,6 +45,7 @@ public final class GameObject
 	{
 		children = new ArrayList<GameObject>();
 		childrenToRemove = new ArrayList<GameObject>();
+		childrenToDestroy = new ArrayList<GameObject>();
 		
 		components = new ArrayList<Component>();
 		componentsToRemove = new ArrayList<Component>();
@@ -50,6 +54,42 @@ public final class GameObject
 		transform.setGameObject(this);
 	}
 	
+	@Override
+	protected void finalize() throws Throwable
+	{
+		try
+		{
+			destroy();
+		}
+		finally
+		{
+			super.finalize();
+		}
+	}
+	
+	public final void destroy()
+	{
+		if(!destroyed)
+		{
+			destroyed = true;
+			
+			if(transform.getParent() != null)
+			{
+				transform.getParent().getGameObject().removeChildAndDestroy(this);
+			}
+			
+			for(Component component : components)
+			{
+				component.onDestroy();
+			}
+			
+			for(GameObject child : children)
+			{
+				child.destroy();
+			}
+		}
+	}
+
 	public final void update(float delta)
 	{
 		updateInternal();
@@ -153,10 +193,29 @@ public final class GameObject
 		}
 	}
 	
+	private final void removeChildAndDestroy(GameObject child)
+	{
+		if(children.contains(child) && !childrenToDestroy.contains(child))
+		{
+			for(Component component : child.components)
+			{
+				component.onRemovedFromScene();
+			}
+			
+			child.transform.setParent(null);
+			childrenToDestroy.add(child);
+		}
+	}
+	
 	private final void updateInternal()
 	{
 		transform.update();
 		
+		for(GameObject child : childrenToDestroy)
+		{
+			children.remove(child);
+		}
+			
 		for(GameObject child : childrenToRemove)
 		{
 			for(Component component : child.components)
@@ -176,6 +235,7 @@ public final class GameObject
 		}
 		
 		childrenToRemove.clear();
+		childrenToDestroy.clear();
 		componentsToRemove.clear();
 	}
 	

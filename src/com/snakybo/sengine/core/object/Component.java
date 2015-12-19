@@ -20,6 +20,10 @@ public abstract class Component
 	{
 	}
 	
+	protected void onDestroy()
+	{
+	}
+	
 	protected void update(float delta)
 	{
 	}

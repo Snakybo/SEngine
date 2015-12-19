@@ -36,6 +36,8 @@ public final class Skybox
 	private Shader shader;
 	private Mesh mesh;
 	
+	private boolean destroyed;
+	
 	public Skybox(CubeMap cubeMap)
 	{
 		this.transform = new Transform();
@@ -47,6 +49,28 @@ public final class Skybox
 	public Skybox(String front, String back, String left, String right, String top, String bottom)
 	{
 		this(new CubeMap(front, back, left, right, top, bottom));
+	}
+	
+	@Override
+	protected void finalize() throws Throwable
+	{
+		try
+		{
+			destroy();
+		}
+		finally
+		{
+			super.finalize();	
+		}
+	}
+	
+	public final void destroy()
+	{
+		if(!destroyed)
+		{
+			destroyed = true;			
+			mesh.destroy();
+		}
 	}
 	
 	public final void render(RenderingEngine renderingEngine)
