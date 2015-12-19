@@ -1,4 +1,4 @@
-package com.snakybo.sengine.utils;
+package com.snakybo.sengine.core;
 
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;

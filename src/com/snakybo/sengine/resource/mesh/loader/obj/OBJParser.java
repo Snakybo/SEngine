@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.utils.Utils;
+import com.snakybo.sengine.utils.StringUtils;
 
 /**
  * @author Kevin
@@ -39,7 +39,7 @@ public final class OBJParser
 			
 		while((line = reader.readLine()) != null)
 		{
-			String[] tokens = Utils.removeEmptyStrings(line.split(" "));
+			String[] tokens = StringUtils.removeEmptyStrings(line.split(" "));
 			
 			if(tokens.length == 0 || tokens[0].equals("#"))
 			{

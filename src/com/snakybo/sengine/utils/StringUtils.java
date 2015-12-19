@@ -1,6 +1,8 @@
 package com.snakybo.sengine.utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kevin
@@ -8,6 +10,23 @@ import java.io.File;
  */
 public class StringUtils
 {
+	public static String[] removeEmptyStrings(String[] data)
+	{
+		List<String> filtered = new ArrayList<String>();
+		
+		for(String checking : data)
+		{
+			if(checking.isEmpty())
+			{
+				continue;
+			}
+			
+			filtered.add(checking);
+		}
+		
+		return filtered.toArray(new String[0]);
+	}
+	
 	public static String getFileExtension(String directory, String fileName)
 	{
 		if(fileName.lastIndexOf('.') != -1)

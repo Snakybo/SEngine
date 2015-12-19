@@ -31,8 +31,8 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
+import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.utils.Input;
 
 public abstract class Window
 {

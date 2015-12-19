@@ -2,7 +2,6 @@ package com.snakybo.sengine.core;
 
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.utils.Input;
 import com.snakybo.sengine.utils.Time;
 
 /** Core class for the engine

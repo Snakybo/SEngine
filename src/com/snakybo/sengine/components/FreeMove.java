@@ -1,9 +1,9 @@
 package com.snakybo.sengine.components;
 
+import com.snakybo.sengine.core.Input;
+import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.utils.Input;
-import com.snakybo.sengine.utils.Input.KeyCode;
 
 /** This class extends the {@link Component} class
  * <p>
