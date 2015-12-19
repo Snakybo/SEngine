@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.mesh.loading;
+package com.snakybo.sengine.resource.mesh.loader.obj;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.resource.mesh.loader.IModel;
+import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
 import com.snakybo.sengine.utils.Utils;
 
 public class OBJModel implements IModel
@@ -87,9 +89,9 @@ public class OBJModel implements IModel
 				case "f":
 					for(int i = 0; i < tokens.length - 3; i++)
 					{
-						indices.add(parseObjIndex(tokens[1]));
-						indices.add(parseObjIndex(tokens[2 + i]));
-						indices.add(parseObjIndex(tokens[3 + i]));
+						indices.add(parseOBJIndex(tokens[1]));
+						indices.add(parseOBJIndex(tokens[2 + i]));
+						indices.add(parseOBJIndex(tokens[3 + i]));
 					}
 					break;
 				default:
@@ -106,10 +108,10 @@ public class OBJModel implements IModel
 		}
 	}
 
-	public IndexedModel toIndexedModel()
+	public ReadableModel toReadableModel()
 	{
-		IndexedModel model = new IndexedModel();
-		IndexedModel normalModel = new IndexedModel();
+		ReadableModel model = new ReadableModel();
+		ReadableModel normalModel = new ReadableModel();
 
 		Map<OBJIndex, Integer> resultIndexMap = new HashMap<OBJIndex, Integer>();
 		Map<Integer, Integer> normalIndexMap = new HashMap<Integer, Integer>();
@@ -127,7 +129,7 @@ public class OBJModel implements IModel
 
 			if(modelVertexIndex == null)
 			{
-				modelVertexIndex = model.getPositions().size();
+				modelVertexIndex = model.getNumVertices();
 				resultIndexMap.put(currentIndex, modelVertexIndex);
 
 				model.addVertex(currentPosition);
@@ -145,7 +147,7 @@ public class OBJModel implements IModel
 
 			if(normalModelIndex == null)
 			{
-				normalModelIndex = normalModel.getPositions().size();
+				normalModelIndex = normalModel.getNumVertices();
 				normalIndexMap.put(currentIndex.vertex, normalModelIndex);
 
 				normalModel.addVertex(currentPosition);
@@ -164,23 +166,23 @@ public class OBJModel implements IModel
 		{
 			normalModel.calcNormals();
 
-			for(int i = 0; i < model.getPositions().size(); i++)
+			for(int i = 0; i < model.getNumVertices(); i++)
 			{
-				model.addNormal(normalModel.getNormals().get(indexMap.get(i)));
+				model.addNormal(normalModel.getNormalAt(indexMap.get(i)));
 			}
 		}
 
 		normalModel.calcTangents();
 
-		for(int i = 0; i < model.getPositions().size(); i++)
+		for(int i = 0; i < model.getNumVertices(); i++)
 		{
-			model.setTangent(i, normalModel.getTangents().get(indexMap.get(i)));
+			model.setTangent(i, normalModel.getTangentAt(indexMap.get(i)));
 		}
 
 		return model;
 	}
 
-	private OBJIndex parseObjIndex(String token)
+	private OBJIndex parseOBJIndex(String token)
 	{
 		String[] values = token.split("/");
 

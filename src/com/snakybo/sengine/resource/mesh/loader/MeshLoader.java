@@ -4,8 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import com.snakybo.sengine.resource.mesh.MeshResource;
-import com.snakybo.sengine.resource.mesh.loading.IModel;
-import com.snakybo.sengine.resource.mesh.loading.OBJModel;
+import com.snakybo.sengine.resource.mesh.loader.obj.OBJModel;
 import com.snakybo.sengine.utils.StringUtils;
 
 /**
@@ -47,7 +46,7 @@ public class MeshLoader
 				System.exit(1);
 			}
 			
-			return new MeshResource(model.toIndexedModel());
+			return new MeshResource(model.toReadableModel());
 		}
 		catch(FileNotFoundException e)
 		{

@@ -1,4 +1,4 @@
-package com.snakybo.sengine.resource.mesh.loading;
+package com.snakybo.sengine.resource.mesh.loader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,30 +10,30 @@ import com.snakybo.sengine.math.Vector3f;
  * @author Kevin Krol
  * @since Jul 8, 2014
  */
-public class IndexedModel
-{
-	private List<Integer> indices;
+public class ReadableModel
+{	
 	private List<Vector3f> positions;
 	private List<Vector2f> texCoords;
 	private List<Vector3f> normals;
 	private List<Vector3f> tangents;
+	private List<Integer> indices;
 
-	public IndexedModel()
+	public ReadableModel()
 	{
 		this(new ArrayList<Integer>(), new ArrayList<Vector3f>(), new ArrayList<Vector2f>());
 	}
 
-	public IndexedModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords)
+	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords)
 	{
 		this(indices, positions, texCoords, new ArrayList<Vector3f>());
 	}
 
-	public IndexedModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals)
+	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals)
 	{
 		this(indices, positions, texCoords, normals, new ArrayList<Vector3f>());
 	}
 
-	public IndexedModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals, List<Vector3f> tangents)
+	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals, List<Vector3f> tangents)
 	{
 		this.indices = indices;
 		this.positions = positions;
@@ -130,7 +130,7 @@ public class IndexedModel
 		}
 	}
 
-	public IndexedModel finish()
+	public ReadableModel finish()
 	{
 		if(isValid())
 		{
@@ -212,29 +212,54 @@ public class IndexedModel
 		tangents.set(index, element);
 	}
 
-	public List<Integer> getIndices()
+	public Iterable<Integer> getIndices()
 	{
 		return indices;
 	}
 
-	public List<Vector3f> getPositions()
+	public Iterable<Vector3f> getPositions()
 	{
 		return positions;
 	}
 
-	public List<Vector2f> getTexCoords()
+	public Iterable<Vector2f> getTexCoords()
 	{
 		return texCoords;
 	}
 
-	public List<Vector3f> getNormals()
+	public Iterable<Vector3f> getNormals()
 	{
 		return normals;
 	}
 
-	public List<Vector3f> getTangents()
+	public Iterable<Vector3f> getTangents()
 	{
 		return tangents;
+	}
+	
+	public int getIndexAt(int index)
+	{
+		return indices.get(index);
+	}
+	
+	public Vector3f getPositionAt(int index)
+	{
+		return new Vector3f(positions.get(index));
+	}
+	
+	public Vector2f getTexCoordAt(int index)
+	{
+		return new Vector2f(texCoords.get(index));
+	}
+	
+	public Vector3f getNormalAt(int index)
+	{
+		return new Vector3f(normals.get(index));
+	}
+	
+	public Vector3f getTangentAt(int index)
+	{
+		return new Vector3f(tangents.get(index));
 	}
 	
 	public int getNumTriangles()
@@ -245,5 +270,10 @@ public class IndexedModel
 	public int getNumVertices()
 	{
 		return positions.size();
+	}
+	
+	public int getNumIndices()
+	{
+		return indices.size();
 	}
 }

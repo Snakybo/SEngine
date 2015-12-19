@@ -18,14 +18,11 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
-import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.resource.IResource;
-import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
+import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
 import com.snakybo.sengine.utils.Buffer;
 
 /**
@@ -47,22 +44,23 @@ public class MeshResource implements IResource
 
 	private int drawCount;
 
-	public MeshResource(IndexedModel model)
+	public MeshResource(ReadableModel model)
 	{
-		this(model.getPositions(), model.getTexCoords(), model.getNormals(), model.getTangents(), model.getIndices());
+		if(!model.isValid())
+		{
+			throw new RuntimeException("[Mesh] Invalid model");
+		}
+		
+		FloatBuffer positionBuffer = Buffer.createFlippedBuffer3f(model.getPositions(), model.getNumVertices());
+		FloatBuffer texCoordBuffer = Buffer.createFlippedBuffer2f(model.getTexCoords(), model.getNumVertices());
+		FloatBuffer normalBuffer = Buffer.createFlippedBuffer3f(model.getNormals(), model.getNumVertices());
+		FloatBuffer tangentBuffer = Buffer.createFlippedBuffer3f(model.getTangents(), model.getNumVertices());
+		IntBuffer indexBuffer = Buffer.createFlippedBufferi(model.getIndices(), model.getNumIndices());
+		
+		initialize(positionBuffer, texCoordBuffer, normalBuffer, tangentBuffer, indexBuffer, model.getNumIndices());
 	}
 	
-	public MeshResource(List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals, List<Vector3f> tangents, List<Integer> indices)
-	{
-		this(	Buffer.createFlippedBuffer3f(positions, positions.size()),
-				Buffer.createFlippedBuffer2f(texCoords, texCoords.size()),
-				Buffer.createFlippedBuffer3f(normals, normals.size()),
-				Buffer.createFlippedBuffer3f(tangents, tangents.size()),
-				Buffer.createFlippedBufferi(indices, indices.size()),
-				indices.size());
-	}
-	
-	public MeshResource(FloatBuffer positions, FloatBuffer texCoords, FloatBuffer normals, FloatBuffer tangents, IntBuffer indices, int drawCount)
+	private void initialize(FloatBuffer positions, FloatBuffer texCoords, FloatBuffer normals, FloatBuffer tangents, IntBuffer indices, int drawCount)
 	{
 		this.vertexArrayObject = BufferUtils.createIntBuffer(1);
 		this.vertexArrayBuffers = BufferUtils.createIntBuffer(NUM_BUFFERS);

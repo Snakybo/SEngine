@@ -7,7 +7,7 @@ import com.snakybo.sengine.rendering.RenderFlag;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.ResourceManager;
 import com.snakybo.sengine.resource.mesh.loader.MeshLoader;
-import com.snakybo.sengine.resource.mesh.loading.IndexedModel;
+import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
 
 /** 
  * @author Kevin Krol
@@ -34,7 +34,7 @@ public class Mesh
 		}
 	}
 	
-	public Mesh(String meshName, IndexedModel model)
+	public Mesh(String meshName, ReadableModel model)
 	{
 		this.fileName = meshName;
 		
