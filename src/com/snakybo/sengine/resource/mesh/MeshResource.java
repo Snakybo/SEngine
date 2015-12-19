@@ -46,12 +46,7 @@ public class MeshResource implements IResource
 
 	public MeshResource(ReadableModel model)
 	{
-		if(!model.isValid())
-		{
-			throw new RuntimeException("[Mesh] Invalid model");
-		}
-		
-		FloatBuffer positionBuffer = Buffer.createFlippedBuffer3f(model.getPositions(), model.getNumVertices());
+		FloatBuffer positionBuffer = Buffer.createFlippedBuffer3f(model.getVertices(), model.getNumVertices());
 		FloatBuffer texCoordBuffer = Buffer.createFlippedBuffer2f(model.getTexCoords(), model.getNumVertices());
 		FloatBuffer normalBuffer = Buffer.createFlippedBuffer3f(model.getNormals(), model.getNumVertices());
 		FloatBuffer tangentBuffer = Buffer.createFlippedBuffer3f(model.getTangents(), model.getNumVertices());

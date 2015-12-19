@@ -10,101 +10,57 @@ import com.snakybo.sengine.math.Vector3f;
  * @author Kevin Krol
  * @since Jul 8, 2014
  */
-public class ReadableModel
+public final class ReadableModel
 {	
-	private List<Vector3f> positions;
+	private List<Vector3f> vertices;
 	private List<Vector2f> texCoords;
 	private List<Vector3f> normals;
 	private List<Vector3f> tangents;
 	private List<Integer> indices;
-
+	
 	public ReadableModel()
 	{
-		this(new ArrayList<Integer>(), new ArrayList<Vector3f>(), new ArrayList<Vector2f>());
+		vertices = new ArrayList<Vector3f>();
+		texCoords = new ArrayList<Vector2f>();
+		normals = new ArrayList<Vector3f>();
+		tangents = new ArrayList<Vector3f>();
+		indices = new ArrayList<Integer>();
 	}
-
-	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords)
+	
+	public final void calcNormals()
 	{
-		this(indices, positions, texCoords, new ArrayList<Vector3f>());
-	}
-
-	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals)
-	{
-		this(indices, positions, texCoords, normals, new ArrayList<Vector3f>());
-	}
-
-	public ReadableModel(List<Integer> indices, List<Vector3f> positions, List<Vector2f> texCoords, List<Vector3f> normals, List<Vector3f> tangents)
-	{
-		this.indices = indices;
-		this.positions = positions;
-		this.texCoords = texCoords;
-		this.normals = normals;
-		this.tangents = tangents;
-	}
-
-	public boolean isValid()
-	{
-		return positions.size() == texCoords.size() && texCoords.size() == normals.size() && normals.size() == tangents.size();
-	}
-
-	public void calcTexCoords()
-	{
-		texCoords.clear();
-
-		for(int i = 0; i < positions.size(); i++)
-		{
-			texCoords.add(new Vector2f(0, 0));
-		}
-	}
-
-	public void calcNormals()
-	{
-		normals.clear();
-
-		for(int i = 0; i < positions.size(); i++)
-		{
-			normals.add(new Vector3f(0, 0, 0));
-		}
-
 		for(int i = 0; i < indices.size(); i += 3)
 		{
 			int i0 = indices.get(i);
 			int i1 = indices.get(i + 1);
 			int i2 = indices.get(i + 2);
-
-			Vector3f v1 = positions.get(i1).sub(positions.get(i0));
-			Vector3f v2 = positions.get(i2).sub(positions.get(i0));
-
+			
+			Vector3f v1 = vertices.get(i1).sub(vertices.get(i0));
+			Vector3f v2 = vertices.get(i2).sub(vertices.get(i0));
+			
 			Vector3f normal = v1.cross(v2).normalized();
-
+			
 			normals.get(i0).set(normals.get(i0).add(normal));
 			normals.get(i1).set(normals.get(i1).add(normal));
 			normals.get(i2).set(normals.get(i2).add(normal));
 		}
-
+		
 		for(int i = 0; i < normals.size(); i++)
 		{
 			normals.get(i).set(normals.get(i).normalized());
 		}
 	}
 
-	public void calcTangents()
+	public final void calcTangents()
 	{
-		tangents.clear();
-
-		for(int i = 0; i < positions.size(); i++)
-		{
-			tangents.add(new Vector3f(0, 0, 0));
-		}
-
 		for(int i = 0; i < indices.size(); i += 3)
 		{
 			int i0 = indices.get(i);
 			int i1 = indices.get(i + 1);
 			int i2 = indices.get(i + 2);
 
-			Vector3f edge1 = positions.get(i1).sub(positions.get(i0));
-			Vector3f edge2 = positions.get(i2).sub(positions.get(i0));
+			Vector3f edge1 = vertices.get(i1).sub(vertices.get(i0));
+			Vector3f edge2 = vertices.get(i2).sub(vertices.get(i0));
 
 			float deltaU1 = texCoords.get(i1).x - texCoords.get(i0).x;
 			float deltaV1 = texCoords.get(i1).y - texCoords.get(i0).y;
@@ -129,150 +85,93 @@ public class ReadableModel
 			tangents.get(i).set(tangents.get(i).normalized());
 		}
 	}
-
-	public ReadableModel finish()
+	
+	public final void addVertex(Vector3f vertex)
 	{
-		if(isValid())
-		{
-			return this;
-		}
-
-		if(texCoords.size() == 0)
-		{
-			calcTexCoords();
-		}
-
-		if(normals.size() == 0)
-		{
-			calcNormals();
-		}
-
-		if(tangents.size() == 0)
-		{
-			calcTangents();
-		}
-
-		return this;
+		vertices.add(vertex);
 	}
-
-	public void addVertex(Vector3f vertex)
-	{
-		positions.add(vertex);
-	}
-
-	public void addTexCoord(Vector2f texCoord)
+	
+	public final void addTexCoord(Vector2f texCoord)
 	{
 		texCoords.add(texCoord);
 	}
-
-	public void addNormal(Vector3f normal)
+	
+	public final void addNormal(Vector3f normal)
 	{
 		normals.add(normal);
 	}
-
-	public void addTangent(Vector3f tangent)
+	
+	public final void addTangent(Vector3f tangent)
 	{
 		tangents.add(tangent);
 	}
-
-	public void addIndex(int index)
+	
+	public final void addIndex(int index)
 	{
 		indices.add(index);
 	}
-
-	public void addFace(int vertIndex0, int vertIndex1, int vertIndex2)
+	
+	public final Iterable<Vector3f> getVertices()
 	{
-		indices.add(vertIndex0);
-		indices.add(vertIndex1);
-		indices.add(vertIndex2);
+		return vertices;
 	}
 
-	public void setIndex(int index, Integer element)
-	{
-		indices.set(index, element);
-	}
-
-	public void setVertex(int index, Vector3f element)
-	{
-		positions.set(index, element);
-	}
-
-	public void setTexCoord(int index, Vector2f element)
-	{
-		texCoords.set(index, element);
-	}
-
-	public void setNormal(int index, Vector3f element)
-	{
-		normals.set(index, element);
-	}
-
-	public void setTangent(int index, Vector3f element)
-	{
-		tangents.set(index, element);
-	}
-
-	public Iterable<Integer> getIndices()
-	{
-		return indices;
-	}
-
-	public Iterable<Vector3f> getPositions()
-	{
-		return positions;
-	}
-
-	public Iterable<Vector2f> getTexCoords()
+	public final Iterable<Vector2f> getTexCoords()
 	{
 		return texCoords;
 	}
 
-	public Iterable<Vector3f> getNormals()
+	public final Iterable<Vector3f> getNormals()
 	{
 		return normals;
 	}
 
-	public Iterable<Vector3f> getTangents()
+	public final Iterable<Vector3f> getTangents()
 	{
 		return tangents;
 	}
 	
-	public int getIndexAt(int index)
+	public final Iterable<Integer> getIndices()
+	{
+		return indices;
+	}
+	
+	public final Vector3f getVertex(int index)
+	{
+		return vertices.get(index);
+	}
+	
+	public final Vector2f getTexCoord(int index)
+	{
+		return texCoords.get(index);
+	}
+	
+	public final Vector3f getNormal(int index)
+	{
+		return normals.get(index);
+	}
+	
+	public final Vector3f getTangent(int index)
+	{
+		return tangents.get(index);
+	}
+	
+	public final int getIndex(int index)
 	{
 		return indices.get(index);
 	}
 	
-	public Vector3f getPositionAt(int index)
+	public final int getNumTriangles()
 	{
-		return new Vector3f(positions.get(index));
+		return getNumIndices() / 3;
 	}
 	
-	public Vector2f getTexCoordAt(int index)
+	public final int getNumVertices()
 	{
-		return new Vector2f(texCoords.get(index));
+		return vertices.size();
 	}
 	
-	public Vector3f getNormalAt(int index)
-	{
-		return new Vector3f(normals.get(index));
-	}
-	
-	public Vector3f getTangentAt(int index)
-	{
-		return new Vector3f(tangents.get(index));
-	}
-	
-	public int getNumTriangles()
-	{
-		return indices.size() / 3;
-	}
-	
-	public int getNumVertices()
-	{
-		return positions.size();
-	}
-	
-	public int getNumIndices()
+	public final int getNumIndices()
 	{
 		return indices.size();
 	}
