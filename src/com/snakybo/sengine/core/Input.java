@@ -158,6 +158,8 @@ public class Input
 	private static boolean[] mouseButtons = new boolean[MouseButton.BUTTON_8];
 	private static boolean[] lastMouseButtons = new boolean[MouseButton.BUTTON_8];
 	
+	private static Vector2f scrollDelta;
+	
 	public static void update()
 	{
 		for(int i = 0; i < lastKeys.length; i++)
@@ -169,6 +171,8 @@ public class Input
 		{
 			lastMouseButtons[i] = false;
 		}
+		
+		scrollDelta = new Vector2f();
 	}
 	
 	public static void onKeyCallback(int key, boolean state)
@@ -181,6 +185,11 @@ public class Input
 	{
 		mouseButtons[button] = state;
 		lastMouseButtons[button] = state;
+	}
+	
+	public static void onScrollCallback(double x, double y)
+	{
+		scrollDelta = new Vector2f((float)x, (float)y);
 	}
 	
 	public static void createArrowCursor()
@@ -261,5 +270,10 @@ public class Input
 	public static Vector2f getMousePosition()
 	{
 		return GLFWWindow.getMousePosition();
+	}
+	
+	public static Vector2f getSrollDelta()
+	{
+		return scrollDelta;
 	}
 }

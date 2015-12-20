@@ -62,6 +62,14 @@ public abstract class SEngine
 		}
 	}
 	
+	public static void onCursorEnterCallback(boolean entered)
+	{
+		if(game != null)
+		{
+			game.onCursorEnter(entered);
+		}
+	}
+	
 	private static void run()
 	{
 		double unprocessedTime = 0.0;

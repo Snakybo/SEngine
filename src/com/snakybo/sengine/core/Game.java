@@ -29,6 +29,10 @@ public abstract class Game
 	{
 	}
 	
+	protected void onCursorEnter(boolean entered)
+	{
+	}
+	
 	final void initialize()
 	{
 		if(instance == null)
