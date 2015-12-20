@@ -37,7 +37,7 @@ void main()
 	color += texture2D(R_filterTexture, texCoord0 + (vec2(2) * R_blurScale.xy)) * (6.0 / 64.0);
 	color += texture2D(R_filterTexture, texCoord0 + (vec2(3) * R_blurScale.xy)) * (1.0 / 64.0);
 	
-	gl_FragColor = color;
+	SetFragOutput(0, color);
 }
 
 #endif
