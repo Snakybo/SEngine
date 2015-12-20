@@ -4,68 +4,55 @@ import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.utils.Time;
 
-/** Core class for the engine
+/**
  * @author Kevin Krol
- * @since Apr 4, 2014 */
-public class SEngine
+ * @since Apr 4, 2014
+ */
+public abstract class SEngine
 {
-	private RenderingEngine renderingEngine;
-	private Game game;
+	private static RenderingEngine renderingEngine;
+	private static Game game;
 
-	private double frameTime;
+	private static double frameTime;
 
-	private boolean isRunning;
-
-	/** Constructor for the engine
-	 * @param game The base class for your game */
-	public SEngine(Game game)
-	{
-		if(!Window.isCreated())
-		{
-			Window.create(1280, 720, "SEngine");
-		}
-		
-		isRunning = false;
-		this.game = game;
-		
-		renderingEngine = new RenderingEngine();
-	}
-
-	/** Start the engine
-	 * @param frameRate The desired frame rate of the game */
-	public void start(double frameRate)
+	private static boolean isRunning;
+	
+	public static void start(Game game, double fps)
 	{
 		if(isRunning)
 		{
 			return;
 		}
 		
-		frameTime = 1.0 / frameRate;
-		isRunning = true;
-
+		if(!Window.isCreated())
+		{
+			Window.create(1280, 720, "SEngine");
+		}
+		
+		SEngine.renderingEngine = new RenderingEngine();
+		SEngine.frameTime = 1.0 / fps;
+		SEngine.isRunning = true;
+		SEngine.game = game;
+		
 		game.internalInit();
 		game.init();
-
+		
 		run();
 	}
-
-	/** Stop the engine
-	 * <p>
-	 * This method stops the game loop and destroys the window
-	 * </p>
-	*/
-	public void stop()
+	
+	public static void stop()
 	{
 		if(!isRunning)
+		{
 			return;
+		}
 
 		isRunning = false;
 
 		Window.destroy();
 	}
-
-	/** Main loop of the engine, timing logic is handled here */
-	private void run()
+	
+	private static void run()
 	{
 		int frames = 0;
 

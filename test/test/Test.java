@@ -73,10 +73,8 @@ public class Test extends Game
 	
 	public static void main(String[] args)
 	{
-		Window.create(1280, 720, "Test");
-		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));
-		
-		SEngine engine = new SEngine(new Test());
-		engine.start(60);
+		Window.create(1280, 720, "Test");		
+		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));		
+		SEngine.start(new Test(), 60);
 	}
 }
