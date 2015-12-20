@@ -17,6 +17,7 @@ public class Time
 	private static double frameCounter;
 	
 	private static int currentFrameCount;
+	private static int fps;
 	
 	static
 	{
@@ -36,7 +37,7 @@ public class Time
 		
 		if(frameCounter >= 1.0)
 		{
-			System.out.println(currentFrameCount);
+			fps = currentFrameCount;
 			
 			frameCounter = 0;
 			currentFrameCount = 0;
@@ -72,6 +73,11 @@ public class Time
 	public static float getDeltaTime()
 	{
 		return (float)getFrameTime();
+	}
+	
+	public static int getFPS()
+	{
+		return fps;
 	}
 	
 	static double getFrameTime()
