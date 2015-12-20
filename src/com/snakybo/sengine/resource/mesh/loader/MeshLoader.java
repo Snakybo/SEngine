@@ -5,6 +5,7 @@ import java.io.FileReader;
 
 import com.snakybo.sengine.resource.mesh.MeshResource;
 import com.snakybo.sengine.resource.mesh.loader.obj.OBJModel;
+import com.snakybo.sengine.utils.DirectoryManager;
 import com.snakybo.sengine.utils.StringUtils;
 
 /**
@@ -14,6 +15,11 @@ import com.snakybo.sengine.utils.StringUtils;
 public class MeshLoader
 {
 	private static final String MESH_FOLDER = "./res/models/";
+	
+	static
+	{
+		DirectoryManager.check(MESH_FOLDER);
+	}
 	
 	public static MeshResource loadMesh(String fileName)
 	{

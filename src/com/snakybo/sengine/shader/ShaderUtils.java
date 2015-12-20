@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.snakybo.sengine.utils.DirectoryManager;
+
 /**
  * A collection of shader utilities.
  * @author Kevin
@@ -148,6 +150,8 @@ public abstract class ShaderUtils
 	
 	static
 	{
+		DirectoryManager.check(SHADER_FOLDER);
+		
 		int majorVersion = glGetInteger(GL_MAJOR_VERSION);
 		int minorVersion = glGetInteger(GL_MINOR_VERSION);
 

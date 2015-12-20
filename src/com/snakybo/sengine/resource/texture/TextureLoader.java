@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import com.snakybo.sengine.utils.Buffer;
+import com.snakybo.sengine.utils.DirectoryManager;
 
 /**
  * @author Kevin
@@ -47,6 +48,12 @@ public abstract class TextureLoader
 	
 	private static final String TEXTURE_FOLDER = "./res/textures/";
 	private static final String CURSOR_FOLDER = "./res/textures/cursors/";
+	
+	static
+	{
+		DirectoryManager.check(TEXTURE_FOLDER);
+		DirectoryManager.check(CURSOR_FOLDER);
+	}
 	
 	public static TextureData loadTexture(String fileName)
 	{

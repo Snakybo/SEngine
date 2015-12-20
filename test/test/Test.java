@@ -5,7 +5,6 @@ import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.core.Game;
-import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
