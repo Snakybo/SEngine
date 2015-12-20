@@ -2,7 +2,6 @@ package com.snakybo.sengine.core;
 
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
-import com.snakybo.sengine.utils.Time;
 
 /**
  * @author Kevin Krol
@@ -51,36 +50,14 @@ public abstract class SEngine
 	
 	private static void run()
 	{
-		int frames = 0;
-
-		double lastTime = Time.getCurrentTime();
 		double unprocessedTime = 0.0;
-		double frameCounter = 0.0;
 
 		while(isRunning)
 		{
 			boolean render = false;
-
-			double startTime = Time.getCurrentTime();
-			double passedTime = startTime - lastTime;
-			lastTime = startTime;
-
-			unprocessedTime += passedTime;
-			frameCounter += passedTime;
-
-			if(frameCounter >= 1.0)
-			{
-				String windowTitle = Window.getTitle();				
-				if(windowTitle.contains("(FPS"))
-				{
-					windowTitle = windowTitle.substring(0, windowTitle.lastIndexOf("(FPS") - 1);
-				}
-				
-				Window.setTitle(windowTitle + " (FPS: " + frames + ")");
-				
-				frames = 0;
-				frameCounter = 0.0;
-			}
+			
+			Time.update();
+			unprocessedTime += Time.getPassedTime();
 
 			while(unprocessedTime > Time.getFrameTime())
 			{
@@ -101,8 +78,9 @@ public abstract class SEngine
 			if(render)
 			{
 				game.render(renderingEngine);
+				
 				Window.update();
-				frames++;
+				Time.onRender();
 			}
 			else
 			{

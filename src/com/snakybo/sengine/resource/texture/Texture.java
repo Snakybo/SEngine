@@ -7,8 +7,8 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
 import java.nio.ByteBuffer;
 
+import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.resource.ResourceManager;
-import com.snakybo.sengine.utils.Time;
 
 public class Texture
 {
