@@ -13,11 +13,19 @@ public abstract class Game
 	
 	private GameObject root;
 	
-	public void create()
+	protected void create()
 	{
 	}
 	
-	public void destroy()
+	protected void destroy()
+	{
+	}
+	
+	protected void onIconify(boolean iconified)
+	{
+	}
+	
+	protected void onFocus(boolean focused)
 	{
 	}
 	

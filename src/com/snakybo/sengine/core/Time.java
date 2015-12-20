@@ -1,6 +1,6 @@
 package com.snakybo.sengine.core;
 
-import org.lwjgl.glfw.GLFW;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 /**
  * @author Kevin
@@ -22,13 +22,13 @@ public class Time
 	{
 		setTargetFPS(60);
 		
-		lastTime = GLFW.glfwGetTime();
-		currentTime = GLFW.glfwGetTime();
+		lastTime = glfwGetTime();
+		currentTime = glfwGetTime();
 	}
 	
 	static void update()
 	{		
-		currentTime = GLFW.glfwGetTime();
+		currentTime = glfwGetTime();
 		passedTime = currentTime - lastTime;
 		lastTime = currentTime;
 		

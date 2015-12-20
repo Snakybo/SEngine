@@ -28,6 +28,8 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
+import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
+
 /**
  * @author Kevin
  *
@@ -63,9 +65,8 @@ public class CubeMap
 		
 		for(int i = 0; i < CUBE_MAP_AXIS.length; i++)
 		{
-			OpenGLTextureLoader texture = new OpenGLTextureLoader(textures[i]);
-			
-			glTexImage2D(CUBE_MAP_AXIS[i], 0, GL_RGB, texture.getWidth(), texture.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.getData());
+			TextureData textureData = TextureLoader.loadTexture(textures[i]);			
+			glTexImage2D(CUBE_MAP_AXIS[i], 0, GL_RGB, textureData.getWidth(), textureData.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData.getData());
 			
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

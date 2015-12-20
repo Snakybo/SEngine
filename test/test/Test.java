@@ -5,6 +5,7 @@ import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.core.Game;
+import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
@@ -16,7 +17,7 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
@@ -28,9 +29,9 @@ public class Test extends Game
 	@Override
 	public void create()
 	{
-		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
+		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)GLFWWindow.getWidth() / (float)GLFWWindow.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
-		camera.addComponent(new FreeLook(Window.getCenter()));
+		camera.addComponent(new FreeLook());
 		camera.addComponent(new FreeMove());
 		camera.addComponent(new CameraComponent(cameraProjection, new Color(0, 0, 0)).setAsMainCamera());
 		addChild(camera);
@@ -69,11 +70,11 @@ public class Test extends Game
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
 		RenderingEngine.setSkybox(skyBox);
-	};
+	}
 	
 	public static void main(String[] args)
 	{
-		Window.create(1280, 720, "Test");		
+		GLFWWindow.createWindowed("Test", 1280, 720);
 		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));		
 		SEngine.start(new Test());
 	}

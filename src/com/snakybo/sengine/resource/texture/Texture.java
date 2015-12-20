@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 
 import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.resource.ResourceManager;
+import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
 
 public class Texture
 {
@@ -108,7 +109,7 @@ public class Texture
 		}
 		else
 		{
-			OpenGLTextureLoader textureData = new OpenGLTextureLoader(fileName);
+			TextureData textureData = TextureLoader.loadTexture(fileName);
 			resource = new TextureResource(target, textureData.getWidth(), textureData.getHeight(), 1, textureData.getData(), filters, internalFormat, format, clamp, attachments);
 			ResourceManager.add(fileName, resource);
 		}

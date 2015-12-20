@@ -13,26 +13,60 @@ import com.snakybo.sengine.utils.Buffer;
  * @author Kevin
  * @since Dec 10, 2015
  */
-class OpenGLTextureLoader
+public abstract class TextureLoader
 {
+	public static class TextureData
+	{
+		private ByteBuffer data;
+		
+		private int width;
+		private int height;
+		
+		public TextureData(ByteBuffer data, int width, int height)
+		{
+			this.data = data;
+			this.width = width;
+			this.height = height;
+		}
+		
+		public final ByteBuffer getData()
+		{
+			return data;
+		}
+		
+		public final int getWidth()
+		{
+			return width;
+		}
+		
+		public final int getHeight()
+		{
+			return height;
+		}
+	}
+	
 	private static final String TEXTURE_FOLDER = "./res/textures/";
+	private static final String CURSOR_FOLDER = "./res/textures/cursors/";
 	
-	private ByteBuffer data;
+	public static TextureData loadTexture(String fileName)
+	{
+		return load(TEXTURE_FOLDER, fileName);
+	}
 	
-	private int width;
-	private int height;
+	public static TextureData loadCursor(String fileName)
+	{
+		return load(CURSOR_FOLDER, fileName);
+	}
 	
-	public OpenGLTextureLoader(String fileName)
+	public static TextureData load(String folder, String fileName)
 	{
 		try
 		{
-			BufferedImage image = ImageIO.read(new File(TEXTURE_FOLDER + fileName));
+			BufferedImage image = ImageIO.read(new File(folder + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 
-			data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
-			width = image.getWidth();
-			height = image.getHeight();
-
+			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);
+			
 			boolean hasAlpha = image.getColorModel().hasAlpha();
 
 			// Put each pixel in a Byte Buffer
@@ -52,25 +86,13 @@ class OpenGLTextureLoader
 			}
 
 			data.flip();
+			return new TextureData(data, image.getWidth(), image.getHeight());
 		}
 		catch(IOException e)
 		{
 			System.err.println("[Texture] Failed to load texture: " + fileName + " doesn't exist");
 		}
-	}
-	
-	public ByteBuffer getData()
-	{
-		return data;
-	}
-	
-	public int getWidth()
-	{
-		return width;
-	}
-	
-	public int getHeight()
-	{
-		return height;
+		
+		return null;
 	}
 }

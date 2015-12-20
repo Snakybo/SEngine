@@ -5,6 +5,7 @@ import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 
 /** This class extends the {@link Component} class
  * <p>
@@ -16,50 +17,25 @@ import com.snakybo.sengine.math.Vector3f;
 public class FreeLook extends Component
 {
 	private static final Vector3f yAxis = new Vector3f(0, 1, 0);
-
-	private Vector2f windowCenter;
-
+	
 	private float sensitivity;
-
+	
 	private int unlockMouseKey;
 
 	private boolean mouseLocked;
-
-	/** Constructor for the component
-	 * <p>
-	 * This constructor will call {@link #FreeLook(Vector2f, float)} with
-	 * {@code 0.5} as {@code sensitivity}
-	 * </p>
-	 * @param windowCenter The center position of the window, the mouse will
-	 *        stay locked in this position
-	 * @see #FreeLook(Vector2f, float) */
-	public FreeLook(Vector2f windowCenter)
+	
+	public FreeLook()
 	{
-		this(windowCenter, 0.5f);
+		this(0.5f);
 	}
-
-	/** Constructor for the component
-	 * <p>
-	 * This constructor will call {@link #FreeLook(Vector2f, float, int)} with
-	 * {@code KeyCode.KEY_ESCAPE}
-	 * </p>
-	 * @param windowCenter The center position of the window, the mouse will
-	 *        stay locked in this position
-	 * @param sensitivity The sensitivity of the mouse
-	 * @see #FreeLook(Vector2f, float, int) */
-	public FreeLook(Vector2f windowCenter, float sensitivity)
+	
+	public FreeLook(float sensitivity)
 	{
-		this(windowCenter, sensitivity, KeyCode.KEY_ESCAPE);
+		this(sensitivity, KeyCode.KEY_ESCAPE);
 	}
-
-	/** Constructor for the component
-	 * @param windowCenter The center position of the window, the mouse will
-	 *        stay locked in this position
-	 * @param sensitivity The sensitivity of the mouse
-	 * @param unlockMouseKey The key code to unlock the mouse */
-	public FreeLook(Vector2f windowCenter, float sensitivity, int unlockMouseKey)
+	
+	public FreeLook(float sensitivity, int unlockMouseKey)
 	{
-		this.windowCenter = windowCenter;
 		this.sensitivity = sensitivity;
 		this.unlockMouseKey = unlockMouseKey;
 
@@ -69,6 +45,8 @@ public class FreeLook extends Component
 	@Override
 	protected void update()
 	{
+		Vector2f center = GLFWWindow.getCenter();
+		
 		if(Input.getKey(unlockMouseKey))
 		{
 			Input.setCursor(true);
@@ -77,23 +55,30 @@ public class FreeLook extends Component
 
 		if(mouseLocked)
 		{
-			Vector2f deltaPos = Input.getMousePosition().sub(windowCenter);
+			Vector2f deltaPos = Input.getMousePosition().sub(center);
 
 			boolean rotY = deltaPos.x != 0;
 			boolean rotX = deltaPos.y != 0;
 
 			if(rotY)
+			{
 				rotate(yAxis, -deltaPos.x);
+			}
+		
 			if(rotX)
+			{
 				rotate(getTransform().getLocalRotation().getRight(), deltaPos.y);
+			}
 
 			if(rotY || rotX)
-				Input.setMousePosition(windowCenter);
+			{
+				Input.setMousePosition(center);
+			}
 		}
 
 		if(Input.getMouseDown(0))
 		{
-			Input.setMousePosition(windowCenter);
+			Input.setMousePosition(center);
 			Input.setCursor(false);
 			mouseLocked = true;
 		}

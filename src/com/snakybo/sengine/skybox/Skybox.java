@@ -10,18 +10,17 @@ import static org.lwjgl.opengl.GL11.glDepthFunc;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glGetInteger;
+import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.CubeMap;
 import com.snakybo.sengine.shader.Shader;
-
-import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 /**
  * @author Kevin
@@ -75,7 +74,7 @@ public final class Skybox
 	
 	public final void render(RenderingEngine renderingEngine)
 	{
-		Window.bindAsRenderTarget();
+		GLFWWindow.bindAsRenderTarget();
 		
 		int cullFaceMode = glGetInteger(GL_CULL_FACE_MODE);
 		int depthFuncMode = glGetInteger(GL_DEPTH_FUNC);

@@ -1,61 +1,17 @@
 package com.snakybo.sengine.core;
 
-import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
-import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL;
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
-import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
-import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
-
-import java.nio.DoubleBuffer;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import static org.lwjgl.glfw.GLFW.GLFW_ARROW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CROSSHAIR_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_HAND_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_HRESIZE_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_IBEAM_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_VRESIZE_CURSOR;
 
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 
 public class Input
 {
-	public static class KeyCallback extends GLFWKeyCallback
-	{
-		@Override
-		public void invoke(long window, int key, int scancode, int action, int mods)
-		{
-			if(action == GLFW_PRESS)
-			{
-				keys[key] = true;
-				lastKeys[key] = true;
-			}
-			else if(action == GLFW_RELEASE)
-			{
-				keys[key] = false;
-				lastKeys[key] = false;
-			}
-		}		
-	}
-	
-	public static class MouseCallback extends GLFWMouseButtonCallback
-	{
-		@Override
-		public void invoke(long window, int button, int action, int mods)
-		{
-			if(action == GLFW_PRESS)
-			{
-				mouseButtons[button] = true;
-				lastMouseButtons[button] = true;
-			}
-			else if(action == GLFW_RELEASE)
-			{
-				mouseButtons[button] = false;
-				lastMouseButtons[button] = false;
-			}
-		}		
-	}
-
 	public class KeyCode
 	{
 		public static final int KEY_SPACE         = 0x20;
@@ -214,15 +170,62 @@ public class Input
 			lastMouseButtons[i] = false;
 		}
 	}
+	
+	public static void onKeyCallback(int key, boolean state)
+	{
+		keys[key] = state;
+		lastKeys[key] = state;
+	}
+	
+	public static void onMouseButtonCallback(int button, boolean state)
+	{
+		mouseButtons[button] = state;
+		lastMouseButtons[button] = state;
+	}
+	
+	public static void createArrowCursor()
+	{
+		GLFWWindow.createCursor(GLFW_ARROW_CURSOR);
+	}
+	
+	public static void createIBeamCursor()
+	{
+		GLFWWindow.createCursor(GLFW_IBEAM_CURSOR);
+	}
+	
+	public static void createCrosshairCursor()
+	{
+		GLFWWindow.createCursor(GLFW_CROSSHAIR_CURSOR);
+	}
+	
+	public static void createHandCursor()
+	{
+		GLFWWindow.createCursor(GLFW_HAND_CURSOR);
+	}
+	
+	public static void createHResizeCursor()
+	{
+		GLFWWindow.createCursor(GLFW_HRESIZE_CURSOR);
+	}
+	
+	public static void createVResizeCursor()
+	{
+		GLFWWindow.createCursor(GLFW_VRESIZE_CURSOR);
+	}
+	
+	public static void createCursor(String fileName, int xhot, int yhot)
+	{
+		GLFWWindow.createCursor(fileName, xhot, yhot);
+	}
 
 	public static void setMousePosition(Vector2f position)
 	{
-		glfwSetCursorPos(Window.getWindow(), position.x, position.y);
+		GLFWWindow.setMousePosition(position);
 	}
 
 	public static void setCursor(boolean enabled)
 	{
-		glfwSetInputMode(Window.getWindow(), GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+		GLFWWindow.setCursor(enabled);
 	}
 
 	public static boolean getKey(int keyCode)
@@ -257,14 +260,6 @@ public class Input
 
 	public static Vector2f getMousePosition()
 	{
-		DoubleBuffer xpos = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer ypos = BufferUtils.createDoubleBuffer(1);
-		
-		glfwGetCursorPos(Window.getWindow(), xpos, ypos);
-		
-		float x = (float)xpos.get();
-		float y = Window.getHeight() - (float)ypos.get();
-		
-		return new Vector2f(x, y);
+		return GLFWWindow.getMousePosition();
 	}
 }

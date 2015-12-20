@@ -1,7 +1,7 @@
 package com.snakybo.sengine.core;
 
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
+import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 
 /**
  * @author Kevin Krol
@@ -21,9 +21,9 @@ public abstract class SEngine
 			return;
 		}
 		
-		if(!Window.isCreated())
+		if(!GLFWWindow.isCreated())
 		{
-			Window.create(1280, 720, "SEngine");
+			throw new IllegalStateException("[SEngine] You have to create a window before starting the engine.");
 		}
 		
 		SEngine.renderingEngine = new RenderingEngine();
@@ -46,6 +46,22 @@ public abstract class SEngine
 		isRunning = false;
 	}
 	
+	public static void onWindowFocusCallback(boolean focused)
+	{
+		if(game != null)
+		{
+			game.onFocus(focused);
+		}
+	}
+	
+	public static void onWindowIconifyCallback(boolean iconified)
+	{
+		if(game != null)
+		{
+			game.onIconify(iconified);
+		}
+	}
+	
 	private static void run()
 	{
 		double unprocessedTime = 0.0;
@@ -63,7 +79,7 @@ public abstract class SEngine
 
 				unprocessedTime -= Time.getFrameTime();
 
-				if(Window.isCloseRequested())
+				if(GLFWWindow.isCloseRequested())
 				{
 					stop();
 					return;
@@ -77,7 +93,7 @@ public abstract class SEngine
 			{
 				game.render(renderingEngine);
 				
-				Window.update();
+				GLFWWindow.update();
 				Time.onRender();
 			}
 			else
@@ -96,6 +112,6 @@ public abstract class SEngine
 		game.deinitialize();
 		game.destroy();		
 		
-		Window.destroy();
+		GLFWWindow.destroy();
 	}
 }
