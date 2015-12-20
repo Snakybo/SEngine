@@ -61,6 +61,8 @@ public abstract class GLFWWindow
 	
 	private static long window;
 	
+	private static boolean vsync;
+	
 	static
 	{
 		handler = new GLFWHandler();
@@ -106,9 +108,7 @@ public abstract class GLFWWindow
 		
 		handler.createCallbacks(window);
 		
-		glfwMakeContextCurrent(window);
-		glfwSwapInterval(1);
-		
+		glfwMakeContextCurrent(window);		
 		glfwShowWindow(window);
 		createCapabilities();
 	}
@@ -165,6 +165,12 @@ public abstract class GLFWWindow
 	public static boolean isCreated()
 	{
 		return window != NULL;
+	}
+	
+	public void setVSync(boolean vsync)
+	{
+		GLFWWindow.vsync = vsync;
+		glfwSwapInterval(vsync ? 1 : 0);
 	}
 	
 	public static void setSize(int width, int height)
@@ -230,5 +236,10 @@ public abstract class GLFWWindow
 	public static int getHeight()
 	{
 		return (int)getSize().y;
+	}
+	
+	public static boolean isVSyncEnabled()
+	{
+		return vsync;
 	}
 }
