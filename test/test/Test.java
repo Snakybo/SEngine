@@ -73,6 +73,7 @@ public class Test extends Game
 	
 	public static void main(String[] args)
 	{
+		GLFWWindow.setSamples(4);
 		GLFWWindow.createWindowed("Test", 1280, 720);
 		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));		
 		SEngine.start(new Test());

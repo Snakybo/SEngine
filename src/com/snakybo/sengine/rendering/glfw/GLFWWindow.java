@@ -1,14 +1,18 @@
 package com.snakybo.sengine.rendering.glfw;
 
+import static org.lwjgl.glfw.GLFW.GLFW_ALPHA_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL;
+import static org.lwjgl.glfw.GLFW.GLFW_DEPTH_BITS;
+import static org.lwjgl.glfw.GLFW.GLFW_DOUBLE_BUFFER;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_GREEN_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_RED_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_REFRESH_RATE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateCursor;
 import static org.lwjgl.glfw.GLFW.glfwCreateStandardCursor;
@@ -60,7 +64,7 @@ public abstract class GLFWWindow
 	private static GLFWHandler handler;
 	
 	private static long window;
-	
+	private static int samples;
 	private static boolean vsync;
 	
 	static
@@ -98,7 +102,18 @@ public abstract class GLFWWindow
 			glfwWindowHint(GLFW_GREEN_BITS, vidMode.greenBits());
 			glfwWindowHint(GLFW_BLUE_BITS, vidMode.blueBits());
 			glfwWindowHint(GLFW_REFRESH_RATE, vidMode.refreshRate());
-		}		
+		}
+		else
+		{
+			glfwWindowHint(GLFW_RED_BITS, 8);
+			glfwWindowHint(GLFW_GREEN_BITS, 8);
+			glfwWindowHint(GLFW_BLUE_BITS, 8);
+			glfwWindowHint(GLFW_ALPHA_BITS, 8);
+			glfwWindowHint(GLFW_DEPTH_BITS, 16);
+			glfwWindowHint(GLFW_DOUBLE_BUFFER, 1);
+		}
+		
+		glfwWindowHint(GLFW_SAMPLES, samples);
 		
 		window = glfwCreateWindow(width, height, title, monitor, NULL);
 		if(window == NULL)
@@ -167,7 +182,12 @@ public abstract class GLFWWindow
 		return window != NULL;
 	}
 	
-	public void setVSync(boolean vsync)
+	public static void setSamples(int samples)
+	{
+		GLFWWindow.samples = samples;
+	}
+	
+	public static void setVSync(boolean vsync)
 	{
 		GLFWWindow.vsync = vsync;
 		glfwSwapInterval(vsync ? 1 : 0);
