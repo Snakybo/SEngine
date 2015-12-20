@@ -1,6 +1,6 @@
 # SEngine [![Build Status](https://travis-ci.org/Snakybo/SEngine.svg?branch=master)](https://travis-ci.org/Snakybo/SEngine)
 
-A 3D game engine, made in Java using using OpenGL.
+A 3D game engine, made in Java using using LWJGL.
 
 ## Core features:
 - [Component system](#component-system)
@@ -10,9 +10,9 @@ A 3D game engine, made in Java using using OpenGL.
 - [Displacement maps](http://en.wikipedia.org/wiki/Displacement_mapping)
 - [Model loader](#model-loader)
 - [Automatic resource management](#automatic-resource-management)
-- [Anti-Aliasing](#anti-aliasing)
 - [Shadow mapping](#shadow-mapping)
 - [Skyboxes](#skyboxes)
+- [Custom Cursors](#custom-cursors)
 
 ## Planned features
 - Physically Based Rendering
@@ -21,25 +21,25 @@ A 3D game engine, made in Java using using OpenGL.
 - Physics
 
 ## Component system
-SEngine uses a system similar to [Unity 3D](http://unity3d.com/), It offers a scene which you can fill with game objects. You can attach multiple components to each game object.
+When you create your game, you can fill a scene with objects. The objects are just a point in space with components. Components make up for all the game logic.
 
 ## Forward rendering
-The engine uses a forward rendering system, meaning it's fast and relatively easy on the GPU. Physically Based Rendering is on the [Planned features](#planned-features) list.
+The engine uses a forward rendering system, [Physically Based Rendering](http://www.pbrt.org/) is on the [Planned features](#planned-features) list.
 
 ## Lighting
-The engine has support for a multitude of lights, such as directional lights, point lights and spot lights.
+The engine supports ambient lighting, as well as directional lights, point lights and spot lights.
 
 ## Model loader
 The engine has the ability to load 3D models. Currently only .obj is supported. Other filetypes are on the [Planned features](#planned-features) list.
 
 ## Automatic resource management
-The engine automatically manages resources that have been loaded. Whenever you create a texture or mesh it automatically checks if it has been loaded before. This saves a lot of time and memory when you try to load the same file multiple times. It also automatically frees any memory allocated to the file by OpenGL when the last reference to the file has been destroyed.
-
-## Anti-Aliasing
-Currently the engine supports [Multisample anti-aliasing](http://en.wikipedia.org/wiki/Multisample_anti-aliasing).
+The engine automatically manages resources that have been loaded. Whenever you create a texture or mesh it automatically checks if it has been loaded before. It also automatically frees any memory allocated to the object when the last reference to the file has been removed.
 
 ## Shadow Mapping
-The engine now supports basic shadow mapping, currently it's restricted to directional-lights only. The short term goal is to add shadow dynamic shadow mapping for all lights.
+The engine makes use of [variance shadow mapping](http://http.developer.nvidia.com/GPUGems3/gpugems3_ch08.html), this feature is still under development.
 
 ## Skyboxes
 There is support for custom cubemap skyboxes.
+
+## Custom Cursors
+You can use any of the system-default cursors, or specify your own image.
