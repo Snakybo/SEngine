@@ -8,15 +8,10 @@ import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.utils.Color;
 
-/** A basic camera class that you could use for perspective and orthographic
- * projections
- * <p>
- * The camera uses a {@link Matrix4f} as a projection matrix
- * </p>
+/**
  * @author Kevin Krol
  * @since Apr 4, 2014
- * @see Component
- * @see Matrix4f */
+ */
 public class Camera
 {
 	private static List<Camera> cameras = new ArrayList<Camera>();
@@ -24,10 +19,7 @@ public class Camera
 	private Matrix4f projection;
 	private Transform transform;
 	private Color clearColor;
-
-	/** Constructor for the component
-	 * @param projection The projection matrix to use for this camera
-	 * @see Matrix4f */
+	
 	public Camera(Matrix4f projection)
 	{
 		this(projection, new Transform());
