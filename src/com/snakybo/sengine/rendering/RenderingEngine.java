@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
 import static org.lwjgl.opengl.GL30.GL_RG32F;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
@@ -269,6 +270,8 @@ public class RenderingEngine
 
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
+		
+		glEnable(GL_MULTISAMPLE);
 	}
 	
 	public void set(String name, Object value)

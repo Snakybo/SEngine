@@ -93,6 +93,7 @@ public abstract class GLFWWindow
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_SAMPLES, samples);
 		
 		if(monitor != NULL)
 		{
@@ -112,8 +113,6 @@ public abstract class GLFWWindow
 			glfwWindowHint(GLFW_DEPTH_BITS, 16);
 			glfwWindowHint(GLFW_DOUBLE_BUFFER, 1);
 		}
-		
-		glfwWindowHint(GLFW_SAMPLES, samples);
 		
 		window = glfwCreateWindow(width, height, title, monitor, NULL);
 		if(window == NULL)
