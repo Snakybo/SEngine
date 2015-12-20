@@ -75,6 +75,6 @@ public class Test extends Game
 	{
 		Window.create(1280, 720, "Test");		
 		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));		
-		SEngine.start(new Test(), 60);
+		SEngine.start(new Test());
 	}
 }

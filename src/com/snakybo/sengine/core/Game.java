@@ -26,9 +26,9 @@ public abstract class Game
 		}
 	}
 	
-	final void update(float delta)
+	final void update()
 	{
-		root.update(delta);
+		root.update();
 	}
 	
 	final void render(RenderingEngine renderingEngine)

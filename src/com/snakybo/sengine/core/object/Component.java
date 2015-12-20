@@ -24,7 +24,7 @@ public abstract class Component
 	{
 	}
 	
-	protected void update(float delta)
+	protected void update()
 	{
 	}
 	

@@ -90,18 +90,18 @@ public final class GameObject
 		}
 	}
 
-	public final void update(float delta)
+	public final void update()
 	{
 		updateInternal();
 		
 		for(Component component : components)
 		{
-			component.update(delta);
+			component.update();
 		}
 		
 		for(GameObject child : children)
 		{
-			child.update(delta);
+			child.update();
 		}
 	}
 	

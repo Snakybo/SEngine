@@ -4,6 +4,7 @@ import com.snakybo.sengine.core.Input;
 import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.utils.Time;
 
 /** This class extends the {@link Component} class
  * <p>
@@ -104,9 +105,9 @@ public class FreeMove extends Component
 	}
 
 	@Override
-	protected void update(float delta)
+	protected void update()
 	{
-		float moveAmount = speed * delta;
+		float moveAmount = speed * Time.getDeltaTime();
 		
 		if(Input.getKey(keyForward))
 			move(getTransform().getLocalRotation().getForward(), moveAmount);

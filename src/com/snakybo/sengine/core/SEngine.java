@@ -12,12 +12,10 @@ public abstract class SEngine
 {
 	private static RenderingEngine renderingEngine;
 	private static Game game;
-
-	private static double frameTime;
-
+	
 	private static boolean isRunning;
 	
-	public static void start(Game game, double fps)
+	public static void start(Game game)
 	{
 		if(isRunning)
 		{
@@ -30,7 +28,6 @@ public abstract class SEngine
 		}
 		
 		SEngine.renderingEngine = new RenderingEngine();
-		SEngine.frameTime = 1.0 / fps;
 		SEngine.isRunning = true;
 		SEngine.game = game;
 		
@@ -85,11 +82,11 @@ public abstract class SEngine
 				frameCounter = 0.0;
 			}
 
-			while(unprocessedTime > frameTime)
+			while(unprocessedTime > Time.getFrameTime())
 			{
 				render = true;
 
-				unprocessedTime -= frameTime;
+				unprocessedTime -= Time.getFrameTime();
 
 				if(Window.isCloseRequested())
 				{
@@ -97,7 +94,7 @@ public abstract class SEngine
 					return;
 				}
 
-				game.update((float)frameTime);
+				game.update();
 				Input.update();
 			}
 
