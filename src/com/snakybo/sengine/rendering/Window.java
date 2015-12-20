@@ -36,13 +36,8 @@ import com.snakybo.sengine.math.Vector2f;
 
 public abstract class Window
 {
-	@SuppressWarnings("unused")
 	private static GLFWErrorCallback errorCallback;
-	
-	@SuppressWarnings("unused")
 	private static GLFWKeyCallback keyCallback;
-	
-	@SuppressWarnings("unused")
 	private static GLFWMouseButtonCallback mouseButtonCallback;
 	
 	private static String title;
@@ -103,7 +98,9 @@ public abstract class Window
 		glfwDestroyWindow(window);
 		glfwTerminate();
 		
-		errorCallback = null;
+		keyCallback.release();
+		mouseButtonCallback.release();
+		errorCallback.release();		
 	}
 	
 	public static boolean isCloseRequested()
