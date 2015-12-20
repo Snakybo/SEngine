@@ -309,7 +309,7 @@ public class RenderingEngine
 		renderFlags.add(flag);
 	}
 	
-	public static void removeRenderFlg(RenderFlag flag)
+	public static void removeRenderFlag(RenderFlag flag)
 	{
 		renderFlags.remove(flag);
 	}
