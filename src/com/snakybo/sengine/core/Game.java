@@ -13,17 +13,26 @@ public abstract class Game
 	
 	private GameObject root;
 	
-	public void init()
+	public void create()
 	{
 	}
 	
-	final void internalInit()
+	public void destroy()
+	{
+	}
+	
+	final void initialize()
 	{
 		if(instance == null)
 		{
 			instance = this;
 			root = new GameObject();
 		}
+	}
+	
+	final void deinitialize()
+	{
+		clearScene();
 	}
 	
 	final void update()

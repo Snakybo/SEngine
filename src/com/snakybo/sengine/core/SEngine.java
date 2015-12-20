@@ -30,8 +30,8 @@ public abstract class SEngine
 		SEngine.isRunning = true;
 		SEngine.game = game;
 		
-		game.internalInit();
-		game.init();
+		game.initialize();
+		game.create();
 		
 		run();
 	}
@@ -44,8 +44,6 @@ public abstract class SEngine
 		}
 
 		isRunning = false;
-
-		Window.destroy();
 	}
 	
 	private static void run()
@@ -94,5 +92,10 @@ public abstract class SEngine
 				}
 			}
 		}
+		
+		game.deinitialize();
+		game.destroy();		
+		
+		Window.destroy();
 	}
 }

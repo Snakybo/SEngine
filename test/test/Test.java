@@ -26,7 +26,7 @@ import com.snakybo.sengine.utils.Color;
 public class Test extends Game
 {
 	@Override
-	public void init()
+	public void create()
 	{
 		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
