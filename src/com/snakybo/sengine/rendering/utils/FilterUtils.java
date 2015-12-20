@@ -29,7 +29,7 @@ public abstract class FilterUtils
 	{
 		transform = new Transform();
 		texture = new Texture(GLFWWindow.getWidth(), GLFWWindow.getHeight(), null, GL_TEXTURE_2D, GL_NEAREST, GL_RGBA, GL_RGBA, false, GL_COLOR_ATTACHMENT0);
-		material = new Material(texture, 1, 8);
+		material = Material.createDefault(texture, 1, 8);
 		shader = new Shader("internal/filter-gausBlur7x1");
 		mesh = Primitive.PLANE.get();
 	}

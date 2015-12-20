@@ -146,12 +146,12 @@ public final class GameObject
 		}
 	}
 	
-	public final GameObject addComponent(Component component)
+	public final Component addComponent(Component component)
 	{
 		components.add(component);
 		component.setParent(this);
 
-		return this;
+		return component;
 	}
 	
 	public final <T extends Component> void removeComponents(Class<T> type)

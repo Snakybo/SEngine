@@ -4,7 +4,6 @@ import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
-import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.shader.Shader;
 
 /**
@@ -16,9 +15,9 @@ public class MeshRenderer extends Component
 	private Mesh mesh;
 	private Material material;
 	
-	public MeshRenderer(Primitive primitive, Material material)
+	public MeshRenderer(Mesh mesh)
 	{
-		this(primitive.get(), material);
+		this(mesh, Material.createDefault());
 	}
 	
 	public MeshRenderer(Mesh mesh, Material material)

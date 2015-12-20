@@ -18,6 +18,7 @@ import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.glfw.GLFWWindow;
 import com.snakybo.sengine.resource.material.Material;
+import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
@@ -28,6 +29,9 @@ public class Test extends Game
 	@Override
 	public void create()
 	{
+		Material brickMaterial = Material.createDefault(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
+		Material brick2Material = Material.createDefault(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
+		
 		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)GLFWWindow.getWidth() / (float)GLFWWindow.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
 		camera.addComponent(new FreeLook());
@@ -35,36 +39,34 @@ public class Test extends Game
 		camera.addComponent(new CameraComponent(cameraProjection, new Color(0, 0, 0)).setAsMainCamera());
 		addChild(camera);
 		
-		DirectionalLight directionalLight = new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10);
-		GameObject directionalLightObject = new GameObject().addComponent(directionalLight);
-		directionalLightObject.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
-		addChild(directionalLightObject);
+		GameObject directionalLight = new GameObject(new Vector3f(), new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
+		directionalLight.addComponent(new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10));
+		addChild(directionalLight);
 		
-		SpotLight spotLight = new SpotLight(new Color(0, 1, 1), 0.8f, new Attenuation(0, 0, 0.02f), (float)Math.toRadians(91.1f), 7, 1, 0.5f);
-		GameObject spotLightObject = new GameObject().addComponent(spotLight);
-		spotLightObject.getTransform().rotate(new Vector3f(0, 1, 0), Math.toRadians(90));
-		spotLightObject.getTransform().rotate(new Vector3f(1, 0, 0), Math.toRadians(-60));
-		spotLightObject.getTransform().setPosition(new Vector3f(-4, 1, 2));
-		addChild(spotLightObject);
+		GameObject spotLight = new GameObject(new Vector3f(-4, 1, 2));
+		spotLight.getTransform().rotate(new Vector3f(0, 1, 0), Math.toRadians(90));
+		spotLight.getTransform().rotate(new Vector3f(1, 0, 0), Math.toRadians(-60));
+		spotLight.addComponent(new SpotLight(new Color(0, 1, 1), 0.8f, new Attenuation(0, 0, 0.02f), (float)Math.toRadians(91.1f), 7, 1, 0.5f));
+		addChild(spotLight);
 		
-		PointLight pointLight = new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f));
-		GameObject pointLightObject = new GameObject().addComponent(pointLight);
-		pointLightObject.getTransform().setPosition(new Vector3f(12, 1, 12));
-		addChild(pointLightObject);
+		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
+		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
+		addChild(pointLight);
 		
-		Material brickMaterial = new Material(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);		
-		addChild(new GameObject(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20)).addComponent(new MeshRenderer(Primitive.PLANE, brickMaterial)));
+		GameObject plane1 = new GameObject(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20));
+		plane1.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.PLANE), brickMaterial));
+		addChild(plane1);
 		
-		Material brick2Material = new Material(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
-		addChild(new GameObject(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5)).addComponent(new MeshRenderer(Primitive.PLANE, brick2Material)));
+		GameObject plane2 = new GameObject(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5));
+		plane2.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.PLANE), brick2Material));
+		addChild(plane2);
 		
-		Material diffuseMaterial = new Material(new Texture("default/diffuse.png"), 4, 8);
 		GameObject sphereObject = new GameObject(new Vector3f(-2, 0, -2), new Quaternion());
-		sphereObject.addComponent(new MeshRenderer(Primitive.SPHERE, diffuseMaterial));
+		sphereObject.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.SPHERE)));
 		addChild(sphereObject);
 		
 		GameObject cubeObject = new GameObject(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
-		cubeObject.addComponent(new MeshRenderer(Primitive.CUBE, diffuseMaterial));
+		cubeObject.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.CUBE)));
 		addChild(cubeObject);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
