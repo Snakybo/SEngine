@@ -59,7 +59,7 @@ import com.snakybo.sengine.utils.Buffer;
  * @author Kevin
  * @since Dec 20, 2015
  */
-public abstract class GLFWWindow
+public abstract class Window
 {
 	private static GLFWHandler handler;
 	
@@ -183,12 +183,12 @@ public abstract class GLFWWindow
 	
 	public static void setSamples(int samples)
 	{
-		GLFWWindow.samples = samples;
+		Window.samples = samples;
 	}
 	
 	public static void setVSync(boolean vsync)
 	{
-		GLFWWindow.vsync = vsync;
+		Window.vsync = vsync;
 		glfwSwapInterval(vsync ? 1 : 0);
 	}
 	

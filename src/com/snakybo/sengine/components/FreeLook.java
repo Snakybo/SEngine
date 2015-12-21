@@ -6,7 +6,7 @@ import com.snakybo.sengine.core.Input.MouseButton;
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.glfw.GLFWWindow;
+import com.snakybo.sengine.rendering.glfw.Window;
 
 /**
  * @author Kevin Krol
@@ -43,7 +43,7 @@ public class FreeLook extends Component
 	@Override
 	protected void update()
 	{
-		Vector2f center = GLFWWindow.getCenter();
+		Vector2f center = Window.getCenter();
 		
 		if(Input.getKey(unlockMouseKey))
 		{

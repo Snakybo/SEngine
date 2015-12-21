@@ -40,7 +40,7 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.glfw.GLFWWindow;
+import com.snakybo.sengine.rendering.glfw.Window;
 import com.snakybo.sengine.rendering.utils.FilterUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
@@ -93,7 +93,7 @@ public class RenderingEngine
 	{
 		Camera mainCamera = Camera.getMainCamera();	
 		
-		GLFWWindow.bindAsRenderTarget();
+		Window.bindAsRenderTarget();
 		
 		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -195,7 +195,7 @@ public class RenderingEngine
 		
 		renderShadow(obj, light);
 		
-		GLFWWindow.bindAsRenderTarget();
+		Window.bindAsRenderTarget();
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
@@ -238,7 +238,7 @@ public class RenderingEngine
 		
 		if(dest == null)
 		{
-			GLFWWindow.bindAsRenderTarget();
+			Window.bindAsRenderTarget();
 		}
 		else
 		{

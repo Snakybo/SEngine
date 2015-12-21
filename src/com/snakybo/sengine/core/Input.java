@@ -8,7 +8,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_IBEAM_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_VRESIZE_CURSOR;
 
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.rendering.glfw.GLFWWindow;
+import com.snakybo.sengine.rendering.glfw.Window;
 
 public abstract class Input
 {
@@ -213,47 +213,47 @@ public abstract class Input
 	
 	public static void createArrowCursor()
 	{
-		GLFWWindow.createCursor(GLFW_ARROW_CURSOR);
+		Window.createCursor(GLFW_ARROW_CURSOR);
 	}
 	
 	public static void createIBeamCursor()
 	{
-		GLFWWindow.createCursor(GLFW_IBEAM_CURSOR);
+		Window.createCursor(GLFW_IBEAM_CURSOR);
 	}
 	
 	public static void createCrosshairCursor()
 	{
-		GLFWWindow.createCursor(GLFW_CROSSHAIR_CURSOR);
+		Window.createCursor(GLFW_CROSSHAIR_CURSOR);
 	}
 	
 	public static void createHandCursor()
 	{
-		GLFWWindow.createCursor(GLFW_HAND_CURSOR);
+		Window.createCursor(GLFW_HAND_CURSOR);
 	}
 	
 	public static void createHResizeCursor()
 	{
-		GLFWWindow.createCursor(GLFW_HRESIZE_CURSOR);
+		Window.createCursor(GLFW_HRESIZE_CURSOR);
 	}
 	
 	public static void createVResizeCursor()
 	{
-		GLFWWindow.createCursor(GLFW_VRESIZE_CURSOR);
+		Window.createCursor(GLFW_VRESIZE_CURSOR);
 	}
 	
 	public static void createCursor(String fileName, int xhot, int yhot)
 	{
-		GLFWWindow.createCursor(fileName, xhot, yhot);
+		Window.createCursor(fileName, xhot, yhot);
 	}
 
 	public static void setMousePosition(Vector2f position)
 	{
-		GLFWWindow.setMousePosition(position);
+		Window.setMousePosition(position);
 	}
 
 	public static void setCursor(boolean enabled)
 	{
-		GLFWWindow.setCursor(enabled);
+		Window.setCursor(enabled);
 	}
 
 	public static boolean getKey(KeyCode keyCode)
@@ -303,7 +303,7 @@ public abstract class Input
 
 	public static Vector2f getMousePosition()
 	{
-		return GLFWWindow.getMousePosition();
+		return Window.getMousePosition();
 	}
 	
 	public static Vector2f getSrollDelta()

@@ -1,11 +1,13 @@
 package test;
 
 import com.snakybo.sengine.components.Camera.CameraComponent;
+import com.snakybo.sengine.components.FPSDisplay;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
+import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
@@ -16,7 +18,7 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.glfw.GLFWWindow;
+import com.snakybo.sengine.rendering.glfw.Window;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
@@ -32,7 +34,7 @@ public class Test extends Game
 		Material brickMaterial = Material.createDefault(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
 		Material brick2Material = Material.createDefault(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
 		
-		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)GLFWWindow.getWidth() / (float)GLFWWindow.getHeight(), 0.01f, 1000);
+		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
 		GameObject camera = new GameObject();
 		camera.addComponent(new FreeLook());
 		camera.addComponent(new FreeMove());
@@ -74,10 +76,10 @@ public class Test extends Game
 	}
 	
 	public static void main(String[] args)
-	{
-		GLFWWindow.setSamples(4);
-		GLFWWindow.createWindowed("Test", 1280, 720);
-		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));		
+	{	
+		Window.setSamples(4);
+		Window.createWindowed("Test", 1280, 720);
+		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));
 		SEngine.start(new Test());
 	}
 }
