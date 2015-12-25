@@ -49,7 +49,7 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("sampler2D"))
 				{
-					int samplerSlot = renderingEngine.getTextureSamplerSlot(unprefixedName);
+					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
 
 					renderingEngine.get(Texture.class, unprefixedName).bind(samplerSlot);
 					shader.setUniformi(name, samplerSlot);
@@ -81,7 +81,7 @@ public abstract class ShaderUpdater
 			}
 			else if(type.startsWith("sampler2D"))
 			{
-				int samplerSlot = renderingEngine.getTextureSamplerSlot(name);
+				int samplerSlot = renderingEngine.getSamplerSlot(name);
 				material.get(Texture.class, name).bind(samplerSlot);
 				shader.setUniformi(name, samplerSlot);
 			}

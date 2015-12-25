@@ -6,7 +6,7 @@ import com.snakybo.sengine.core.Input.MouseButton;
 import com.snakybo.sengine.core.object.Component;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.glfw.Window;
+import com.snakybo.sengine.rendering.Window;
 
 /**
  * @author Kevin Krol

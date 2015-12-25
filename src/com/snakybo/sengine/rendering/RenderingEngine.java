@@ -40,7 +40,6 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.glfw.Window;
 import com.snakybo.sengine.rendering.utils.FilterUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
@@ -60,22 +59,20 @@ public class RenderingEngine
 	private static Skybox skyBox;
 	private static EnumSet<RenderFlag> renderFlags = EnumSet.of(RenderFlag.NORMAL);
 	
-	private Map<String, Integer> samplerMap;
 	private Map<String, Object> dataContainer;
 	
-	private Camera shadowMapCamera;
+	private Camera altCamera;
 	
 	public RenderingEngine()
-	{		
-		samplerMap = new HashMap<String, Integer>();
-		samplerMap.put("diffuse", 0);
-		samplerMap.put("normalMap", 1);
-		samplerMap.put("dispMap", 2);
-		samplerMap.put("shadowMap", 3);
-		samplerMap.put("filterTexture", 0);
-		
+	{
 		dataContainer = new HashMap<String, Object>();
-		dataContainer.put("ambient", AmbientLight.getAmbientColor());
+		
+		set("ambient", AmbientLight.getAmbientColor());		
+		set("sampler_diffuse", 0);
+		set("sampler_normalMap", 1);
+		set("sampler_dispMap", 2);
+		set("sampler_shadowMap", 3);
+		set("sampler_filterTexture", 0);
 		
 		for(int i = 0; i < ShadowUtils.getNumShadowMaps(); i++)
 		{
@@ -83,7 +80,7 @@ public class RenderingEngine
 			ShadowUtils.setShadowMapAt(i, new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0));
 		}
 		
-		shadowMapCamera = new Camera(Matrix4f.identity());
+		altCamera = new Camera(Matrix4f.identity());
 		LightUtils.setCurrentLightMatrix(Matrix4f.createScaleMatrix(new Vector3f()));
 		
 		initializeGL();
@@ -148,11 +145,11 @@ public class RenderingEngine
 		{
 			ShadowCameraTransform shadowCameraTransform = light.calculateShadowCameraTransform();
 			
-			shadowMapCamera.setProjection(shadowInfo.getProjection());
-			shadowMapCamera.getTransform().setPosition(shadowCameraTransform.getPosition());
-			shadowMapCamera.getTransform().setRotation(shadowCameraTransform.getRotation());
+			altCamera.setProjection(shadowInfo.getProjection());
+			altCamera.getTransform().setPosition(shadowCameraTransform.getPosition());
+			altCamera.getTransform().setRotation(shadowCameraTransform.getRotation());
 			
-			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(shadowMapCamera.getViewProjection()));
+			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(altCamera.getViewProjection()));
 			
 			set("shadowVarianceMin", shadowInfo.getMinVariance());
 			set("shadowLightBleedingReduction", shadowInfo.getLightBleedingReductionAmount());
@@ -163,7 +160,7 @@ public class RenderingEngine
 			}
 			
 			glEnable(GL_DEPTH_CLAMP);
-			obj.render(this, ShadowUtils.getShadowMapShader(), shadowMapCamera);
+			obj.render(this, ShadowUtils.getShadowMapShader(), altCamera);
 			glDisable(GL_DEPTH_CLAMP);
 			
 			if(shadowInfo.getFlipFaces())
@@ -247,14 +244,14 @@ public class RenderingEngine
 		
 		set("filterTexture", src);
 		
-		shadowMapCamera.setProjection(Matrix4f.identity());
-		shadowMapCamera.getTransform().setPosition(new Vector3f());
-		shadowMapCamera.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(180)));
+		altCamera.setProjection(Matrix4f.identity());
+		altCamera.getTransform().setPosition(new Vector3f());
+		altCamera.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(180)));
 		
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
 		filter.bind();
-		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), this, shadowMapCamera);
+		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), this, altCamera);
 		FilterUtils.getMesh().draw();
 		
 		set("filterTexture", null);
@@ -289,14 +286,9 @@ public class RenderingEngine
 		return type.cast(dataContainer.get(name));
 	}
 	
-	public int getTextureSamplerSlot(String samplerName)
+	public int getSamplerSlot(String samplerName)
 	{
-		if(samplerMap.containsKey(samplerName))
-		{
-			return samplerMap.get(samplerName);
-		}
-		
-		throw new IllegalArgumentException("[RenderingEngine] No texture sampler slot found for sampler with name: " + samplerName);
+		return get(Integer.class, "sampler_" + samplerName);
 	}
 	
 	public static void setSkybox(Skybox skyBox)

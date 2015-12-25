@@ -27,7 +27,7 @@ import com.snakybo.sengine.core.SEngine;
  * @author Kevin
  * @since Dec 20, 2015
  */
-class GLFWHandler
+public class GLFWHandler
 {	
 	private static class WindowFocusCallback extends GLFWWindowFocusCallback
 	{
@@ -97,7 +97,7 @@ class GLFWHandler
 	private GLFWScrollCallback scrollCallback;
 	private GLFWCursorEnterCallback cursorEnterCallback;
 	
-	GLFWHandler()
+	public GLFWHandler()
 	{
 		glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 		
@@ -107,12 +107,12 @@ class GLFWHandler
 		}
 	}
 	
-	void destroy()
+	public void destroy()
 	{
 		errorCallback.release();
 	}
 	
-	void createCallbacks(long window)
+	public void createCallbacks(long window)
 	{
 		glfwSetKeyCallback(window, keyCallback = new KeyCallback());
 		glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
@@ -122,7 +122,7 @@ class GLFWHandler
 		glfwSetCursorEnterCallback(window, cursorEnterCallback = new CursorEnterCallback());
 	}
 	
-	void destroyCallbacks()
+	public void destroyCallbacks()
 	{
 		keyCallback.release();
 		mouseButtonCallback.release();

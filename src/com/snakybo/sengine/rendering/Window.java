@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering.glfw;
+package com.snakybo.sengine.rendering;
 
 import static org.lwjgl.glfw.GLFW.GLFW_ALPHA_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
@@ -40,6 +40,7 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL30.GL_DRAW_FRAMEBUFFER;
+import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glBindFramebuffer;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -51,6 +52,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 
 import com.snakybo.sengine.math.Vector2f;
+import com.snakybo.sengine.rendering.glfw.GLFWHandler;
 import com.snakybo.sengine.resource.texture.TextureLoader;
 import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
 import com.snakybo.sengine.utils.Buffer;
@@ -135,7 +137,7 @@ public abstract class Window
 	
 	public static void bindAsRenderTarget()
 	{
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, getWidth(), getHeight());
 	}
 	

@@ -1,7 +1,7 @@
 package com.snakybo.sengine.core;
 
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.glfw.Window;
+import com.snakybo.sengine.rendering.Window;
 
 /**
  * @author Kevin Krol

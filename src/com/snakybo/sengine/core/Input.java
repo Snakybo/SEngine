@@ -8,7 +8,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_IBEAM_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_VRESIZE_CURSOR;
 
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.rendering.glfw.Window;
+import com.snakybo.sengine.rendering.Window;
 
 public abstract class Input
 {

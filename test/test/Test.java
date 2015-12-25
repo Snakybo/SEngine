@@ -18,7 +18,7 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.glfw.Window;
+import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;

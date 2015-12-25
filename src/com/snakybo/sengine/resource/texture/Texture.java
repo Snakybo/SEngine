@@ -64,7 +64,7 @@ public class Texture
 	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
 		fileName = "texture_" + Time.getCurrentTimeMillis();		
-		resource = new TextureResource(textureTarget, width, height, 1, data, filters, internalFormat, format, clamp, attachments);
+		resource = new TextureResource(textureTarget, width, height, data, filters, internalFormat, format, clamp, attachments);
 		ResourceManager.add(fileName, resource);
 	}
 
@@ -110,7 +110,7 @@ public class Texture
 		else
 		{
 			TextureData textureData = TextureLoader.loadTexture(fileName);
-			resource = new TextureResource(target, textureData.getWidth(), textureData.getHeight(), 1, textureData.getData(), filters, internalFormat, format, clamp, attachments);
+			resource = new TextureResource(target, textureData.getWidth(), textureData.getHeight(), textureData.getData(), filters, internalFormat, format, clamp, attachments);
 			ResourceManager.add(fileName, resource);
 		}
 	}
