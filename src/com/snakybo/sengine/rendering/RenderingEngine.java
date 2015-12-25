@@ -219,10 +219,10 @@ public class RenderingEngine
 		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
 		
 		set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
-		applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
+		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
 		
 		set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
-		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
+		applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
 	}
 	
 	private void applyFilter(Shader filter, Texture src, Texture dest)
