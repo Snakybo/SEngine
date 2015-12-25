@@ -16,7 +16,6 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
-import static org.lwjgl.opengl.GL11.glDrawBuffer;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glGetFloat;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
@@ -29,6 +28,7 @@ import static org.lwjgl.opengl.GL12.GL_TEXTURE_MAX_LEVEL;
 import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL20.glDrawBuffers;
 import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_COMPLETE;
@@ -127,28 +127,34 @@ public class TextureResource implements IResource
 		}
 	}
 
-	private void initRenderTargets(int attachments)
+	private void initRenderTargets(int attachment)
 	{
-		frameBuffer = glGenFramebuffers();		
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, attachments, target, id, 0);
-		
-		if(attachments == GL_DEPTH_ATTACHMENT)
+		if(attachment == GL_NONE)
 		{
-			glDrawBuffer(GL_NONE);
+			return;
 		}
 		
-		if(attachments != GL_DEPTH_ATTACHMENT)
+		int drawBuffer;
+		
+		frameBuffer = glGenFramebuffers();
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, target, id, 0);
+		
+		if(attachment == GL_DEPTH_ATTACHMENT)
+		{
+			drawBuffer = GL_NONE;
+		}
+		else
 		{
 			renderBuffer = glGenRenderbuffers();
+			drawBuffer = attachment;
 			
 			glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
-			
-			glDrawBuffer(attachments);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);			
 		}
+		
+		glDrawBuffers(drawBuffer);
 		
 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{
@@ -157,57 +163,6 @@ public class TextureResource implements IResource
 		}
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-				
-		/*if(attachments == GL_NONE)
-		{
-			return;
-		}
-
-		IntBuffer drawBuffers = BufferUtils.createIntBuffer(1);
-		boolean hasDepth = false;
-
-		if(attachments == GL_DEPTH_ATTACHMENT)
-		{
-			drawBuffers.put(GL_NONE);
-			hasDepth = true;
-		}
-		else
-		{
-			drawBuffers.put(attachments);
-		}
-		
-		if(frameBuffer == 0)
-		{
-			frameBuffer = glGenFramebuffers();
-			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-		}
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, attachments, target, id, 0);
-
-		if(frameBuffer == 0)
-		{
-			System.err.println("[Texture] Unable to create Framebuffer");
-			return;
-		}
-
-		if(!hasDepth)
-		{
-			renderBuffer = glGenRenderbuffers();
-
-			glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
-		}
-
-		glDrawBuffers(drawBuffers);
-
-		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		{
-			System.err.println("[Texture] Unable to create Framebuffer");
-			System.exit(1);
-		}
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
 	}
 	
 	public int getWidth()

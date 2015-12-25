@@ -88,14 +88,13 @@ public class RenderingEngine
 	
 	public void render(GameObject obj)
 	{
-		Camera mainCamera = Camera.getMainCamera();	
-		
 		Window.bindAsRenderTarget();
 		
-		glClearColor(mainCamera.getClearColor().x, mainCamera.getClearColor().y, mainCamera.getClearColor().z, 1);
+		Camera camera = Camera.getMainCamera();
+		glClearColor(camera.getClearColor().x, camera.getClearColor().y, camera.getClearColor().z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		obj.render(this, AmbientLight.getAmbientShader(), mainCamera);
+		obj.render(this, AmbientLight.getAmbientShader(), camera);
 		
 		if(!renderFlags.contains(RenderFlag.WIREFRAME) && !renderFlags.contains(RenderFlag.NO_LIGHTING))
 		{
@@ -220,7 +219,7 @@ public class RenderingEngine
 		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
 		
 		set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
-		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
+		applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
 		
 		set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
 		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);

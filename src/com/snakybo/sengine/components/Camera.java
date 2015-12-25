@@ -44,18 +44,18 @@ public class Camera
 		cameras.add(this);
 	}
 	
-	public Camera setAsMainCamera()
+	public final Camera setAsMainCamera()
 	{
 		setMainCamera(this);
 		return this;
 	}
 	
-	public void setProjection(Matrix4f projection)
+	public final void setProjection(Matrix4f projection)
 	{
 		this.projection = projection;
 	}
 	
-	public void setTransform(Transform transform)
+	public final void setTransform(Transform transform)
 	{
 		this.transform = transform;
 	}
@@ -63,7 +63,7 @@ public class Camera
 	/** @return A transformed version of the projection matrix, rotation and
 	 *         translation is applied before returning the projection
 	 * @see Matrix4f */
-	public Matrix4f getViewProjection()
+	public final Matrix4f getViewProjection()
 	{
 		Matrix4f cameraRotation = Matrix4f.createRotationMatrix(transform.getRotation().conjugate());
 		Matrix4f cameraTranslation = Matrix4f.createTranslationMatrix(transform.getPosition().mul(-1));
@@ -71,12 +71,12 @@ public class Camera
 		return projection.mul(cameraRotation.mul(cameraTranslation));
 	}
 	
-	public Transform getTransform()
+	public final Transform getTransform()
 	{
 		return transform;
 	}
 	
-	public Color getClearColor()
+	public final Color getClearColor()
 	{
 		return clearColor;
 	}
@@ -126,25 +126,30 @@ public class Camera
 			camera.setTransform(getTransform());
 		}
 		
-		public CameraComponent setAsMainCamera()
+		public final CameraComponent setAsMainCamera()
 		{
 			camera.setAsMainCamera();
 			return this;
 		}
 		
-		public void setProjection(Matrix4f projection)
+		public final void setProjection(Matrix4f projection)
 		{
 			camera.setProjection(projection);
 		}
 		
-		public Matrix4f getViewProjection()
+		public final Matrix4f getViewProjection()
 		{
 			return camera.getViewProjection();
 		}
 		
-		public Color getClearColor()
+		public final Color getClearColor()
 		{
 			return camera.getClearColor();
+		}
+		
+		public final Camera getCamera()
+		{
+			return camera;
 		}
 	}
 }
