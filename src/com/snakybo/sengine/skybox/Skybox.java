@@ -16,7 +16,7 @@ import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.glfw.Window;
+import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.CubeMap;
