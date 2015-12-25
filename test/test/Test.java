@@ -1,13 +1,11 @@
 package test;
 
 import com.snakybo.sengine.components.Camera.CameraComponent;
-import com.snakybo.sengine.components.FPSDisplay;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
-import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
