@@ -1,10 +1,7 @@
 package com.snakybo.sengine.resource.mesh;
 
-import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
-import com.snakybo.sengine.rendering.RenderFlag;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.ResourceManager;
 import com.snakybo.sengine.resource.mesh.loader.MeshLoader;
 import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
@@ -71,7 +68,7 @@ public class Mesh
 	
 	public void draw()
 	{
-		draw(RenderingEngine.getRenderFlags().contains(RenderFlag.WIREFRAME) ? GL_LINES : GL_TRIANGLES);
+		draw(GL_TRIANGLES);
 	}
 
 	public void draw(int mode)

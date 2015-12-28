@@ -28,10 +28,6 @@ import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
 import static org.lwjgl.opengl.GL30.GL_RG32F;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
@@ -46,6 +42,7 @@ import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
+import com.snakybo.sengine.shader.ShaderUniformContainer;
 import com.snakybo.sengine.skybox.Skybox;
 
 /**
@@ -57,24 +54,12 @@ public class RenderingEngine
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
 	private static Skybox skyBox;
-	private static EnumSet<RenderFlag> renderFlags = EnumSet.of(RenderFlag.NORMAL);
-	
-	private Map<String, Object> dataContainer;
 	
 	private Camera altCamera;
 	
 	public RenderingEngine()
 	{
-		dataContainer = new HashMap<String, Object>();
-		
-		set("ambient", AmbientLight.getAmbientColor());		
-		set("sampler_diffuse", 0);
-		set("sampler_normalMap", 1);
-		set("sampler_dispMap", 2);
-		set("sampler_shadowMap", 3);
-		set("sampler_filterTexture", 0);
-		
-		for(int i = 0; i < ShadowUtils.getNumShadowMaps(); i++)
+		for(int i = 0; i < ShadowUtils.NUM_SHADOW_MAPS; i++)
 		{
 			int size = 1 << (i + 1);			
 			ShadowUtils.setShadowMapAt(i, new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0));
@@ -94,23 +79,17 @@ public class RenderingEngine
 		glClearColor(camera.getClearColor().x, camera.getClearColor().y, camera.getClearColor().z, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		obj.render(this, AmbientLight.getAmbientShader(), camera);
+		obj.render(AmbientLight.getAmbientShader(), camera);
 		
-		if(!renderFlags.contains(RenderFlag.WIREFRAME) && !renderFlags.contains(RenderFlag.NO_LIGHTING))
+		for(Light light : Light.getLights())
 		{
-			for(Light light : Light.getLights())
-			{
-				renderLighting(obj, light);
-			}
+			renderLighting(obj, light);
 		}
 	}
 	
 	public void postRenderObjects()
 	{
-		if(!renderFlags.contains(RenderFlag.NO_SKYBOX))
-		{
-			renderSkyBox();
-		}
+		renderSkyBox();
 	}
 	
 	/**
@@ -129,18 +108,18 @@ public class RenderingEngine
 			shadowMapIndex = shadowInfo.getSize() - 1;
 		}
 		
-		if(shadowMapIndex < 0 && shadowMapIndex >= ShadowUtils.getNumShadowMaps())
+		if(shadowMapIndex < 0 && shadowMapIndex >= ShadowUtils.NUM_SHADOW_MAPS)
 		{
 			throw new RuntimeException("[RenderingEngine] Invalid shadow map index: " + shadowMapIndex);
 		}
 		
-		set("shadowMap", ShadowUtils.getShadowMapAt(shadowMapIndex));
+		ShaderUniformContainer.set("shadowMap", ShadowUtils.getShadowMapAt(shadowMapIndex));
 		ShadowUtils.getShadowMapAt(shadowMapIndex).bindAsRenderTarget();
 		
 		glClearColor(1, 1, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		if(shadowInfo.getSize() > 0 && !renderFlags.contains(RenderFlag.NO_SHADOWS))
+		if(shadowInfo.getSize() > 0)
 		{
 			ShadowCameraTransform shadowCameraTransform = light.calculateShadowCameraTransform();
 			
@@ -150,8 +129,8 @@ public class RenderingEngine
 			
 			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(altCamera.getViewProjection()));
 			
-			set("shadowVarianceMin", shadowInfo.getMinVariance());
-			set("shadowLightBleedingReduction", shadowInfo.getLightBleedingReductionAmount());
+			ShaderUniformContainer.set("shadowVarianceMin", shadowInfo.getMinVariance());
+			ShaderUniformContainer.set("shadowLightBleedingReduction", shadowInfo.getLightBleedingReductionAmount());
 			
 			if(shadowInfo.getFlipFaces())
 			{
@@ -159,7 +138,7 @@ public class RenderingEngine
 			}
 			
 			glEnable(GL_DEPTH_CLAMP);
-			obj.render(this, ShadowUtils.getShadowMapShader(), altCamera);
+			obj.render(ShadowUtils.getShadowMapShader(), altCamera);
 			glDisable(GL_DEPTH_CLAMP);
 			
 			if(shadowInfo.getFlipFaces())
@@ -169,14 +148,14 @@ public class RenderingEngine
 				
 			if(shadowInfo.getSoftness() > 0)
 			{
-				blurShadowMap(shadowMapIndex, shadowInfo.getSoftness());
+				ShadowUtils.blurShadowMap(this, shadowMapIndex, shadowInfo.getSoftness());
 			}
 		}
 		else
 		{
 			LightUtils.setCurrentLightMatrix(Matrix4f.createScaleMatrix(new Vector3f()));
-			set("shadowVarianceMin", 0.00002f);
-			set("shadowLightBleedingReduction", 0.0f);
+			ShaderUniformContainer.set("shadowVarianceMin", 0.00002f);
+			ShaderUniformContainer.set("shadowLightBleedingReduction", 0.0f);
 		}
 	}
 	
@@ -198,7 +177,7 @@ public class RenderingEngine
 		glDepthMask(false);
 		glDepthFunc(GL_EQUAL);
 
-		obj.render(this, light.getShader(), Camera.getMainCamera());
+		obj.render(light.getShader(), Camera.getMainCamera());
 
 		glDepthMask(true);
 		glDepthFunc(GL_LESS);
@@ -209,23 +188,11 @@ public class RenderingEngine
 	{
 		if(skyBox != null)
 		{
-			skyBox.render(this);
+			skyBox.render();
 		}
 	}
 	
-	private void blurShadowMap(int shadowMapIndex, float amount)
-	{
-		Texture shadowMap = ShadowUtils.getShadowMapAt(shadowMapIndex);
-		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
-		
-		set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
-		applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
-		
-		set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
-		applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
-	}
-	
-	private void applyFilter(Shader filter, Texture src, Texture dest)
+	public void applyFilter(Shader filter, Texture src, Texture dest)
 	{
 		if(src == dest)
 		{
@@ -241,7 +208,7 @@ public class RenderingEngine
 			dest.bindAsRenderTarget();
 		}
 		
-		set("filterTexture", src);
+		ShaderUniformContainer.set("filterTexture", src);
 		
 		altCamera.setProjection(Matrix4f.identity());
 		altCamera.getTransform().setPosition(new Vector3f());
@@ -250,10 +217,10 @@ public class RenderingEngine
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
 		filter.bind();
-		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), this, altCamera);
+		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), altCamera);
 		FilterUtils.getMesh().draw();
 		
-		set("filterTexture", null);
+		ShaderUniformContainer.set("filterTexture", null);
 	}
 	
 	/**
@@ -270,48 +237,8 @@ public class RenderingEngine
 		glEnable(GL_MULTISAMPLE);
 	}
 	
-	public void set(String name, Object value)
-	{
-		dataContainer.put(name, value);
-	}
-	
-	public <T> T get(Class<T> type, String name)
-	{
-		if(!dataContainer.containsKey(name))
-		{
-			throw new IllegalArgumentException("[RenderingEngine] No data with the name: " + name + " found.");
-		}
-		
-		return type.cast(dataContainer.get(name));
-	}
-	
-	public int getSamplerSlot(String samplerName)
-	{
-		return get(Integer.class, "sampler_" + samplerName);
-	}
-	
 	public static void setSkybox(Skybox skyBox)
 	{
 		RenderingEngine.skyBox = skyBox;
-	}
-	
-	public static void addRenderFlag(RenderFlag flag)
-	{
-		renderFlags.add(flag);
-	}
-	
-	public static void removeRenderFlag(RenderFlag flag)
-	{
-		renderFlags.remove(flag);
-	}
-	
-	public static void setRenderFlag(RenderFlag flag)
-	{
-		renderFlags = EnumSet.of(flag);
-	}
-	
-	public static EnumSet<RenderFlag> getRenderFlags()
-	{
-		return renderFlags;
 	}
 }

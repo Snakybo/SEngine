@@ -31,11 +31,12 @@ import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.utils.Buffer;
+
+import sun.java2d.pipe.RenderingEngine;
 
 /**
  * @author Kevin
@@ -115,9 +116,9 @@ public class Shader
 	 * @param renderingEngine The rendering engine.
 	 * @see #updateUniforms(Transform, Material, String, String)
 	 */
-	public final void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine, Camera camera)
+	public final void updateUniforms(Transform transform, Material material, Camera camera)
 	{
-		ShaderUpdater.updateUniforms(this, transform, material, renderingEngine, camera);
+		ShaderUpdater.updateUniforms(this, transform, material, camera);
 	}
 	
 	/**

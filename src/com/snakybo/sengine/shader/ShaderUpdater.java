@@ -8,10 +8,11 @@ import com.snakybo.sengine.lighting.SpotLight;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
+
+import sun.java2d.pipe.RenderingEngine;
 
 /**
  * @author Kevin
@@ -29,7 +30,7 @@ public abstract class ShaderUpdater
 	 * @see Shader#updateUniforms(Transform, Material, RenderingEngine)
 	 * @see Shader#updateUniforms(Transform, Material, String, String)
 	 */
-	public static void updateUniforms(Shader shader, Transform transform, Material material, RenderingEngine renderingEngine, Camera camera)
+	public static void updateUniforms(Shader shader, Transform transform, Material material, Camera camera)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
 		Matrix4f mvpMatrix = camera.getViewProjection().mul(worldMatrix);
@@ -49,18 +50,18 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("sampler2D"))
 				{
-					int samplerSlot = renderingEngine.getSamplerSlot(unprefixedName);
+					int samplerSlot = ShaderUniformContainer.getSampler(unprefixedName);
 
-					renderingEngine.get(Texture.class, unprefixedName).bind(samplerSlot);
+					ShaderUniformContainer.getTexture(unprefixedName).bind(samplerSlot);
 					shader.setUniformi(name, samplerSlot);
 				}
 				else if(type.equals("vec3"))
 				{
-					shader.setUniform(name, renderingEngine.get(Vector3f.class, unprefixedName));
+					shader.setUniform(name, ShaderUniformContainer.getVector3f(unprefixedName));
 				}
 				else if(type.equals("float"))
 				{
-					shader.setUniformf(name, renderingEngine.get(Float.class, unprefixedName));
+					shader.setUniformf(name, ShaderUniformContainer.getFloat(unprefixedName));
 				}
 				else if(type.equals("DirectionalLight"))
 				{
@@ -81,7 +82,7 @@ public abstract class ShaderUpdater
 			}
 			else if(type.startsWith("sampler2D"))
 			{
-				int samplerSlot = renderingEngine.getSamplerSlot(name);
+				int samplerSlot = ShaderUniformContainer.getSampler(name);
 				material.get(Texture.class, name).bind(samplerSlot);
 				shader.setUniformi(name, samplerSlot);
 			}

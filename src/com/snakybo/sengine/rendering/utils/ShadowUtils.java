@@ -1,10 +1,18 @@
 package com.snakybo.sengine.rendering.utils;
 
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
+import static org.lwjgl.opengl.GL30.GL_RG32F;
+
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
+import com.snakybo.sengine.shader.ShaderUniformContainer;
 
 /**
  * @author Kevin
@@ -12,8 +20,10 @@ import com.snakybo.sengine.shader.Shader;
  */
 public class ShadowUtils
 {	
+	public static final int NUM_SHADOW_MAPS = 10;
+	public static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
+	
 	private static final String SHADOW_MAP_SHADER_NAME = "internal/shadowMapGenerator";
-	private static final int NUM_SHADOW_MAPS = 10;
 	
 	private static Texture[] shadowMaps;
 	private static Texture[] tempShadowMaps;
@@ -26,6 +36,24 @@ public class ShadowUtils
 		tempShadowMaps = new Texture[NUM_SHADOW_MAPS];
 		
 		shadowMapShader = new Shader(SHADOW_MAP_SHADER_NAME);
+		
+		for(int i = 0; i < NUM_SHADOW_MAPS; i++)
+		{
+			int size = 1 << (i + 1);			
+			setShadowMapAt(i, new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0));
+		}
+	}
+	
+	public static void blurShadowMap(RenderingEngine renderingEngine, int shadowMapIndex, float amount)
+	{
+		Texture shadowMap = ShadowUtils.getShadowMapAt(shadowMapIndex);
+		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
+		
+		ShaderUniformContainer.set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
+		renderingEngine.applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
+		
+		ShaderUniformContainer.set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
+		renderingEngine.applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
 	}
 	
 	public static void setShadowMapAt(int index, Texture texture)
@@ -47,11 +75,6 @@ public class ShadowUtils
 	public static Shader getShadowMapShader()
 	{
 		return shadowMapShader;
-	}
-	
-	public static int getNumShadowMaps()
-	{
-		return NUM_SHADOW_MAPS;
 	}
 	
 	public static final class ShadowCameraTransform

@@ -46,11 +46,6 @@ public final class Transform
 		changed = true;
 	}
 	
-	final void setGameObject(GameObject object)
-	{
-		gameObject = object;
-	}
-	
 	final void update()
 	{
 		changed = false;
@@ -133,6 +128,11 @@ public final class Transform
 		}
 		
 		this.scale = scale;
+	}
+	
+	final void setGameObject(GameObject object)
+	{
+		gameObject = object;
 	}
 
 	public final Matrix4f getTransformation()

@@ -15,7 +15,6 @@ import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.mesh.Primitive;
@@ -72,7 +71,7 @@ public final class Skybox
 		}
 	}
 	
-	public final void render(RenderingEngine renderingEngine)
+	public final void render()
 	{
 		Window.bindAsRenderTarget();
 		
@@ -89,7 +88,7 @@ public final class Skybox
 		transform.setScale(5000);
 		
 		shader.bind();
-		shader.updateUniforms(transform, null, renderingEngine, Camera.getMainCamera());
+		shader.updateUniforms(transform, null, Camera.getMainCamera());
 		
 		cubeMap.bind();
 		mesh.draw(GL_TRIANGLES);
