@@ -3,9 +3,9 @@ package com.snakybo.sengine.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.snakybo.sengine.core.object.Component;
-import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.object.Component;
+import com.snakybo.sengine.object.Transform;
 import com.snakybo.sengine.utils.Color;
 
 /**

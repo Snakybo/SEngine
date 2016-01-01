@@ -3,7 +3,7 @@ package com.snakybo.sengine.lighting;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.snakybo.sengine.core.object.Component;
+import com.snakybo.sengine.object.Component;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;

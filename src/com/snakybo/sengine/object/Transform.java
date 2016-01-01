@@ -1,4 +1,4 @@
-package com.snakybo.sengine.core.object;
+package com.snakybo.sengine.object;
 
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;

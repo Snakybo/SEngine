@@ -1,8 +1,8 @@
-package com.snakybo.sengine.core.object.prefab;
+package com.snakybo.sengine.object.prefab;
 
-import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.object.GameObject;
 
 /**
  * @author Kevin

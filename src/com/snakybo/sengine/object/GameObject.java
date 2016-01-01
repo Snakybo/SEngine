@@ -1,4 +1,4 @@
-package com.snakybo.sengine.core.object;
+package com.snakybo.sengine.object;
 
 import java.util.ArrayList;
 import java.util.List;

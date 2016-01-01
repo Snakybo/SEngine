@@ -29,13 +29,13 @@ import static org.lwjgl.opengl.GL30.GL_RG32F;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.core.object.GameObject;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.rendering.utils.FilterUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils;
 import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;

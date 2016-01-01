@@ -1,6 +1,6 @@
 package com.snakybo.sengine.core;
 
-import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.rendering.RenderingEngine;
 
 /** Base game class, your has to extend this class in order to work with the

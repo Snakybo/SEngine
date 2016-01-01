@@ -1,4 +1,4 @@
-package com.snakybo.sengine.core.object;
+package com.snakybo.sengine.object;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.shader.Shader;
