@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.object.Component;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 

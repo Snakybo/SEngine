@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering.glfw;
+package com.snakybo.sengine.window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -27,7 +27,7 @@ import com.snakybo.sengine.core.SEngine;
  * @author Kevin
  * @since Dec 20, 2015
  */
-public class GLFWHandler
+class GLFWHandler
 {	
 	private static class WindowFocusCallback extends GLFWWindowFocusCallback
 	{
@@ -97,7 +97,7 @@ public class GLFWHandler
 	private GLFWScrollCallback scrollCallback;
 	private GLFWCursorEnterCallback cursorEnterCallback;
 	
-	public GLFWHandler()
+	GLFWHandler()
 	{
 		glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 		
@@ -107,12 +107,12 @@ public class GLFWHandler
 		}
 	}
 	
-	public void destroy()
+	void destroy()
 	{
 		errorCallback.release();
 	}
 	
-	public void createCallbacks(long window)
+	void createCallbacks(long window)
 	{
 		glfwSetKeyCallback(window, keyCallback = new KeyCallback());
 		glfwSetMouseButtonCallback(window, mouseButtonCallback = new MouseButtonCallback());
@@ -122,7 +122,7 @@ public class GLFWHandler
 		glfwSetCursorEnterCallback(window, cursorEnterCallback = new CursorEnterCallback());
 	}
 	
-	public void destroyCallbacks()
+	void destroyCallbacks()
 	{
 		keyCallback.release();
 		mouseButtonCallback.release();

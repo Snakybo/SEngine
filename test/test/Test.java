@@ -18,11 +18,11 @@ import com.snakybo.sengine.object.prefab.CubePrefab;
 import com.snakybo.sengine.object.prefab.PlanePrefab;
 import com.snakybo.sengine.object.prefab.SpherePrefab;
 import com.snakybo.sengine.rendering.RenderingEngine;
-import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.utils.Color;
+import com.snakybo.sengine.window.Window;
 
 public class Test extends Game
 {

@@ -2,7 +2,7 @@ package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.lighting.utils.Attenuation;
 import com.snakybo.sengine.math.Matrix4f;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 

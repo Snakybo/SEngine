@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering.utils;
+package com.snakybo.sengine.rendering;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
@@ -9,7 +9,6 @@ import static org.lwjgl.opengl.GL30.GL_RG32F;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.shader.ShaderUniformContainer;

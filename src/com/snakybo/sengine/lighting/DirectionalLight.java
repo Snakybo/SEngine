@@ -4,8 +4,8 @@ import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.utils.Color;
 

@@ -36,14 +36,13 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.GameObject;
-import com.snakybo.sengine.rendering.utils.FilterUtils;
-import com.snakybo.sengine.rendering.utils.ShadowUtils;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowCameraTransform;
-import com.snakybo.sengine.rendering.utils.ShadowUtils.ShadowInfo;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
+import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.shader.ShaderUniformContainer;
 import com.snakybo.sengine.skybox.Skybox;
+import com.snakybo.sengine.window.Window;
 
 /**
  * @author Kevin

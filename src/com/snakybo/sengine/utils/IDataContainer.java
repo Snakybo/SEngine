@@ -2,7 +2,7 @@ package com.snakybo.sengine.utils;
 
 /**
  * @author Kevin
- *
+ * @since Dec 16, 2015
  */
 public interface IDataContainer
 {

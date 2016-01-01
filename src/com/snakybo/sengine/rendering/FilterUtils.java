@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering.utils;
+package com.snakybo.sengine.rendering;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
@@ -6,11 +6,11 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
 
 import com.snakybo.sengine.object.Transform;
-import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
+import com.snakybo.sengine.window.Window;
 
 /**
  * @author Kevin

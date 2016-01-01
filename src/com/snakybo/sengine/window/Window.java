@@ -1,4 +1,4 @@
-package com.snakybo.sengine.rendering;
+package com.snakybo.sengine.window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_ALPHA_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
@@ -51,7 +51,6 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.rendering.glfw.GLFWHandler;
 import com.snakybo.sengine.resource.texture.TextureLoader;
 import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
 import com.snakybo.sengine.utils.Buffer;

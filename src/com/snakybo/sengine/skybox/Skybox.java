@@ -15,10 +15,10 @@ import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Transform;
-import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.resource.texture.CubeMap;
 import com.snakybo.sengine.shader.Shader;
+import com.snakybo.sengine.window.Window;
 
 /**
  * @author Kevin
