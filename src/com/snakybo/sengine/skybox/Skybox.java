@@ -17,7 +17,6 @@ import com.snakybo.sengine.core.object.Transform;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.mesh.Mesh;
-import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.CubeMap;
 import com.snakybo.sengine.shader.Shader;
 
@@ -41,7 +40,7 @@ public final class Skybox
 		this.transform = new Transform();
 		this.cubeMap = cubeMap;
 		this.shader = new Shader(SKYBOX_SHADER_NAME);
-		this.mesh = Primitive.CUBE.get();
+		this.mesh = new Mesh("default/cube.obj");
 	}
 	
 	public Skybox(String front, String back, String left, String right, String top, String bottom)

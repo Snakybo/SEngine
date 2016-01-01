@@ -3,10 +3,12 @@ package test;
 import com.snakybo.sengine.components.Camera.CameraComponent;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
-import com.snakybo.sengine.components.MeshRenderer;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.core.object.GameObject;
+import com.snakybo.sengine.core.object.prefab.CubePrefab;
+import com.snakybo.sengine.core.object.prefab.PlanePrefab;
+import com.snakybo.sengine.core.object.prefab.SpherePrefab;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.lighting.PointLight;
@@ -18,8 +20,6 @@ import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.rendering.RenderingEngine;
 import com.snakybo.sengine.rendering.Window;
 import com.snakybo.sengine.resource.material.Material;
-import com.snakybo.sengine.resource.mesh.Mesh;
-import com.snakybo.sengine.resource.mesh.Primitive;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.utils.Color;
@@ -53,20 +53,16 @@ public class Test extends Game
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
 		addChild(pointLight);
 		
-		GameObject plane1 = new GameObject(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20));
-		plane1.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.PLANE), brickMaterial));
+		GameObject plane1 = new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
 		addChild(plane1);
 		
-		GameObject plane2 = new GameObject(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5));
-		plane2.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.PLANE), brick2Material));
+		GameObject plane2 = new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
 		addChild(plane2);
 		
-		GameObject sphereObject = new GameObject(new Vector3f(-2, 0, -2), new Quaternion());
-		sphereObject.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.SPHERE)));
+		GameObject sphereObject = new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
 		addChild(sphereObject);
 		
-		GameObject cubeObject = new GameObject(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
-		cubeObject.addComponent(new MeshRenderer(Mesh.createPrimitive(Primitive.CUBE)));
+		GameObject cubeObject = new CubePrefab(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
 		addChild(cubeObject);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");

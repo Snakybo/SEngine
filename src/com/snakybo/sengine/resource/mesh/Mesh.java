@@ -75,9 +75,4 @@ public class Mesh
 	{
 		resource.draw(mode);
 	}
-	
-	public static Mesh createPrimitive(Primitive primitive)
-	{
-		return primitive.get();
-	}
 }
