@@ -19,8 +19,6 @@ public final class Transform
 	private Quaternion rotation;
 	private Vector3f scale;
 	
-	private boolean changed;
-	
 	public Transform()
 	{
 		this(new Vector3f());
@@ -43,12 +41,6 @@ public final class Transform
 		this.scale = scale;
 		
 		parentMatrix = Matrix4f.identity();
-		changed = true;
-	}
-	
-	final void update()
-	{
-		changed = false;
 	}
 	
 	public final void translate(Vector3f direction)
@@ -71,16 +63,6 @@ public final class Transform
 		setRotation(getLookAtRotation(point, up));
 	}
 
-	public final boolean hasChanged()
-	{
-		if(parent != null && parent.hasChanged())
-		{
-			return true;
-		}
-
-		return changed;
-	}
-
 	public final void setParent(Transform parent)
 	{
 		this.parent = parent;
@@ -88,27 +70,11 @@ public final class Transform
 
 	public final void setPosition(Vector3f position)
 	{
-		if(!changed)
-		{
-			if(!position.equals(this.position))
-			{
-				changed = true;
-			}
-		}
-		
 		this.position = position;		
 	}
 
 	public final void setRotation(Quaternion rotation)
 	{
-		if(!changed)
-		{
-			if(!rotation.equals(this.rotation))
-			{
-				changed = true;
-			}
-		}
-		
 		this.rotation = rotation;
 	}
 	
@@ -119,14 +85,6 @@ public final class Transform
 
 	public final void setScale(Vector3f scale)
 	{
-		if(!changed)
-		{
-			if(!scale.equals(this.scale))
-			{
-				changed = true;
-			}
-		}
-		
 		this.scale = scale;
 	}
 	
@@ -188,7 +146,7 @@ public final class Transform
 	
 	private final Matrix4f getParentMatrix()
 	{
-		if(parent != null && parent.hasChanged())
+		if(parent != null)
 		{
 			parentMatrix = parent.getTransformation();
 		}

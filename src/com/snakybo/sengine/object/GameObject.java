@@ -75,8 +75,6 @@ public class GameObject
 
 	final void update()
 	{
-		transform.update();
-		
 		for(Component component : componentsToRemove)
 		{
 			component.onRemovedFromScene();
