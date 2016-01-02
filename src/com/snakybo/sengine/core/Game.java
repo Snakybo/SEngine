@@ -6,11 +6,11 @@ package com.snakybo.sengine.core;
  */
 public abstract class Game
 {
-	protected void create()
+	protected void onCreate()
 	{
 	}
 	
-	protected void destroy()
+	protected void onDestroy()
 	{
 	}
 	

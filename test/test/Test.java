@@ -26,7 +26,7 @@ import com.snakybo.sengine.window.Window;
 public class Test extends Game
 {
 	@Override
-	public void create()
+	public void onCreate()
 	{
 		Material brickMaterial = Material.createDefault(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
 		Material brick2Material = Material.createDefault(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);

@@ -29,7 +29,7 @@ public abstract class SEngine
 		SEngine.isRunning = true;
 		SEngine.game = game;
 		
-		game.create();
+		game.onCreate();
 		
 		run();
 	}
@@ -88,7 +88,6 @@ public abstract class SEngine
 				if(Window.isCloseRequested())
 				{
 					stop();
-					return;
 				}
 
 				GameObjectInternal.updateInternal();
@@ -117,8 +116,7 @@ public abstract class SEngine
 			}
 		}
 		
-		game.destroy();		
-		
+		game.onDestroy();		
 		Window.destroy();
 	}
 }
