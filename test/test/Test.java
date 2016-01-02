@@ -66,7 +66,7 @@ public class Test extends Game
 		addChild(cubeObject);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
-		RendererInternal.setSkybox(skyBox);
+		AmbientLight.setSkybox(skyBox);
 	}
 	
 	public static void main(String[] args)

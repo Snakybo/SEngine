@@ -4,6 +4,7 @@
 package com.snakybo.sengine.lighting;
 
 import com.snakybo.sengine.shader.Shader;
+import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.utils.Color;
 
 /**
@@ -16,6 +17,7 @@ public abstract class AmbientLight
 	
 	private static Color ambientColor;
 	private static Shader ambientShader;
+	private static Skybox skybox;
 	
 	static
 	{
@@ -28,6 +30,11 @@ public abstract class AmbientLight
 		ambientColor = color;
 	}
 	
+	public static void setSkybox(Skybox skybox)
+	{
+		AmbientLight.skybox = skybox;
+	}
+	
 	public static Color getAmbientColor()
 	{
 		return ambientColor;
@@ -36,5 +43,10 @@ public abstract class AmbientLight
 	public static Shader getAmbientShader()
 	{
 		return ambientShader;
+	}
+	
+	public static Skybox getSkybox()
+	{
+		return skybox;
 	}
 }

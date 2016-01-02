@@ -41,7 +41,6 @@ import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.shader.ShaderUniformContainer;
-import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.window.Window;
 
 /**
@@ -50,8 +49,6 @@ import com.snakybo.sengine.window.Window;
  */
 public class RendererInternal
 {
-	private static Skybox skyBox;
-	
 	private Camera altCamera;
 	
 	public RendererInternal()
@@ -183,9 +180,9 @@ public class RendererInternal
 	
 	private void renderSkyBox()
 	{
-		if(skyBox != null)
+		if(AmbientLight.getSkybox() != null)
 		{
-			skyBox.render();
+			AmbientLight.getSkybox().render();
 		}
 	}
 	
@@ -234,8 +231,5 @@ public class RendererInternal
 		glEnable(GL_MULTISAMPLE);
 	}
 	
-	public static void setSkybox(Skybox skyBox)
-	{
-		RendererInternal.skyBox = skyBox;
-	}
+	
 }
