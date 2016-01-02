@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snakybo.sengine.resource.texture.Texture;
-import com.snakybo.sengine.utils.IDataContainer;
 
-public class Material implements IDataContainer
+public class Material
 {
 	private Map<String, Object> data;
 	
@@ -15,13 +14,11 @@ public class Material implements IDataContainer
 		data = new HashMap<String, Object>();
 	}
 
-	@Override
 	public void set(String name, Object value)
 	{
 		data.put(name, value);
 	}
 
-	@Override
 	public <T> T get(Class<T> type, String name)
 	{
 		if(!data.containsKey(name))
