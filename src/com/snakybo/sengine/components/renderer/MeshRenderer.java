@@ -1,6 +1,6 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.components.renderer;
 
-import com.snakybo.sengine.object.Component;
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.shader.Shader;
@@ -9,7 +9,7 @@ import com.snakybo.sengine.shader.Shader;
  * @author Kevin Krol
  * @since Apr 4, 2014
  */
-public class MeshRenderer extends Component
+public class MeshRenderer extends Renderer
 {
 	private Mesh mesh;
 	private Material material;

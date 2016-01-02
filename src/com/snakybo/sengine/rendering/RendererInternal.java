@@ -48,7 +48,7 @@ import com.snakybo.sengine.window.Window;
  * @author Kevin
  * @since Apr 4, 2014
  */
-public class RenderingEngine
+public class RendererInternal
 {
 	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
@@ -56,7 +56,7 @@ public class RenderingEngine
 	
 	private Camera altCamera;
 	
-	public RenderingEngine()
+	public RendererInternal()
 	{
 		for(int i = 0; i < ShadowUtils.NUM_SHADOW_MAPS; i++)
 		{
@@ -238,6 +238,6 @@ public class RenderingEngine
 	
 	public static void setSkybox(Skybox skyBox)
 	{
-		RenderingEngine.skyBox = skyBox;
+		RendererInternal.skyBox = skyBox;
 	}
 }

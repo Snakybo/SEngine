@@ -1,6 +1,6 @@
 package com.snakybo.sengine.object.prefab;
 
-import com.snakybo.sengine.components.MeshRenderer;
+import com.snakybo.sengine.components.renderer.MeshRenderer;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.resource.material.Material;

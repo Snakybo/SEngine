@@ -1,6 +1,6 @@
 package com.snakybo.sengine.core;
 
-import com.snakybo.sengine.rendering.RenderingEngine;
+import com.snakybo.sengine.rendering.RendererInternal;
 import com.snakybo.sengine.window.Window;
 
 /**
@@ -9,7 +9,7 @@ import com.snakybo.sengine.window.Window;
  */
 public abstract class SEngine
 {
-	private static RenderingEngine renderingEngine;
+	private static RendererInternal renderingEngine;
 	private static Game game;
 	
 	private static boolean isRunning;
@@ -26,7 +26,7 @@ public abstract class SEngine
 			throw new IllegalStateException("[SEngine] You have to create a window before starting the engine.");
 		}
 		
-		SEngine.renderingEngine = new RenderingEngine();
+		SEngine.renderingEngine = new RendererInternal();
 		SEngine.isRunning = true;
 		SEngine.game = game;
 		

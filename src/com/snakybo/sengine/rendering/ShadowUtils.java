@@ -43,7 +43,7 @@ public class ShadowUtils
 		}
 	}
 	
-	public static void blurShadowMap(RenderingEngine renderingEngine, int shadowMapIndex, float amount)
+	public static void blurShadowMap(RendererInternal renderingEngine, int shadowMapIndex, float amount)
 	{
 		Texture shadowMap = ShadowUtils.getShadowMapAt(shadowMapIndex);
 		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);

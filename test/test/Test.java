@@ -17,7 +17,7 @@ import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.object.prefab.CubePrefab;
 import com.snakybo.sengine.object.prefab.PlanePrefab;
 import com.snakybo.sengine.object.prefab.SpherePrefab;
-import com.snakybo.sengine.rendering.RenderingEngine;
+import com.snakybo.sengine.rendering.RendererInternal;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
@@ -66,7 +66,7 @@ public class Test extends Game
 		addChild(cubeObject);
 		
 		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
-		RenderingEngine.setSkybox(skyBox);
+		RendererInternal.setSkybox(skyBox);
 	}
 	
 	public static void main(String[] args)
