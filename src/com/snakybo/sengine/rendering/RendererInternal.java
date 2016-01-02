@@ -50,8 +50,6 @@ import com.snakybo.sengine.window.Window;
  */
 public class RendererInternal
 {
-	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
-	
 	private static Skybox skyBox;
 	
 	private Camera altCamera;
@@ -126,7 +124,7 @@ public class RendererInternal
 			altCamera.getTransform().setPosition(shadowCameraTransform.getPosition());
 			altCamera.getTransform().setRotation(shadowCameraTransform.getRotation());
 			
-			LightUtils.setCurrentLightMatrix(SHADOW_MAP_BIAS_MATRIX.mul(altCamera.getViewProjection()));
+			LightUtils.setCurrentLightMatrix(ShadowUtils.getShadowMapBiasMatrix(altCamera.getViewProjection()));
 			
 			ShaderUniformContainer.set("shadowVarianceMin", shadowInfo.getMinVariance());
 			ShaderUniformContainer.set("shadowLightBleedingReduction", shadowInfo.getLightBleedingReductionAmount());

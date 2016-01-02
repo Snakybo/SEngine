@@ -20,8 +20,8 @@ import com.snakybo.sengine.shader.ShaderUniformContainer;
 public class ShadowUtils
 {	
 	public static final int NUM_SHADOW_MAPS = 10;
-	public static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	
+	private static final Matrix4f SHADOW_MAP_BIAS_MATRIX = Matrix4f.createScaleMatrix(0.5f, 0.5f, 0.5f).mul(Matrix4f.createTranslationMatrix(1, 1, 1));
 	private static final String SHADOW_MAP_SHADER_NAME = "internal/shadowMapGenerator";
 	
 	private static Texture[] shadowMaps;
@@ -74,6 +74,11 @@ public class ShadowUtils
 	public static Shader getShadowMapShader()
 	{
 		return shadowMapShader;
+	}
+	
+	public static Matrix4f getShadowMapBiasMatrix(Matrix4f projection)
+	{
+		return SHADOW_MAP_BIAS_MATRIX.mul(projection);
 	}
 	
 	public static final class ShadowCameraTransform
