@@ -99,9 +99,7 @@ public abstract class SEngine
 
 			if(render)
 			{
-				RendererInternal.preRenderScene();
 				RendererInternal.renderScene();
-				RendererInternal.postRenderScene();
 				
 				Window.update();
 				Time.onRender();

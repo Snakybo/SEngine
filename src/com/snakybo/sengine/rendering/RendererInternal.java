@@ -61,29 +61,19 @@ public abstract class RendererInternal
 		glEnable(GL_MULTISAMPLE);
 	}
 	
-	public static void preRenderScene()
+	public static void renderScene()
 	{
 		Window.bindAsRenderTarget();
 		
-		Color cc = Camera.getMainCamera().getClearColor();
-		glClearColor(cc.getRed(), cc.getGreen(), cc.getBlue(), 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-	
-	public static void renderScene()
-	{
+		clear(Camera.getMainCamera().getClearColor(), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		
 		GameObjectInternal.renderGameObjects(AmbientLight.getAmbientShader(), Camera.getMainCamera());
 		
 		for(Light light : Light.getLights())
 		{
 			renderSceneLighting(light);
 		}
-	}
-	
-	public static void postRenderScene()
-	{
-		Skybox skybox = AmbientLight.getSkybox();
 		
+		Skybox skybox = AmbientLight.getSkybox();		
 		if(skybox != null)
 		{
 			skybox.render();
@@ -112,7 +102,7 @@ public abstract class RendererInternal
 		altCamera.getTransform().setPosition(new Vector3f());
 		altCamera.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(180)));
 		
-		glClear(GL_DEPTH_BUFFER_BIT);
+		clear(new Color(0, 0, 0), GL_DEPTH_BUFFER_BIT);
 		
 		filter.bind();
 		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), altCamera);
@@ -123,9 +113,7 @@ public abstract class RendererInternal
 
 	private static void renderSceneLighting(Light light)
 	{
-		LightUtils.setCurrentLight(light);
-		
-		renderSceneShadow(light);
+		renderSceneShadows(light);
 		
 		Window.bindAsRenderTarget();
 	
@@ -141,7 +129,7 @@ public abstract class RendererInternal
 		glDisable(GL_BLEND);
 	}
 
-	private static void renderSceneShadow(Light light)
+	private static void renderSceneShadows(Light light)
 	{
 		ShadowInfo shadowInfo = light.getShadowInfo();
 		
@@ -156,11 +144,12 @@ public abstract class RendererInternal
 			throw new RuntimeException("[RenderingEngine] Invalid shadow map index: " + shadowMapIndex);
 		}
 		
+		LightUtils.setCurrentLight(light);
+		
 		ShaderUniformContainer.set("shadowMap", ShadowUtils.getShadowMapAt(shadowMapIndex));
 		ShadowUtils.getShadowMapAt(shadowMapIndex).bindAsRenderTarget();
 		
-		glClearColor(1, 1, 0, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		clear(new Color(1, 1, 0), GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if(shadowInfo.getSize() > 0)
 		{
@@ -200,5 +189,11 @@ public abstract class RendererInternal
 			ShaderUniformContainer.set("shadowVarianceMin", 0.00002f);
 			ShaderUniformContainer.set("shadowLightBleedingReduction", 0.0f);
 		}
+	}
+	
+	private static void clear(Color color, int mask)
+	{
+		glClearColor(color.getRed(), color.getGreen(), color.getBlue(), 1);
+		glClear(mask);
 	}
 }
