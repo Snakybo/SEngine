@@ -43,16 +43,16 @@ public class ShadowUtils
 		}
 	}
 	
-	public static void blurShadowMap(RendererInternal renderingEngine, int shadowMapIndex, float amount)
+	public static void blurShadowMap(int shadowMapIndex, float amount)
 	{
 		Texture shadowMap = ShadowUtils.getShadowMapAt(shadowMapIndex);
 		Texture tempShadowMap = ShadowUtils.getTempShadowMapAt(shadowMapIndex);
 		
 		ShaderUniformContainer.set("blurScale", new Vector3f(amount / shadowMap.getWidth(), 0, 0));
-		renderingEngine.applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
+		RendererInternal.applyFilter(FilterUtils.getShader(), shadowMap, tempShadowMap);
 		
 		ShaderUniformContainer.set("blurScale", new Vector3f(0, amount / shadowMap.getHeight(), 0));
-		renderingEngine.applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
+		RendererInternal.applyFilter(FilterUtils.getShader(), tempShadowMap, shadowMap);
 	}
 	
 	public static void setShadowMapAt(int index, Texture texture)

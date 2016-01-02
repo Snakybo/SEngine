@@ -30,23 +30,25 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
-import com.snakybo.sengine.object.GameObject;
+import com.snakybo.sengine.object.GameObjectInternal;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.Shader;
 import com.snakybo.sengine.shader.ShaderUniformContainer;
+import com.snakybo.sengine.skybox.Skybox;
+import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.window.Window;
 
 /**
  * @author Kevin
  * @since Apr 4, 2014
  */
-public class RendererInternal
+public abstract class RendererInternal
 {
-	private Camera altCamera;
+	private static Camera altCamera;
 	
-	public RendererInternal()
+	static
 	{	
 		altCamera = new Camera(Matrix4f.identity());
 		
@@ -59,34 +61,87 @@ public class RendererInternal
 		glEnable(GL_MULTISAMPLE);
 	}
 	
-	public void render(GameObject obj)
+	public static void preRenderScene()
 	{
 		Window.bindAsRenderTarget();
 		
-		Camera camera = Camera.getMainCamera();
-		glClearColor(camera.getClearColor().x, camera.getClearColor().y, camera.getClearColor().z, 1);
+		Color cc = Camera.getMainCamera().getClearColor();
+		glClearColor(cc.getRed(), cc.getGreen(), cc.getBlue(), 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		obj.render(AmbientLight.getAmbientShader(), camera);
+	}
+	
+	public static void renderScene()
+	{
+		GameObjectInternal.renderGameObjects(AmbientLight.getAmbientShader(), Camera.getMainCamera());
 		
 		for(Light light : Light.getLights())
 		{
-			renderLighting(obj, light);
+			renderSceneLighting(light);
 		}
 	}
 	
-	public void postRenderObjects()
+	public static void postRenderScene()
 	{
-		renderSkyBox();
+		Skybox skybox = AmbientLight.getSkybox();
+		
+		if(skybox != null)
+		{
+			skybox.render();
+		}
 	}
 	
-	/**
-	 * Render the shadows of an object.
-	 * @param obj The object to render.
-	 * @param light The current light.
-	 * @param shadowInfo The shadow info of the object.
-	 */
-	private void renderShadow(GameObject obj, Light light)
+	public static void applyFilter(Shader filter, Texture src, Texture dest)
+	{
+		if(src == dest)
+		{
+			throw new IllegalArgumentException("[RenderingEngine] The source texture cannot be the same as the destination texture");
+		}
+		
+		if(dest == null)
+		{
+			Window.bindAsRenderTarget();
+		}
+		else
+		{
+			dest.bindAsRenderTarget();
+		}
+		
+		ShaderUniformContainer.set("filterTexture", src);
+		
+		altCamera.setProjection(Matrix4f.identity());
+		altCamera.getTransform().setPosition(new Vector3f());
+		altCamera.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(180)));
+		
+		glClear(GL_DEPTH_BUFFER_BIT);
+		
+		filter.bind();
+		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), altCamera);
+		FilterUtils.getMesh().draw();
+		
+		ShaderUniformContainer.set("filterTexture", null);
+	}
+
+	private static void renderSceneLighting(Light light)
+	{
+		LightUtils.setCurrentLight(light);
+		
+		renderSceneShadow(light);
+		
+		Window.bindAsRenderTarget();
+	
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		glDepthMask(false);
+		glDepthFunc(GL_EQUAL);
+	
+		GameObjectInternal.renderGameObjects(light.getShader(), Camera.getMainCamera());
+	
+		glDepthMask(true);
+		glDepthFunc(GL_LESS);
+		glDisable(GL_BLEND);
+	}
+
+	private static void renderSceneShadow(Light light)
 	{
 		ShadowInfo shadowInfo = light.getShadowInfo();
 		
@@ -126,7 +181,7 @@ public class RendererInternal
 			}
 			
 			glEnable(GL_DEPTH_CLAMP);
-			obj.render(ShadowUtils.getShadowMapShader(), altCamera);
+			GameObjectInternal.renderGameObjects(ShadowUtils.getShadowMapShader(), altCamera);
 			glDisable(GL_DEPTH_CLAMP);
 			
 			if(shadowInfo.getFlipFaces())
@@ -136,7 +191,7 @@ public class RendererInternal
 				
 			if(shadowInfo.getSoftness() > 0)
 			{
-				ShadowUtils.blurShadowMap(this, shadowMapIndex, shadowInfo.getSoftness());
+				ShadowUtils.blurShadowMap(shadowMapIndex, shadowInfo.getSoftness());
 			}
 		}
 		else
@@ -145,69 +200,5 @@ public class RendererInternal
 			ShaderUniformContainer.set("shadowVarianceMin", 0.00002f);
 			ShaderUniformContainer.set("shadowLightBleedingReduction", 0.0f);
 		}
-	}
-	
-	/**
-	 * Render the lighting of an object.
-	 * @param obj The object to render.
-	 * @param light The current light.
-	 */
-	private void renderLighting(GameObject obj, Light light)
-	{
-		LightUtils.setCurrentLight(light);
-		
-		renderShadow(obj, light);
-		
-		Window.bindAsRenderTarget();
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
-		glDepthMask(false);
-		glDepthFunc(GL_EQUAL);
-
-		obj.render(light.getShader(), Camera.getMainCamera());
-
-		glDepthMask(true);
-		glDepthFunc(GL_LESS);
-		glDisable(GL_BLEND);
-	}
-	
-	private void renderSkyBox()
-	{
-		if(AmbientLight.getSkybox() != null)
-		{
-			AmbientLight.getSkybox().render();
-		}
-	}
-	
-	public void applyFilter(Shader filter, Texture src, Texture dest)
-	{
-		if(src == dest)
-		{
-			throw new IllegalArgumentException("[RenderingEngine] The source texture cannot be the same as the destination texture");
-		}
-		
-		if(dest == null)
-		{
-			Window.bindAsRenderTarget();
-		}
-		else
-		{
-			dest.bindAsRenderTarget();
-		}
-		
-		ShaderUniformContainer.set("filterTexture", src);
-		
-		altCamera.setProjection(Matrix4f.identity());
-		altCamera.getTransform().setPosition(new Vector3f());
-		altCamera.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(180)));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		
-		filter.bind();
-		filter.updateUniforms(FilterUtils.getTransform(), FilterUtils.getMaterial(), altCamera);
-		FilterUtils.getMesh().draw();
-		
-		ShaderUniformContainer.set("filterTexture", null);
 	}
 }

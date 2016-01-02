@@ -17,7 +17,6 @@ import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.object.prefab.CubePrefab;
 import com.snakybo.sengine.object.prefab.PlanePrefab;
 import com.snakybo.sengine.object.prefab.SpherePrefab;
-import com.snakybo.sengine.rendering.RendererInternal;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
@@ -37,43 +36,32 @@ public class Test extends Game
 		camera.addComponent(new FreeLook());
 		camera.addComponent(new FreeMove());
 		camera.addComponent(new CameraComponent(cameraProjection, new Color(0, 0, 0)).setAsMainCamera());
-		addChild(camera);
 		
 		GameObject directionalLight = new GameObject(new Vector3f(), new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
 		directionalLight.addComponent(new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10));
-		addChild(directionalLight);
 		
 		GameObject spotLight = new GameObject(new Vector3f(-4, 1, 2));
 		spotLight.getTransform().rotate(new Vector3f(0, 1, 0), Math.toRadians(90));
 		spotLight.getTransform().rotate(new Vector3f(1, 0, 0), Math.toRadians(-60));
 		spotLight.addComponent(new SpotLight(new Color(0, 1, 1), 0.8f, new Attenuation(0, 0, 0.02f), (float)Math.toRadians(91.1f), 7, 1, 0.5f));
-		addChild(spotLight);
 		
 		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
-		addChild(pointLight);
 		
-		GameObject plane1 = new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
-		addChild(plane1);
-		
-		GameObject plane2 = new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
-		addChild(plane2);
-		
-		GameObject sphereObject = new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
-		addChild(sphereObject);
-		
-		GameObject cubeObject = new CubePrefab(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
-		addChild(cubeObject);
-		
-		Skybox skyBox = new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg");
-		AmbientLight.setSkybox(skyBox);
+		new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
+		new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
+		new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
+		new CubePrefab(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
 	}
 	
 	public static void main(String[] args)
 	{	
 		Window.setSamples(4);
 		Window.createWindowed("Test", 1280, 720);
+		
 		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));
+		AmbientLight.setSkybox(new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg"));
+		
 		SEngine.start(new Test());
 	}
 }
