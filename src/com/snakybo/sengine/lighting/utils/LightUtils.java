@@ -2,6 +2,7 @@ package com.snakybo.sengine.lighting.utils;
 
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.math.Matrix4f;
+import com.snakybo.sengine.math.Vector3f;
 
 /**
  * @author Kevin
@@ -9,9 +10,13 @@ import com.snakybo.sengine.math.Matrix4f;
  */
 public abstract class LightUtils
 {
-	private static Light currentLight;
-	
+	private static Light currentLight;	
 	private static Matrix4f currentLightMatrix;
+	
+	static
+	{
+		currentLightMatrix = Matrix4f.createScaleMatrix(new Vector3f());
+	}
 	
 	public static void setCurrentLight(Light light)
 	{

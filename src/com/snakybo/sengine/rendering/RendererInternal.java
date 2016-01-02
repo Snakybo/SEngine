@@ -10,10 +10,7 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_FRONT;
 import static org.lwjgl.opengl.GL11.GL_LESS;
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_ONE;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -24,8 +21,6 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
-import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
-import static org.lwjgl.opengl.GL30.GL_RG32F;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
 import com.snakybo.sengine.components.Camera;
@@ -52,17 +47,16 @@ public class RendererInternal
 	private Camera altCamera;
 	
 	public RendererInternal()
-	{
-		for(int i = 0; i < ShadowUtils.NUM_SHADOW_MAPS; i++)
-		{
-			int size = 1 << (i + 1);			
-			ShadowUtils.setShadowMapAt(i, new Texture(size, size, null, GL_TEXTURE_2D, GL_LINEAR, GL_RG32F, GL_RGBA, true, GL_COLOR_ATTACHMENT0));
-		}
-		
+	{	
 		altCamera = new Camera(Matrix4f.identity());
-		LightUtils.setCurrentLightMatrix(Matrix4f.createScaleMatrix(new Vector3f()));
 		
-		initializeGL();
+		glFrontFace(GL_CW);
+		glCullFace(GL_BACK);
+
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+		
+		glEnable(GL_MULTISAMPLE);
 	}
 	
 	public void render(GameObject obj)
@@ -216,20 +210,4 @@ public class RendererInternal
 		
 		ShaderUniformContainer.set("filterTexture", null);
 	}
-	
-	/**
-	 * Initialize OpenGL.
-	 */
-	private void initializeGL()
-	{
-		glFrontFace(GL_CW);
-		glCullFace(GL_BACK);
-
-		glEnable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
-		
-		glEnable(GL_MULTISAMPLE);
-	}
-	
-	
 }
