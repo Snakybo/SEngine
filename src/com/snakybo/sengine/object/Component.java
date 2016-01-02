@@ -9,7 +9,7 @@ import com.snakybo.sengine.shader.Shader;
  */
 public abstract class Component
 {
-	private GameObject parent;
+	GameObject parent;
 	
 	protected void onAddedToScene()
 	{
@@ -29,11 +29,6 @@ public abstract class Component
 	
 	protected void render(Shader shader, Camera camera)
 	{
-	}
-	
-	final void setParent(GameObject parent)
-	{
-		this.parent = parent;
 	}
 	
 	public final GameObject getParent()

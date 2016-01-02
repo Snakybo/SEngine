@@ -81,7 +81,7 @@ public class GameObject
 		{
 			component.onRemovedFromScene();
 			component.onDestroy();
-			component.setParent(null);
+			component.parent = null;
 			components.remove(component);
 		}
 		
@@ -120,7 +120,7 @@ public class GameObject
 	public final Component addComponent(Component component)
 	{
 		components.add(component);
-		component.setParent(this);
+		component.parent = this;
 
 		return component;
 	}
