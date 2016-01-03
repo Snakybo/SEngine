@@ -115,12 +115,13 @@ public class GameObject
 		}
 	}
 	
-	public final Component addComponent(Component component)
+	@SuppressWarnings("unchecked")
+	public final <T extends Component> T addComponent(Component component)
 	{
 		components.add(component);
 		component.parent = this;
 
-		return component;
+		return (T)component.getClass().cast(component);
 	}
 	
 	public final void removeComponent(Component component)

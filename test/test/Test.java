@@ -1,8 +1,5 @@
 package test;
 
-import com.snakybo.sengine.components.CameraComponent;
-import com.snakybo.sengine.components.FreeLook;
-import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.lighting.AmbientLight;
@@ -10,11 +7,11 @@ import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.lighting.PointLight;
 import com.snakybo.sengine.lighting.SpotLight;
 import com.snakybo.sengine.lighting.utils.Attenuation;
-import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.object.prefab.CubePrefab;
+import com.snakybo.sengine.object.prefab.FreeCameraPrefab;
 import com.snakybo.sengine.object.prefab.PlanePrefab;
 import com.snakybo.sengine.object.prefab.SpherePrefab;
 import com.snakybo.sengine.resource.material.Material;
@@ -31,12 +28,6 @@ public class Test extends Game
 		Material brickMaterial = Material.createDefault(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
 		Material brick2Material = Material.createDefault(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
 		
-		Matrix4f cameraProjection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
-		GameObject camera = new GameObject();
-		camera.addComponent(new FreeLook());
-		camera.addComponent(new FreeMove());
-		camera.addComponent(new CameraComponent(cameraProjection, new Color(), true));
-		
 		GameObject directionalLight = new GameObject(new Vector3f(), new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
 		directionalLight.addComponent(new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10));
 		
@@ -48,6 +39,7 @@ public class Test extends Game
 		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
 		
+		new FreeCameraPrefab();		
 		new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
 		new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
 		new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());

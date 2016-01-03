@@ -1,8 +1,8 @@
 package com.snakybo.sengine.components;
 
 import com.snakybo.sengine.core.Input;
-import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.core.Input.KeyCode;
+import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Component;
 
@@ -15,7 +15,7 @@ public class FreeMove extends Component
 	private float speed;
 
 	private KeyCode keyForward;
-	private KeyCode keyBackward;
+	private KeyCode keyBack;
 	private KeyCode keyLeft;
 	private KeyCode keyRight;
 	
@@ -49,7 +49,7 @@ public class FreeMove extends Component
 		this.speed = speed;
 
 		this.keyForward = keyForward;
-		this.keyBackward = keyBackward;
+		this.keyBack = keyBackward;
 		this.keyLeft = keyLeft;
 		this.keyRight = keyRight;
 	}
@@ -63,7 +63,7 @@ public class FreeMove extends Component
 		{
 			move(getTransform().getLocalRotation().getForward(), moveAmount);
 		}
-		else if(Input.getKey(keyBackward))
+		else if(Input.getKey(keyBack))
 		{
 			move(getTransform().getLocalRotation().getForward(), -moveAmount);
 		}
@@ -78,8 +78,33 @@ public class FreeMove extends Component
 		}
 	}
 	
-	private void move(Vector3f direction, float amount)
+	private final void move(Vector3f direction, float amount)
 	{
 		getTransform().translate(direction.mul(amount));
+	}
+	
+	public final void setSpeed(float speed)
+	{
+		this.speed = speed;
+	}
+	
+	public final void setForwardKey(KeyCode key)
+	{
+		this.keyForward = key;
+	}
+	
+	public final void setLeftKey(KeyCode key)
+	{
+		this.keyLeft = key;
+	}
+	
+	public final void setBackKey(KeyCode key)
+	{
+		this.keyBack = key;
+	}
+	
+	public final void setRightKey(KeyCode key)
+	{
+		this.keyRight = key;
 	}
 }

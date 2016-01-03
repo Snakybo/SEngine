@@ -251,9 +251,9 @@ public abstract class Input
 		Window.setMousePosition(position);
 	}
 
-	public static void setCursor(boolean enabled)
+	public static void setCursorLocked(boolean enabled)
 	{
-		Window.setCursor(enabled);
+		Window.setCursor(!enabled);
 	}
 
 	public static boolean getKey(KeyCode keyCode)
