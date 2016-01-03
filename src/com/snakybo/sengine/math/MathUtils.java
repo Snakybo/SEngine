@@ -4,7 +4,7 @@ package com.snakybo.sengine.math;
  * @author Kevin
  * @since Jul 12, 2014
  */
-public class MathUtils
+public abstract class MathUtils
 {
 	public static <T extends Comparable<T>> T clamp(T value, T min, T max)
 	{

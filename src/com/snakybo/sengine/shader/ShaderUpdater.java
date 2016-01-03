@@ -1,6 +1,5 @@
 package com.snakybo.sengine.shader;
 
-import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.lighting.PointLight;
 import com.snakybo.sengine.lighting.SpotLight;
@@ -8,6 +7,7 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Transform;
+import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
@@ -57,7 +57,14 @@ public abstract class ShaderUpdater
 				}
 				else if(type.equals("vec3"))
 				{
-					shader.setUniform(name, ShaderUniformContainer.getVector3f(unprefixedName));
+					try
+					{
+						shader.setUniform(name, ShaderUniformContainer.getVector3f(unprefixedName));
+					}
+					catch(ClassCastException e)
+					{
+						shader.setUniform(name, ShaderUniformContainer.getColor(unprefixedName));
+					}
 				}
 				else if(type.equals("float"))
 				{
@@ -158,9 +165,9 @@ public abstract class ShaderUpdater
 		shader.setUniform(name + ".baseLight.color", light.getColor());
 
 		shader.setUniformf(name + ".baseLight.intensity", light.getIntensity());
-		shader.setUniformf(name + ".attenuation.constant", light.getAttenuation().getConstant());
-		shader.setUniformf(name + ".attenuation.linear", light.getAttenuation().getLinear());
-		shader.setUniformf(name + ".attenuation.exponent", light.getAttenuation().getExponent());
+		shader.setUniformf(name + ".attenuation.constant", light.getAttenuation().constant);
+		shader.setUniformf(name + ".attenuation.linear", light.getAttenuation().linear);
+		shader.setUniformf(name + ".attenuation.exponent", light.getAttenuation().exponent);
 		shader.setUniformf(name + ".range", light.getRange());
 	}
 
@@ -178,9 +185,9 @@ public abstract class ShaderUpdater
 		shader.setUniform(name + ".baseLight.color", light.getColor());
 
 		shader.setUniformf(name + ".baseLight.intensity", light.getIntensity());
-		shader.setUniformf(name + ".attenuation.constant", light.getAttenuation().getConstant());
-		shader.setUniformf(name + ".attenuation.linear", light.getAttenuation().getLinear());
-		shader.setUniformf(name + ".attenuation.exponent", light.getAttenuation().getExponent());
+		shader.setUniformf(name + ".attenuation.constant", light.getAttenuation().constant);
+		shader.setUniformf(name + ".attenuation.linear", light.getAttenuation().linear);
+		shader.setUniformf(name + ".attenuation.exponent", light.getAttenuation().exponent);
 		shader.setUniformf(name + ".cutoff", light.getCutoff());
 		shader.setUniformf(name + ".range", light.getRange());
 	}

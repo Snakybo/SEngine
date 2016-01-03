@@ -10,7 +10,7 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
 
-public class Buffer
+public abstract class Buffer
 {
 	public static FloatBuffer createFloatBuffer(int size)
 	{

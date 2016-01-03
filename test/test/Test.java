@@ -1,6 +1,6 @@
 package test;
 
-import com.snakybo.sengine.components.Camera.CameraComponent;
+import com.snakybo.sengine.components.CameraComponent;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.core.Game;
@@ -35,7 +35,7 @@ public class Test extends Game
 		GameObject camera = new GameObject();
 		camera.addComponent(new FreeLook());
 		camera.addComponent(new FreeMove());
-		camera.addComponent(new CameraComponent(cameraProjection, new Color(0, 0, 0)).setAsMainCamera());
+		camera.addComponent(new CameraComponent(cameraProjection, new Color(), true));
 		
 		GameObject directionalLight = new GameObject(new Vector3f(), new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
 		directionalLight.addComponent(new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10));

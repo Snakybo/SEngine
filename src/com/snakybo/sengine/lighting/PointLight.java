@@ -35,9 +35,9 @@ public class PointLight extends Light
 	{
 		super(color, intensity, new Shader("internal/forward-point"));
 		
-		float a = attenuation.getExponent();
-		float b = attenuation.getLinear();
-		float c = attenuation.getConstant() - COLOR_DEPTH * getIntensity() * getColor().max();
+		float a = attenuation.exponent;
+		float b = attenuation.linear;
+		float c = attenuation.constant - COLOR_DEPTH * getIntensity() * getColor().max();
 
 		this.range = (float)((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a));
 		this.attenuation = attenuation;

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.snakybo.sengine.resource.texture.Texture;
 
-public class Material
+public final class Material
 {
 	private Map<String, Object> data;
 	

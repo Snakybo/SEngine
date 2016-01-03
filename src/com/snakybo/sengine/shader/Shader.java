@@ -26,15 +26,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Transform;
+import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
 import com.snakybo.sengine.utils.Buffer;
+import com.snakybo.sengine.utils.Color;
 
 import sun.java2d.pipe.RenderingEngine;
 
@@ -369,6 +370,16 @@ public class Shader
 	public final void setUniform(String name, Vector3f value)
 	{
 		glUniform3f(uniformLookup.get(name), value.x, value.y, value.z);
+	}
+	
+	/**
+	 * Set the {@code vec3} value of an uniform.
+	 * @param name The name of the uniform.
+	 * @param value The value of the uniform.
+	 */
+	public final void setUniform(String name, Color value)
+	{
+		glUniform3f(uniformLookup.get(name), value.getRed(), value.getGreen(), value.getBlue());
 	}
 	
 	/**

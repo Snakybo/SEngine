@@ -3,9 +3,9 @@ package com.snakybo.sengine.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.shader.Shader;
 
 /**

@@ -1,61 +1,78 @@
 package com.snakybo.sengine.utils;
 
-import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.math.MathUtils;
 
-/** @author Kevin
- * @since Jul 6, 2014 */
-public class Color extends Vector3f
+/**
+ * @author Kevin
+ * @since Jul 6, 2014
+ */
+public class Color
 {
+	private float r;
+	private float g;
+	private float b;
+	private float a;
+	
 	public Color()
 	{
 		this(0, 0, 0);
 	}
 	
-	/** Constructor for the color
-	 * @param red The value of the red component
-	 * @param green The value of the green component
-	 * @param blue The value of the blue component */
-	public Color(float red, float green, float blue)
+	public Color(float r, float g, float b)
 	{
-		super(red, green, blue);
+		this(r, g, b, 1);
 	}
-
-	/** Set the red component of the color
-	 * @param red The new value of the red component */
-	public void setRed(float red)
+	
+	public Color(float r, float g, float b, float a)
 	{
-		x = red;
+		setRed(r);
+		setGreen(g);
+		setBlue(b);
+		setAlpha(a);
 	}
-
-	/** Set the green component of the color
-	 * @param green The new value of the green component */
-	public void setGreen(float green)
+	
+	public float max()
 	{
-		y = green;
+		return Math.max(r, Math.max(g, b));
 	}
-
-	/** Set the blue component of the color
-	 * @param blue The new value of the blue component */
-	public void setBlue(float blue)
+	
+	public void setRed(float r)
 	{
-		z = blue;
+		this.r = MathUtils.clamp(r, 0f, 1f);
 	}
-
-	/** @return The value of the red component of the color */
+	
+	public void setGreen(float g)
+	{
+		this.g = MathUtils.clamp(g, 0f, 1f);
+	}
+	
+	public void setBlue(float b)
+	{
+		this.b = MathUtils.clamp(b, 0f, 1f);
+	}
+	
+	public void setAlpha(float a)
+	{
+		this.a = MathUtils.clamp(a, 0f, 1f);
+	}
+	
 	public float getRed()
 	{
-		return x;
+		return r;
 	}
-
-	/** @return The value of the green component of the color */
+	
 	public float getGreen()
 	{
-		return y;
+		return g;
 	}
-
-	/** @return The value of the blue component of the color */
+	
 	public float getBlue()
 	{
-		return z;
+		return b;
+	}
+	
+	public float getAlpha()
+	{
+		return a;
 	}
 }

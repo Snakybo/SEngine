@@ -1,9 +1,9 @@
 package com.snakybo.sengine.lighting;
 
-import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
 import com.snakybo.sengine.shader.Shader;

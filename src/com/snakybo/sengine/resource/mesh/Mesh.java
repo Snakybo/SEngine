@@ -10,7 +10,7 @@ import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
  * @author Kevin Krol
  * @since Jul 8, 2014
  */
-public class Mesh
+public final class Mesh
 {
 	private final String fileName;
 	private final MeshResource resource;

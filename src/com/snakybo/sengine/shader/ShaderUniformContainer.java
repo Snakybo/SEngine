@@ -7,6 +7,7 @@ import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.resource.texture.Texture;
+import com.snakybo.sengine.utils.Color;
 
 /**
  * @author Kevin
@@ -47,8 +48,13 @@ public abstract class ShaderUniformContainer
 	}
 	
 	public static Vector3f getVector3f(String name)
-	{
+	{	
 		return get(Vector3f.class, name);
+	}
+	
+	public static Color getColor(String name)
+	{
+		return get(Color.class, name);
 	}
 	
 	public static Vector2f getVector2f(String name)

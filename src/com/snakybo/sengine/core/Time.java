@@ -6,7 +6,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  * @author Kevin
  * @since Dec 20, 2015
  */
-public class Time
+public abstract class Time
 {
 	private static long totalFrameCount;
 	

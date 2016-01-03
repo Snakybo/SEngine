@@ -34,7 +34,7 @@ import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
  * @author Kevin
  *
  */
-public class CubeMap
+public final class CubeMap
 {
 	private static int[] CUBE_MAP_AXIS = new int[]
 	{

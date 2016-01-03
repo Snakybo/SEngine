@@ -1,12 +1,8 @@
 package com.snakybo.sengine.utils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
 
-import com.snakybo.sengine.core.AppData;
-import com.snakybo.sengine.core.SEngine;
+import com.snakybo.sengine.resource.ResourceLoader;
 
 /**
  * @author Kevin
@@ -14,23 +10,13 @@ import com.snakybo.sengine.core.SEngine;
  */
 public abstract class DirectoryManager
 {
-	public static void check(String directory)
+	public static void check(String path)
 	{
-		if(!AppData.RUN_AS_JAR)
+		File file = ResourceLoader.loadResource(path);
+		
+		if(!file.isDirectory() || !file.exists())
 		{
-			try
-			{
-				Path textures = Paths.get(directory);			
-				if(!Files.exists(textures))
-				{
-					System.out.println("[DirectoryManager] Creating directory: " + directory);
-					Files.createDirectory(textures);
-				}
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			file.mkdir();
 		}
 	}
 }

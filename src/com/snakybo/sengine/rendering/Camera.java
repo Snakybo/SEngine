@@ -1,10 +1,9 @@
-package com.snakybo.sengine.components;
+package com.snakybo.sengine.rendering;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.snakybo.sengine.math.Matrix4f;
-import com.snakybo.sengine.object.Component;
 import com.snakybo.sengine.object.Transform;
 import com.snakybo.sengine.utils.Color;
 
@@ -12,7 +11,7 @@ import com.snakybo.sengine.utils.Color;
  * @author Kevin Krol
  * @since Apr 4, 2014
  */
-public class Camera
+public final class Camera
 {
 	private static List<Camera> cameras = new ArrayList<Camera>();
 	
@@ -44,12 +43,6 @@ public class Camera
 		cameras.add(this);
 	}
 	
-	public final Camera setAsMainCamera()
-	{
-		setMainCamera(this);
-		return this;
-	}
-	
 	public final void setProjection(Matrix4f projection)
 	{
 		this.projection = projection;
@@ -60,9 +53,6 @@ public class Camera
 		this.transform = transform;
 	}
 	
-	/** @return A transformed version of the projection matrix, rotation and
-	 *         translation is applied before returning the projection
-	 * @see Matrix4f */
 	public final Matrix4f getViewProjection()
 	{
 		Matrix4f cameraRotation = Matrix4f.createRotationMatrix(transform.getRotation().conjugate());
@@ -104,52 +94,5 @@ public class Camera
 	public static Iterable<Camera> getCameras()
 	{
 		return cameras;
-	}
-
-	public static class CameraComponent extends Component
-	{
-		private Camera camera;
-		
-		public CameraComponent(Matrix4f projection)
-		{
-			this(projection, new Color(0, 0, 0));
-		}
-		
-		public CameraComponent(Matrix4f projection, Color clearColor)
-		{
-			camera = new Camera(projection, clearColor);
-		}
-		
-		@Override
-		protected void onAddedToScene()
-		{		
-			camera.setTransform(getTransform());
-		}
-		
-		public final CameraComponent setAsMainCamera()
-		{
-			camera.setAsMainCamera();
-			return this;
-		}
-		
-		public final void setProjection(Matrix4f projection)
-		{
-			camera.setProjection(projection);
-		}
-		
-		public final Matrix4f getViewProjection()
-		{
-			return camera.getViewProjection();
-		}
-		
-		public final Color getClearColor()
-		{
-			return camera.getClearColor();
-		}
-		
-		public final Camera getCamera()
-		{
-			return camera;
-		}
 	}
 }

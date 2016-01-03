@@ -23,7 +23,6 @@ import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
-import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.lighting.utils.LightUtils;

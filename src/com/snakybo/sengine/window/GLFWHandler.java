@@ -27,7 +27,7 @@ import com.snakybo.sengine.core.SEngine;
  * @author Kevin
  * @since Dec 20, 2015
  */
-class GLFWHandler
+final class GLFWHandler
 {	
 	private static class WindowFocusCallback extends GLFWWindowFocusCallback
 	{

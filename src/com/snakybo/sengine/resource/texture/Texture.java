@@ -11,7 +11,7 @@ import com.snakybo.sengine.core.Time;
 import com.snakybo.sengine.resource.ResourceManager;
 import com.snakybo.sengine.resource.texture.TextureLoader.TextureData;
 
-public class Texture
+public final class Texture
 {
 	private final String fileName;	
 	private final TextureResource resource;

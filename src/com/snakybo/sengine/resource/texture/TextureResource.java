@@ -50,7 +50,7 @@ import java.nio.ByteBuffer;
 import com.snakybo.sengine.math.MathUtils;
 import com.snakybo.sengine.resource.IResource;
 
-public class TextureResource implements IResource
+public final class TextureResource implements IResource
 {
 	private int id;
 	private int target;

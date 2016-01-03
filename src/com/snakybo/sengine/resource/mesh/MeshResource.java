@@ -29,7 +29,7 @@ import com.snakybo.sengine.utils.Buffer;
  * @author Kevin Krol
  * @since Jul 8, 2014
  */
-public class MeshResource implements IResource
+public final class MeshResource implements IResource
 {
 	private static final int NUM_BUFFERS = 5;
 

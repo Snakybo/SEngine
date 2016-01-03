@@ -11,7 +11,7 @@ import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.resource.mesh.loader.IModel;
 import com.snakybo.sengine.resource.mesh.loader.ReadableModel;
 
-public class OBJModel implements IModel
+public final class OBJModel implements IModel
 {	
 	private final OBJParser parser;
 	

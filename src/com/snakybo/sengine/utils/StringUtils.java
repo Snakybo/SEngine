@@ -8,23 +8,23 @@ import java.util.List;
  * @author Kevin
  * @since Dec 19, 2015
  */
-public class StringUtils
+public abstract class StringUtils
 {
 	public static String[] removeEmptyStrings(String[] data)
 	{
-		List<String> filtered = new ArrayList<String>();
+		List<String> result = new ArrayList<String>();
 		
-		for(String checking : data)
+		for(String element : data)
 		{
-			if(checking.isEmpty())
+			if(element.isEmpty())
 			{
 				continue;
 			}
 			
-			filtered.add(checking);
+			result.add(element);
 		}
 		
-		return filtered.toArray(new String[0]);
+		return result.toArray(new String[0]);
 	}
 	
 	public static String getFileExtension(String directory, String fileName)
