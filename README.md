@@ -12,6 +12,7 @@ A 3D game engine, made in Java using using LWJGL.
 - [Automatic resource management](#automatic-resource-management)
 - [Anti-Aliasing](#anti-aliasing)
 - [Shadow mapping](#shadow-mapping)
+- [Mipmaps](#mipmaps)
 - [Skyboxes](#skyboxes)
 - [Custom Cursors](#custom-cursors)
 
@@ -37,10 +38,13 @@ The engine has the ability to load 3D models. Currently only .obj is supported. 
 The engine automatically manages resources that have been loaded. Whenever you create a texture or mesh it automatically checks if it has been loaded before. It also automatically frees any memory allocated to the object when the last reference to the file has been removed.
 
 ## Anti-Aliasing
-Currently the engine supports [Multisample anti-aliasing](http://en.wikipedia.org/wiki/Multisample_anti-aliasing).
+Currently the engine supports [multisample anti-aliasing](http://en.wikipedia.org/wiki/Multisample_anti-aliasing).
 
 ## Shadow Mapping
 The engine makes use of [variance shadow mapping](http://http.developer.nvidia.com/GPUGems3/gpugems3_ch08.html), this feature is still under development.
+
+## Mipmaps
+There is support for texture mipmapping.
 
 ## Skyboxes
 There is support for custom cubemap skyboxes.
