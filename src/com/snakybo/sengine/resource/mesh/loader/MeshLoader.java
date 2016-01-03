@@ -1,11 +1,11 @@
 package com.snakybo.sengine.resource.mesh.loader;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import com.snakybo.sengine.resource.mesh.MeshResource;
 import com.snakybo.sengine.resource.mesh.loader.obj.OBJModel;
 import com.snakybo.sengine.utils.DirectoryManager;
+import com.snakybo.sengine.utils.FileUtils;
 import com.snakybo.sengine.utils.StringUtils;
 
 /**
@@ -14,7 +14,7 @@ import com.snakybo.sengine.utils.StringUtils;
  */
 public class MeshLoader
 {
-	private static final String MESH_FOLDER = "./res/models/";
+	private static final String MESH_FOLDER = "res/models/";
 	
 	static
 	{
@@ -37,29 +37,19 @@ public class MeshLoader
 			extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 		}
 		
-		try
-		{
-			FileReader file = new FileReader(MESH_FOLDER + name + "." + extension);		
-			IModel model = null;
+		FileReader file = FileUtils.loadFileReader(MESH_FOLDER + name + "." + extension);		
+		IModel model = null;
 			
-			switch(extension)
-			{
-			case "obj":
-				model = new OBJModel(file);
-				break;
-			default:
-				System.err.println("[MeshLoader] The engine currently does not support " + extension + " models");
-				System.exit(1);
-			}
-			
-			return new MeshResource(model.toReadableModel());
-		}
-		catch(FileNotFoundException e)
+		switch(extension)
 		{
-			System.err.println("[MeshLoader] No model with the name: " + (MESH_FOLDER + name + "." + extension) + " found");
+		case "obj":
+			model = new OBJModel(file);
+			break;
+		default:
+			System.err.println("[MeshLoader] The engine currently does not support " + extension + " models");
 			System.exit(1);
 		}
 		
-		return null;
+		return new MeshResource(model.toReadableModel());
 	}
 }

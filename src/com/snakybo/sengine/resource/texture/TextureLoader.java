@@ -1,7 +1,6 @@
 package com.snakybo.sengine.resource.texture;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -9,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import com.snakybo.sengine.utils.Buffer;
 import com.snakybo.sengine.utils.DirectoryManager;
+import com.snakybo.sengine.utils.FileUtils;
 
 /**
  * @author Kevin
@@ -46,8 +46,8 @@ public abstract class TextureLoader
 		}
 	}
 	
-	private static final String TEXTURE_FOLDER = "./res/textures/";
-	private static final String CURSOR_FOLDER = "./res/textures/cursors/";
+	private static final String TEXTURE_FOLDER = "res/textures/";
+	private static final String CURSOR_FOLDER = "res/textures/cursors/";
 	
 	static
 	{
@@ -69,7 +69,7 @@ public abstract class TextureLoader
 	{
 		try
 		{
-			BufferedImage image = ImageIO.read(new File(folder + fileName));
+			BufferedImage image = ImageIO.read(FileUtils.loadFile(folder + fileName));
 			int[] pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 
 			ByteBuffer data = Buffer.createByteBuffer(image.getHeight() * image.getWidth() * 4);

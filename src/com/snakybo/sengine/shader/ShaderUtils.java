@@ -12,10 +12,10 @@ import static org.lwjgl.opengl.GL30.GL_MAJOR_VERSION;
 import static org.lwjgl.opengl.GL30.GL_MINOR_VERSION;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 import com.snakybo.sengine.utils.DirectoryManager;
+import com.snakybo.sengine.utils.FileUtils;
 
 /**
  * A collection of shader utilities.
@@ -143,7 +143,7 @@ public abstract class ShaderUtils
 	/**
 	 * The default location for shaders.
 	 */
-	public static final String SHADER_FOLDER = "./res/shaders/";
+	public static final String SHADER_FOLDER = "res/shaders/";
 	
 	private static int openGLVersion;
 	private static int glslVersion;
@@ -279,7 +279,7 @@ public abstract class ShaderUtils
 
 		try
 		{
-			shaderReader = new BufferedReader(new FileReader(SHADER_FOLDER + fileName));
+			shaderReader = FileUtils.loadBufferedReader(SHADER_FOLDER + fileName);
 			String line;
 
 			while((line = shaderReader.readLine()) != null)

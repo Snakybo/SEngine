@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.snakybo.sengine.core.AppData;
+import com.snakybo.sengine.core.SEngine;
+
 /**
  * @author Kevin
  * @since Dec 20, 2015
@@ -13,20 +16,21 @@ public abstract class DirectoryManager
 {
 	public static void check(String directory)
 	{
-		// TODO: Check if the engine is currently being run in release mode, or development mode.
-		
-		try
+		if(!AppData.RUN_AS_JAR)
 		{
-			Path textures = Paths.get(directory);			
-			if(!Files.exists(textures))
+			try
 			{
-				System.out.println("[DirectoryManager] Creating directory: " + directory);
-				Files.createDirectory(textures);
+				Path textures = Paths.get(directory);			
+				if(!Files.exists(textures))
+				{
+					System.out.println("[DirectoryManager] Creating directory: " + directory);
+					Files.createDirectory(textures);
+				}
 			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }
