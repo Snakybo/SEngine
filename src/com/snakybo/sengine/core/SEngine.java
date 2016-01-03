@@ -116,7 +116,7 @@ public abstract class SEngine
 			}
 		}
 		
-		game.onDestroy();		
+		game.onDestroy();
 		Window.destroy();
 	}
 }

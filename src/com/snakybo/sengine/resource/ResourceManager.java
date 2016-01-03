@@ -70,6 +70,7 @@ public abstract class ResourceManager
 			if(resource.numReferences <= 0)
 			{
 				resource.resource.destroy();
+				resources.remove(resource);
 			}
 		}
 	}

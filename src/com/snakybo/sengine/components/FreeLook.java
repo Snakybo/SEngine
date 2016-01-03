@@ -27,6 +27,7 @@ public class FreeLook extends Component
 	@Override
 	protected void onAddedToScene()
 	{
+		Input.setMousePosition(Window.getCenter());
 		Input.setCursorLocked(true);
 	}
 	
@@ -39,8 +40,7 @@ public class FreeLook extends Component
 	@Override
 	protected void update()
 	{
-		Vector2f center = Window.getCenter();		
-		Vector2f deltaPos = Input.getMousePosition().sub(center);
+		Vector2f deltaPos = Input.getMousePosition().sub(Window.getCenter());
 		
 		if(deltaPos.x != 0)
 		{
@@ -52,7 +52,7 @@ public class FreeLook extends Component
 			rotate(getTransform().getLocalRotation().getRight(), deltaPos.y);
 		}
 
-		Input.setMousePosition(center);
+		Input.setMousePosition(Window.getCenter());
 	}
 	
 	private final void rotate(Vector3f axis, float amount)
