@@ -11,6 +11,7 @@ import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
+import com.snakybo.sengine.utils.Color;
 
 import sun.java2d.pipe.RenderingEngine;
 
@@ -123,7 +124,14 @@ public abstract class ShaderUpdater
 			{
 				if(type.equals("vec3"))
 				{
-					shader.setUniform(name, material.get(Vector3f.class, name));
+					try
+					{
+						shader.setUniform(name, material.get(Vector3f.class, name));
+					}
+					catch(ClassCastException e)
+					{
+						shader.setUniform(name, material.get(Color.class, name));
+					}
 				}
 				else if(type.equals("float"))
 				{

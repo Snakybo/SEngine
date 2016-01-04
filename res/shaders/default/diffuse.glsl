@@ -19,11 +19,12 @@ void main()
 
 in vec2 texCoord0;
 
+uniform vec3 color;
 uniform sampler2D diffuse;
 
 DeclareFragOutput(0, vec4);
 void main()
 {
-	SetFragOutput(0, texture2D(diffuse, texCoord0));
+	SetFragOutput(0, color * texture2D(diffuse, texCoord0));
 }
 #endif

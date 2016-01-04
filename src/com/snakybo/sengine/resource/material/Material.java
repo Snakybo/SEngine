@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snakybo.sengine.resource.texture.Texture;
+import com.snakybo.sengine.utils.Color;
 
 public final class Material
 {
@@ -47,6 +48,8 @@ public final class Material
 	public static Material createDefault(Texture diffuse, float specularIntensity, float specularPower, Texture normal, Texture disp, float dispMapScale, float dispMapOffset)
 	{
 		Material result = new Material();
+		
+		result.set("color", new Color(1, 1, 1));
 		
 		result.set("diffuse", diffuse);
 		result.set("normalMap", normal);

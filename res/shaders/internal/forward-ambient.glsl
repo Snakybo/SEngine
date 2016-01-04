@@ -38,6 +38,7 @@ in mat3 tbnMatrix;
 
 uniform vec3 R_ambient;
 uniform vec3 C_eyePos;
+uniform vec3 color;
 
 uniform sampler2D diffuse;
 uniform sampler2D dispMap;
@@ -51,7 +52,7 @@ void main()
 	vec3 directionToEye = normalize(C_eyePos - worldPos0);
 	vec2 texCoords = CalcParallaxTexCoords(dispMap, tbnMatrix, directionToEye, texCoord0, dispMapScale, dispMapBias);
 	
-	SetFragOutput(0, texture2D(diffuse, texCoords) * vec4(R_ambient, 1));
+	SetFragOutput(0, (vec4(color, 1) * texture2D(diffuse, texCoords)) * vec4(R_ambient, 1));
 }
 
 #endif
