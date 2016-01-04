@@ -306,7 +306,8 @@ public abstract class ShaderUtils
 					}
 					else
 					{
-						throw new IllegalStateException("[Shader] The shader: " + fileName + " includes the same shader multiple times, or tries to include itself");
+						System.err.println("[Shader] The shader: " + fileName + " includes the same shader multiple times, or tries to include itself");
+						System.exit(1);
 					}
 				}
 				else

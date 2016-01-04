@@ -33,7 +33,7 @@ public class PointLight extends Light
 	
 	public PointLight(Color color, float intensity, Attenuation attenuation)
 	{
-		super(color, intensity, new Shader("internal/forward-point"));
+		super(color, intensity, new Shader("internal/forward-light-point"));
 		
 		float a = attenuation.exponent;
 		float b = attenuation.linear;

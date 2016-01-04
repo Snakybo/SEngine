@@ -26,7 +26,7 @@ import com.snakybo.sengine.window.Window;
  */
 public final class Skybox
 {
-	private static final String SKYBOX_SHADER_NAME = "internal/skybox";
+	private static final String SKYBOX_SHADER_NAME = "default/skybox/cubemap";
 	
 	private Transform transform;
 	private CubeMap cubeMap;

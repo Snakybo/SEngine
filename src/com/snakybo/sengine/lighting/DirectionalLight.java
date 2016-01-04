@@ -54,7 +54,7 @@ public class DirectionalLight extends Light
 	
 	public DirectionalLight(Color color, float intensity, int shadowMapSize, float shadowArea, float shadowSoftness, float lightBleedReductionAmount, float minVariance)
 	{
-		super(color, intensity, new Shader("internal/forward-directional"));
+		super(color, intensity, new Shader("internal/forward-light-directional"));
 		
 		halfShadowArea = shadowArea / 2f;
 		

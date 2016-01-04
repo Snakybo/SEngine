@@ -1,15 +1,10 @@
 #if defined(VS_BUILD)
 
-out vec2 texCoord0;
-out vec3 worldPos0;
-out vec4 shadowMapCoords0;
-out mat3 tbnMatrix;
-
-#include "internal/forwardlighting"
+#include "internal/forward-lighting-vs"
 
 #elif defined(FS_BUILD)
 
-#include "internal/lighting"
+#include "internal/forward-lighting-fs"
 
 in vec2 texCoord0;
 in vec3 worldPos0;
@@ -35,6 +30,6 @@ vec4 CalcLightingEffect(vec3 normal, vec3 worldPos)
 	return vec4(0, 0, 0, 0);
 }
 
-#include "internal/lightingMain"
+#include "internal/lighting"
 
 #endif

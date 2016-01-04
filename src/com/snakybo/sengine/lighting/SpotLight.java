@@ -62,7 +62,7 @@ public class SpotLight extends Light
 
 	public SpotLight(Color color, float intensity, Attenuation attenuation, float viewAngle, int shadowMapSize, float shadowSoftness, float lightBleedReductionAmount, float minVariance)
 	{
-		super(color, intensity, new Shader("internal/forward-spot"));
+		super(color, intensity, new Shader("internal/forward-light-spot"));
 		
 		float a = attenuation.exponent;
 		float b = attenuation.linear;

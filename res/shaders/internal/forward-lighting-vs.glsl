@@ -1,7 +1,12 @@
-attribute vec3 position;
-attribute vec2 texCoord;
-attribute vec3 normal;
-attribute vec3 tangent;
+in vec3 position;
+in vec2 texCoord;
+in vec3 normal;
+in vec3 tangent;
+
+out vec2 texCoord0;
+out vec3 worldPos0;
+out vec4 shadowMapCoords0;
+out mat3 tbnMatrix;
 
 uniform mat4 T_model;
 uniform mat4 T_MVP;

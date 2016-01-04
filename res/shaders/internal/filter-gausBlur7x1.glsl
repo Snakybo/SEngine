@@ -1,9 +1,9 @@
 #if defined(VS_BUILD)
 
-out vec2 texCoord0;
+in vec3 position;
+in vec2 texCoord;
 
-attribute vec3 position;
-attribute vec2 texCoord;
+out vec2 texCoord0;
 
 uniform mat4 T_MVP;
 
