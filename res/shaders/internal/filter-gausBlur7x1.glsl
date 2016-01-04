@@ -1,5 +1,3 @@
-#include "internal/common.glh"
-
 #if defined(VS_BUILD)
 
 out vec2 texCoord0;
@@ -17,7 +15,7 @@ void main()
 
 #elif defined(FS_BUILD)
 
-#include "internal/sampling.glh"
+#include "internal/sampling"
 
 in vec2 texCoord0;
 

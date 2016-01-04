@@ -1,4 +1,4 @@
-#include "internal/sampling.glh"
+#include "internal/sampling"
 
 uniform float R_shadowVarianceMin;
 uniform float R_shadowLightBleedingReduction;

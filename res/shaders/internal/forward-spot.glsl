@@ -1,5 +1,3 @@
-#include "internal/common.glh"
-
 #if defined(VS_BUILD)
 
 out vec2 texCoord0;
@@ -7,11 +5,11 @@ out vec3 worldPos0;
 out vec4 shadowMapCoords0;
 out mat3 tbnMatrix;
 
-#include "internal/forwardlighting.glsl"
+#include "internal/forwardlighting"
 
 #elif defined(FS_BUILD)
 
-#include "internal/lighting.glh"
+#include "internal/lighting"
 
 in vec2 texCoord0;
 in vec3 worldPos0;
@@ -37,6 +35,6 @@ vec4 CalcLightingEffect(vec3 normal, vec3 worldPos)
 	return vec4(0, 0, 0, 0);
 }
 
-#include "internal/lightingMain.fsh"
+#include "internal/lightingMain"
 
 #endif

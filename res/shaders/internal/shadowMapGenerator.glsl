@@ -1,5 +1,3 @@
-#include "internal/common.glh"
-
 #if defined(VS_BUILD)
 
 attribute vec3 position;

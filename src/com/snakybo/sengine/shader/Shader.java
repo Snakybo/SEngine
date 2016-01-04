@@ -78,7 +78,7 @@ public class Shader
 			System.exit(1);
 		}
 		
-		String source = ShaderUtils.loadShaderFile(fileName + ".glsl");	
+		String source = ShaderUtils.loadShaderFile(fileName);	
 		
 		createShaders(source);
 		addAttributes(source);

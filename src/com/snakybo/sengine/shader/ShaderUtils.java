@@ -13,6 +13,8 @@ import static org.lwjgl.opengl.GL30.GL_MINOR_VERSION;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.snakybo.sengine.resource.ResourceLoader;
 import com.snakybo.sengine.utils.DirectoryManager;
@@ -272,36 +274,55 @@ public abstract class ShaderUtils
 	 */
 	public static String loadShaderFile(String fileName)
 	{
-		final String INCLUDE_DIRECTIVE = "#include";
-
+		return loadShaderFile(fileName, new ArrayList<String>());
+	}
+		
+	private static String loadShaderFile(String fileName, List<String> included)
+	{
 		String result = "";
-		BufferedReader shaderReader = null;
-
+		
+		// Include the common.glsl shader
+		if(included.size() == 0)
+		{
+			included.add("internal/common");
+			result += loadShaderFile("internal/common", included);			
+		}
+		
 		try
 		{
-			shaderReader = ResourceLoader.loadResourceAsBufferedReader(SHADER_FOLDER + fileName);
+			BufferedReader reader = ResourceLoader.loadResourceAsBufferedReader(SHADER_FOLDER + fileName + ".glsl");
 			String line;
 
-			while((line = shaderReader.readLine()) != null)
+			while((line = reader.readLine()) != null)
 			{
-				if(line.startsWith(INCLUDE_DIRECTIVE))
+				if(line.startsWith("#include"))
 				{
-					result += loadShaderFile(line.substring(INCLUDE_DIRECTIVE.length() + 2, line.length() - 1));
+					String includeName = line.substring(10, line.length() - 1);
+					
+					if(!included.contains(includeName))
+					{
+						included.add(includeName);
+						result += loadShaderFile(includeName, included);
+					}
+					else
+					{
+						throw new IllegalStateException("[Shader] The shader: " + fileName + " includes the same shader multiple times, or tries to include itself");
+					}
 				}
 				else
 				{
 					result += line + "\n";
 				}
 			}
-
-			shaderReader.close();
+			
+			reader.close();
 		}
 		catch(IOException e)
 		{
 			System.err.println("[Shader] No shader with name: " + fileName + " found.");
 			System.exit(1);
 		}
-
+		
 		return result;
 	}
 	

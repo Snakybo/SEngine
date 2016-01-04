@@ -1,5 +1,3 @@
-#include "internal/common.glh"
-
 #if defined(VS_BUILD)
 
 out vec2 texCoord0;
