@@ -39,7 +39,7 @@ public class Test extends Game
 		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
 		
-		new FreeCameraPrefab();		
+		new FreeCameraPrefab();
 		new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
 		new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
 		new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
