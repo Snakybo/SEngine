@@ -21,7 +21,7 @@ public abstract class AmbientLight
 	
 	static
 	{
-		ambientColor = new Color(0, 0, 0);
+		ambientColor = new Color(1, 1, 1);
 		ambientShader = new Shader(AMBIENT_SHADER_NAME);
 	}
 	
