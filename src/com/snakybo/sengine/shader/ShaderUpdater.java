@@ -122,7 +122,7 @@ public abstract class ShaderUpdater
 			}
 			else
 			{
-				if(type.equals("vec3"))
+				if(type.equals("vec3") || type.equals("float3"))
 				{
 					try
 					{
