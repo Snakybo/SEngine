@@ -1,4 +1,5 @@
-#if defined(VS_BUILD)
+// Vertex shader
+#ifdef VS_BUILD
 
 attribute vec3 position;
 
@@ -9,7 +10,10 @@ void main()
 	gl_Position = T_MVP * vec4(position, 1.0);
 }
 
-#elif defined(FS_BUILD)
+#endif
+
+// Fragment shader
+#ifdef FS_BUILD
 
 DeclareFragOutput(0, vec4);
 void main()

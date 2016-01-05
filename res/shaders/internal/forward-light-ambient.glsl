@@ -1,4 +1,5 @@
-#if defined(VS_BUILD)
+// Vertex shader
+#ifdef VS_BUILD
 
 in vec3 position;
 in vec2 texCoord;
@@ -26,7 +27,10 @@ void main()
 	tbnMatrix = mat3(t, biTangent, n);
 }
 
-#elif defined(FS_BUILD)
+#endif
+
+// Fragment shader
+#ifdef FS_BUILD
 
 #include "internal/sampling"
 

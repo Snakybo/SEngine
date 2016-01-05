@@ -1,8 +1,12 @@
-#if defined(VS_BUILD)
+// Vertex shader
+#ifdef VS_BUILD
 
 #include "internal/forward-lighting-vs"
 
-#elif defined(FS_BUILD)
+#endif
+
+// Fragment shader
+#ifdef FS_BUILD
 
 #include "internal/forward-lighting-fs"
 

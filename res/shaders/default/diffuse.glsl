@@ -1,4 +1,5 @@
-#if defined(VS_BUILD)
+// Vertex shader
+#ifdef VS_BUILD
 
 out vec2 texCoord0;
 
@@ -13,7 +14,10 @@ void main()
 	texCoord0 = texCoord; 
 }
 
-#elif defined(FS_BUILD)
+#endif
+
+// Fragment shader
+#ifdef FS_BUILD
 
 in vec2 texCoord0;
 

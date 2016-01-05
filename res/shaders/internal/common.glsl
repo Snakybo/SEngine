@@ -1,21 +1,32 @@
-#if (GLSL_VERSION >= 150)
+#if GLSL_VERSION >= 150
 	#define DeclareFragOutput(locationNumber, type) out type outputLocation##locationNumber
 	#define SetFragOutput(locationNumber, val) outputLocation##locationNumber = val
 
 	#define texture2D(tex, coord) texture(tex, coord)
 
-	#if defined(VS_BUILD)
+	#ifdef VS_BUILD
 		#define varying out
 		#define attribute in
-	#elif defined(FS_BUILD)
+	#endif
+	
+	#ifdef FS_BUILD
 		#define varying in
 	#endif
 #else
 	#define DeclareFragOutput(locationNumber)
 	#define SetFragOutput(locationNumber, val) gl_FragData[locationNumber] = val
+	
+	#ifdef VS_BUILD
+		#define out varying
+		#define in attribute
+	#endif
+	
+	#ifdef FS_BUILD
+		#define in varying
+	#endif
 #endif
 
-#if (GLSL_VERSION >= 400)
+#if GLSL_VERSION >= 400
 	#define mad(a, b, c) fma(a, b, c)
 #else
 	#define mad(a, b, c) (a * b + c)
