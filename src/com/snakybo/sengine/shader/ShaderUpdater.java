@@ -27,9 +27,7 @@ public abstract class ShaderUpdater
 	 * @param shader The shader to update.
 	 * @param transform The transform of the object.
 	 * @param material The material currently being used.
-	 * @param renderingEngine The rendering engine.
-	 * @see Shader#updateUniforms(Transform, Material, RenderingEngine)
-	 * @see Shader#updateUniforms(Transform, Material, String, String)
+	 * @param camera The current camera.
 	 */
 	public static void updateUniforms(Shader shader, Transform transform, Material material, Camera camera)
 	{
