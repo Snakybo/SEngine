@@ -51,6 +51,6 @@ public class CapsulePrefab extends Prefab
 	{
 		super(position, rotation, scale);
 		
-		addComponent(new MeshRenderer(new Mesh("default/plane.obj"), material));
+		addComponent(new MeshRenderer(new Mesh("default/capsule.obj"), material));
 	}
 }
