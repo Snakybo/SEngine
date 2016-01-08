@@ -14,8 +14,9 @@ import com.snakybo.sengine.shader.Shader;
  */
 public class GameObject
 {
-	private ArrayList<Component> components;
-	private ArrayList<Component> componentsToRemove;
+	private List<Component> components;
+	private List<Component> componentsToAdd;
+	private List<Component> componentsToRemove;
 	
 	private Transform transform;
 	
@@ -39,6 +40,7 @@ public class GameObject
 	public GameObject(Vector3f position, Quaternion rotation, Vector3f scale)
 	{
 		components = new ArrayList<Component>();
+		componentsToAdd = new ArrayList<Component>();
 		componentsToRemove = new ArrayList<Component>();
 		
 		transform = new Transform(position, rotation, scale);
@@ -75,15 +77,26 @@ public class GameObject
 
 	final void update()
 	{
-		for(Component component : componentsToRemove)
+		List<Component> componentsToAddCache = new ArrayList<Component>(componentsToAdd);
+		List<Component> componentsToRemoveCache = new ArrayList<Component>(componentsToRemove);
+		
+		componentsToAdd.clear();
+		componentsToRemove.clear();
+		
+		for(Component component : componentsToAddCache)
+		{
+			component.parent = this;
+			component.onAddedToScene();
+			components.add(component);
+		}
+		
+		for(Component component : componentsToRemoveCache)
 		{
 			component.onRemovedFromScene();
 			component.onDestroy();
 			component.parent = null;
 			components.remove(component);
 		}
-		
-		componentsToRemove.clear();
 		
 		for(Component component : components)
 		{
@@ -118,8 +131,7 @@ public class GameObject
 	@SuppressWarnings("unchecked")
 	public final <T extends Component> T addComponent(Component component)
 	{
-		components.add(component);
-		component.parent = this;
+		componentsToAdd.add(component);
 
 		return (T)component.getClass().cast(component);
 	}
