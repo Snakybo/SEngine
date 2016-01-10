@@ -7,7 +7,7 @@ import com.snakybo.sengine.shader.Shader;
  * @author Kevin Krol
  * @since Apr 4, 2014
  */
-public abstract class Component
+public abstract class Component extends Object
 {
 	GameObject gameObject;
 	

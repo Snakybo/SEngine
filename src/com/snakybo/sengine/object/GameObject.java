@@ -12,7 +12,7 @@ import com.snakybo.sengine.shader.Shader;
  * @author Kevin Krol
  * @since Apr 4, 2014 
  */
-public class GameObject
+public class GameObject extends Object
 {
 	private List<Component> components;
 	private List<Component> componentsToAdd;
@@ -128,20 +128,20 @@ public class GameObject
 		}
 	}
 	
+	final void removeComponent(Component component)
+	{
+		if(components.contains(component) && !componentsToRemove.contains(component))
+		{
+			componentsToRemove.add(component);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public final <T extends Component> T addComponent(Component component)
 	{
 		componentsToAdd.add(component);
 
 		return (T)component.getClass().cast(component);
-	}
-	
-	public final void removeComponent(Component component)
-	{
-		if(components.contains(component) && !componentsToRemove.contains(component))
-		{
-			componentsToRemove.add(component);
-		}
 	}
 	
 	public final <T extends Component> Iterable<T> getComponents(Class<T> type)
@@ -175,10 +175,5 @@ public class GameObject
 	public final Transform getTransform()
 	{
 		return transform;
-	}
-	
-	public static void destroy(GameObject gameObject)
-	{
-		GameObjectInternal.remove(gameObject);
 	}
 }
