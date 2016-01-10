@@ -85,7 +85,7 @@ public class GameObject
 		
 		for(Component component : componentsToAddCache)
 		{
-			component.parent = this;
+			component.gameObject = this;
 			component.onAddedToScene();
 			components.add(component);
 		}
@@ -94,7 +94,7 @@ public class GameObject
 		{
 			component.onRemovedFromScene();
 			component.onDestroy();
-			component.parent = null;
+			component.gameObject = null;
 			components.remove(component);
 		}
 		

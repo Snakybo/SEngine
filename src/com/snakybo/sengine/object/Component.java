@@ -9,7 +9,7 @@ import com.snakybo.sengine.shader.Shader;
  */
 public abstract class Component
 {
-	GameObject parent;
+	GameObject gameObject;
 	
 	protected void onAddedToScene()
 	{
@@ -31,13 +31,13 @@ public abstract class Component
 	{
 	}
 	
-	public final GameObject getParent()
+	public final GameObject getGameObject()
 	{
-		return parent;
+		return gameObject;
 	}
 	
 	public final Transform getTransform()
 	{
-		return parent.getTransform();
+		return gameObject.getTransform();
 	}
 }
