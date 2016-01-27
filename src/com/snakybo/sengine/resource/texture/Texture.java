@@ -36,35 +36,35 @@ public final class Texture
 		this(width, height, data, GL_TEXTURE_2D);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget)
+	public Texture(int width, int height, ByteBuffer data, int target)
 	{
-		this(width, height, data, textureTarget, GL_LINEAR_MIPMAP_LINEAR);
+		this(width, height, data, target, GL_LINEAR_MIPMAP_LINEAR);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters)
+	public Texture(int width, int height, ByteBuffer data, int target, int filters)
 	{
-		this(width, height, data, textureTarget, filters, GL_RGBA);
+		this(width, height, data, target, filters, GL_RGBA);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat)
+	public Texture(int width, int height, ByteBuffer data, int target, int filters, int internalFormat)
 	{
-		this(width, height, data, textureTarget, filters, internalFormat, GL_RGBA);
+		this(width, height, data, target, filters, internalFormat, GL_RGBA);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format)
+	public Texture(int width, int height, ByteBuffer data, int target, int filters, int internalFormat, int format)
 	{
-		this(width, height, data, textureTarget, filters, internalFormat, format, false);
+		this(width, height, data, target, filters, internalFormat, format, false);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp)
+	public Texture(int width, int height, ByteBuffer data, int target, int filters, int internalFormat, int format, boolean clamp)
 	{
-		this(width, height, data, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
+		this(width, height, data, target, filters, internalFormat, format, clamp, GL_NONE);
 	}
 
-	public Texture(int width, int height, ByteBuffer data, int textureTarget, int filters, int internalFormat, int format, boolean clamp, int attachments)
+	public Texture(int width, int height, ByteBuffer data, int target, int filters, int internalFormat, int format, boolean clamp, int attachments)
 	{
-		fileName = "texture_" + Time.getCurrentTimeMillis();		
-		resource = new TextureResource(textureTarget, width, height, data, filters, internalFormat, format, clamp, attachments);
+		fileName = "texture_" + Time.getCurrentTimeMillis();
+		resource = new TextureResource(target, width, height, data, filters, internalFormat, format, clamp, attachments);
 		ResourceManager.add(fileName, resource);
 	}
 
@@ -73,29 +73,29 @@ public final class Texture
 		this(fileName, GL_TEXTURE_2D);
 	}
 
-	public Texture(String fileName, int textureTarget)
+	public Texture(String fileName, int target)
 	{
-		this(fileName, textureTarget, GL_LINEAR_MIPMAP_LINEAR);
+		this(fileName, target, GL_LINEAR_MIPMAP_LINEAR);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters)
+	public Texture(String fileName, int target, int filters)
 	{
-		this(fileName, textureTarget, filters, GL_RGBA);
+		this(fileName, target, filters, GL_RGBA);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters, int internalFormat)
+	public Texture(String fileName, int target, int filters, int internalFormat)
 	{
-		this(fileName, textureTarget, filters, internalFormat, GL_RGBA);
+		this(fileName, target, filters, internalFormat, GL_RGBA);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters, int internalFormat, int format)
+	public Texture(String fileName, int target, int filters, int internalFormat, int format)
 	{
-		this(fileName, textureTarget, filters, internalFormat, format, false);
+		this(fileName, target, filters, internalFormat, format, false);
 	}
 
-	public Texture(String fileName, int textureTarget, int filters, int internalFormat, int format, boolean clamp)
+	public Texture(String fileName, int target, int filters, int internalFormat, int format, boolean clamp)
 	{
-		this(fileName, textureTarget, filters, internalFormat, format, clamp, GL_NONE);
+		this(fileName, target, filters, internalFormat, format, clamp, GL_NONE);
 	}
 
 	public Texture(String fileName, int target, int filters, int internalFormat, int format, boolean clamp, int attachments)
