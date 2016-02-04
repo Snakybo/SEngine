@@ -1,8 +1,8 @@
 package com.snakybo.sengine.components;
 
-import com.snakybo.sengine.core.Input;
-import com.snakybo.sengine.core.Input.KeyCode;
 import com.snakybo.sengine.core.Time;
+import com.snakybo.sengine.core.input.Input;
+import com.snakybo.sengine.core.input.Input.KeyCode;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Component;
 

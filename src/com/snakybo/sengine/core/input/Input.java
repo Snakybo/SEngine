@@ -1,14 +1,7 @@
-package com.snakybo.sengine.core;
-
-import static org.lwjgl.glfw.GLFW.GLFW_ARROW_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_CROSSHAIR_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_HAND_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_HRESIZE_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_IBEAM_CURSOR;
-import static org.lwjgl.glfw.GLFW.GLFW_VRESIZE_CURSOR;
+package com.snakybo.sengine.core.input;
 
 import com.snakybo.sengine.math.Vector2f;
-import com.snakybo.sengine.window.Window;
+import com.snakybo.sengine.window.WindowInternal;
 
 public abstract class Input
 {
@@ -171,89 +164,22 @@ public abstract class Input
 		}
 	}
 	
-	private static boolean[] keys = new boolean[KeyCode.KEY_MENU.key];
-	private static boolean[] lastKeys = new boolean[KeyCode.KEY_MENU.key];
+	static boolean[] keys = new boolean[KeyCode.KEY_MENU.key];
+	static boolean[] lastKeys = new boolean[KeyCode.KEY_MENU.key];
 	
-	private static boolean[] mouseButtons = new boolean[MouseButton.BUTTON_8.button];
-	private static boolean[] lastMouseButtons = new boolean[MouseButton.BUTTON_8.button];
+	static boolean[] mouseButtons = new boolean[MouseButton.BUTTON_8.button];
+	static boolean[] lastMouseButtons = new boolean[MouseButton.BUTTON_8.button];
 	
-	private static Vector2f scrollDelta;
-	
-	public static void update()
-	{
-		for(int i = 0; i < lastKeys.length; i++)
-		{
-			lastKeys[i] = false;
-		}
-		
-		for(int i = 0; i < lastMouseButtons.length; i++)
-		{
-			lastMouseButtons[i] = false;
-		}
-		
-		scrollDelta = new Vector2f();
-	}
-	
-	public static void onKeyCallback(int key, boolean state)
-	{
-		keys[key] = state;
-		lastKeys[key] = state;
-	}
-	
-	public static void onMouseButtonCallback(int button, boolean state)
-	{
-		mouseButtons[button] = state;
-		lastMouseButtons[button] = state;
-	}
-	
-	public static void onScrollCallback(double x, double y)
-	{
-		scrollDelta = new Vector2f((float)x, (float)y);
-	}
-	
-	public static void createArrowCursor()
-	{
-		Window.createCursor(GLFW_ARROW_CURSOR);
-	}
-	
-	public static void createIBeamCursor()
-	{
-		Window.createCursor(GLFW_IBEAM_CURSOR);
-	}
-	
-	public static void createCrosshairCursor()
-	{
-		Window.createCursor(GLFW_CROSSHAIR_CURSOR);
-	}
-	
-	public static void createHandCursor()
-	{
-		Window.createCursor(GLFW_HAND_CURSOR);
-	}
-	
-	public static void createHResizeCursor()
-	{
-		Window.createCursor(GLFW_HRESIZE_CURSOR);
-	}
-	
-	public static void createVResizeCursor()
-	{
-		Window.createCursor(GLFW_VRESIZE_CURSOR);
-	}
-	
-	public static void createCursor(String fileName, int xhot, int yhot)
-	{
-		Window.createCursor(fileName, xhot, yhot);
-	}
+	static Vector2f scrollDelta;
 
 	public static void setMousePosition(Vector2f position)
 	{
-		Window.setMousePosition(position);
+		WindowInternal.setMousePosition(position);
 	}
 
-	public static void setCursorLocked(boolean enabled)
+	public static void setCursor(boolean enabled)
 	{
-		Window.setCursor(!enabled);
+		WindowInternal.setCursor(!enabled);
 	}
 
 	public static boolean getKey(KeyCode keyCode)
@@ -303,7 +229,7 @@ public abstract class Input
 
 	public static Vector2f getMousePosition()
 	{
-		return Window.getMousePosition();
+		return WindowInternal.getMousePosition();
 	}
 	
 	public static Vector2f getSrollDelta()

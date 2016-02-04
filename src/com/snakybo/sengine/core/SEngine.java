@@ -1,8 +1,14 @@
 package com.snakybo.sengine.core;
 
+import org.lwjgl.glfw.GLFWCursorEnterCallback;
+import org.lwjgl.glfw.GLFWWindowFocusCallback;
+import org.lwjgl.glfw.GLFWWindowIconifyCallback;
+
+import com.snakybo.sengine.core.input.InputInternal;
 import com.snakybo.sengine.object.GameObjectInternal;
 import com.snakybo.sengine.rendering.RendererInternal;
-import com.snakybo.sengine.window.Window;
+import com.snakybo.sengine.utils.Version;
+import com.snakybo.sengine.window.WindowInternal;
 
 /**
  * @author Kevin Krol
@@ -10,70 +16,90 @@ import com.snakybo.sengine.window.Window;
  */
 public abstract class SEngine
 {
-	private static Game game;
-	
-	private static boolean isRunning;
-	
-	public static void start(Game game)
+	private class WindowFocusCallback extends GLFWWindowFocusCallback
 	{
-		if(isRunning)
+		@Override
+		public void invoke(long window, int focused)
 		{
-			return;
+			onFocus(focused == 1 ? true : false);
+		}		
+	}
+	
+	private class WindowIconifyCallback extends GLFWWindowIconifyCallback
+	{
+		@Override
+		public void invoke(long window, int iconified)
+		{
+			onIconify(iconified == 1 ? true : false);
+		}
+	}
+	
+	private class CursorEnterCallback extends GLFWCursorEnterCallback
+	{
+		@Override
+		public void invoke(long window, int entered)
+		{
+			onCursorEnter(entered == 1 ? true : false);
+		}
+	}
+	
+	public static final Version VERSION = new Version(0, 1, 0);
+	
+	private static SEngine instance;
+	
+	private boolean running;
+	
+	protected SEngine()
+	{
+		instance = this;
+		
+		initialize();
+		
+		if(!WindowInternal.isCreated())
+		{
+			throw new IllegalStateException("[SEngine] You have to create a window in initialize()");
 		}
 		
-		if(!Window.isCreated())
-		{
-			throw new IllegalStateException("[SEngine] You have to create a window before starting the engine.");
-		}
+		WindowInternal.setWindowFocusCallback(new WindowFocusCallback());
+		WindowInternal.setWindowIconifyCallback(new WindowIconifyCallback());
+		WindowInternal.setCursorEnterCallback(new CursorEnterCallback());
 		
+		InputInternal.initialize();
 		RendererInternal.initialize();
-		SEngine.isRunning = true;
-		SEngine.game = game;
 		
-		game.onCreate();
+		onCreate();
 		
-		run();
+		loop();
 	}
 	
-	public static void stop()
+	protected abstract void initialize();
+	
+	protected void onCreate()
 	{
-		if(!isRunning)
-		{
-			return;
-		}
-
-		isRunning = false;
 	}
 	
-	public static void onWindowFocusCallback(boolean focused)
+	protected void onDestroy()
 	{
-		if(game != null)
-		{
-			game.onFocus(focused);
-		}
 	}
 	
-	public static void onWindowIconifyCallback(boolean iconified)
+	protected void onIconify(boolean iconified)
 	{
-		if(game != null)
-		{
-			game.onIconify(iconified);
-		}
 	}
 	
-	public static void onCursorEnterCallback(boolean entered)
+	protected void onFocus(boolean focused)
 	{
-		if(game != null)
-		{
-			game.onCursorEnter(entered);
-		}
 	}
 	
-	private static void run()
+	protected void onCursorEnter(boolean entered)
 	{
+	}
+	
+	private final void loop()
+	{
+		running = true;
 		double unprocessedTime = 0.0;
 
-		while(isRunning)
+		while(running)
 		{
 			boolean render = false;
 			
@@ -86,7 +112,7 @@ public abstract class SEngine
 
 				unprocessedTime -= Time.getFrameTime();
 
-				if(Window.isCloseRequested())
+				if(WindowInternal.isCloseRequested())
 				{
 					stop();
 				}
@@ -94,14 +120,14 @@ public abstract class SEngine
 				GameObjectInternal.updateInternal();
 				GameObjectInternal.updateGameObjects();
 				
-				Input.update();
+				InputInternal.update();
 			}
 
 			if(render)
 			{
 				RendererInternal.renderScene();
 				
-				Window.update();
+				WindowInternal.update();
 				Time.onRender();
 			}
 			else
@@ -117,7 +143,12 @@ public abstract class SEngine
 			}
 		}
 		
-		game.onDestroy();
-		Window.destroy();
+		onDestroy();
+		WindowInternal.destroy();
+	}
+	
+	public static void stop()
+	{
+		instance.running = false;
 	}
 }

@@ -3,7 +3,6 @@ package test;
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.components.FreeLook;
 import com.snakybo.sengine.components.FreeMove;
-import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.DirectionalLight;
@@ -23,8 +22,18 @@ import com.snakybo.sengine.skybox.Skybox;
 import com.snakybo.sengine.utils.Color;
 import com.snakybo.sengine.window.Window;
 
-public class Test extends Game
+public class Test extends SEngine
 {
+	@Override
+	protected void initialize()
+	{
+		Window.setSamples(4);
+		Window.createWindowed("Test", 1280, 720);
+		
+		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));
+		AmbientLight.setSkybox(new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg"));
+	}
+	
 	@Override
 	public void onCreate()
 	{
@@ -57,12 +66,6 @@ public class Test extends Game
 	
 	public static void main(String[] args)
 	{
-		Window.setSamples(4);
-		Window.createWindowed("Test", 1280, 720);
-		
-		AmbientLight.setAmbientColor(new Color(0.2f, 0.2f, 0.2f));
-		AmbientLight.setSkybox(new Skybox("skybox/sp3front.jpg", "skybox/sp3back.jpg", "skybox/sp3left.jpg", "skybox/sp3right.jpg", "skybox/sp3top.jpg", "skybox/sp3bot.jpg"));
-		
-		SEngine.start(new Test());
+		new Test();
 	}
 }

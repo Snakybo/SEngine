@@ -4,7 +4,7 @@ package com.snakybo.sengine.utils;
  * @author Kevin
  * @since Feb 4, 2016
  */
-public class Version implements Comparable<Version>
+public final class Version implements Comparable<Version>
 {
 	private final int major;
 	private final int minor;
@@ -26,7 +26,7 @@ public class Version implements Comparable<Version>
 		this.minor = minor;
 		this.patch = patch;
 	}
-
+	
 	@Override
 	public int compareTo(Version version)
 	{
@@ -59,5 +59,25 @@ public class Version implements Comparable<Version>
 		
 		return 0;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return major + "." + minor + "." + patch;
+	}
+	
+	public final int getMajor()
+	{
+		return major;
+	}
+	
+	public final int getMinor()
+	{
+		return minor;
+	}
+	
+	public final int getPatch()
+	{
+		return patch;
+	}
 }

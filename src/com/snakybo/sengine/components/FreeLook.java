@@ -1,6 +1,6 @@
 package com.snakybo.sengine.components;
 
-import com.snakybo.sengine.core.Input;
+import com.snakybo.sengine.core.input.Input;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Component;
@@ -28,13 +28,13 @@ public class FreeLook extends Component
 	protected void onAddedToScene()
 	{
 		Input.setMousePosition(Window.getCenter());
-		Input.setCursorLocked(true);
+		Input.setCursor(true);
 	}
 	
 	@Override
 	protected void onRemovedFromScene()
 	{
-		Input.setCursorLocked(false);
+		Input.setCursor(false);
 	}
 
 	@Override
