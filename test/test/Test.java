@@ -13,9 +13,9 @@ import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.GameObject;
-import com.snakybo.sengine.object.prefab.CubePrefab;
-import com.snakybo.sengine.object.prefab.PlanePrefab;
-import com.snakybo.sengine.object.prefab.SpherePrefab;
+import com.snakybo.sengine.object.prefab.Cube;
+import com.snakybo.sengine.object.prefab.Plane;
+import com.snakybo.sengine.object.prefab.Sphere;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.skybox.Skybox;
@@ -58,10 +58,10 @@ public class Test extends SEngine
 		camera.addComponent(new FreeMove());
 		Camera.setMainCamera(cam);
 		
-		new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
-		new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
-		new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
-		new CubePrefab(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
+		new Plane(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
+		new Plane(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
+		new Sphere(new Vector3f(-2, 0, -2), new Quaternion());
+		new Cube(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
 	}
 	
 	public static void main(String[] args)
