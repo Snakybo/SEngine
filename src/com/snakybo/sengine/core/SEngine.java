@@ -26,6 +26,7 @@ public abstract class SEngine
 			throw new IllegalStateException("[SEngine] You have to create a window before starting the engine.");
 		}
 		
+		RendererInternal.initialize();
 		SEngine.isRunning = true;
 		SEngine.game = game;
 		

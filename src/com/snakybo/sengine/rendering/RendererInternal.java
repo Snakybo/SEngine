@@ -23,12 +23,14 @@ import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.opengl.GL32.GL_DEPTH_CLAMP;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.lighting.AmbientLight;
 import com.snakybo.sengine.lighting.Light;
 import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
+import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.object.GameObjectInternal;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowCameraTransform;
 import com.snakybo.sengine.rendering.ShadowUtils.ShadowInfo;
@@ -47,9 +49,10 @@ public abstract class RendererInternal
 {
 	private static Camera altCamera;
 	
-	static
-	{	
-		altCamera = new Camera(Matrix4f.identity());
+	public static void initialize()
+	{
+		GameObject altCameraObject = new GameObject();
+		altCamera = altCameraObject.addComponent(new Camera(Matrix4f.identity()));
 		
 		glFrontFace(GL_CW);
 		glCullFace(GL_BACK);

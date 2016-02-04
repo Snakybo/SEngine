@@ -1,6 +1,6 @@
 package com.snakybo.sengine.components.renderer;
 
-import com.snakybo.sengine.rendering.Camera;
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
 import com.snakybo.sengine.shader.Shader;

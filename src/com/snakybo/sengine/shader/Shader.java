@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector2f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Transform;
-import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderStruct;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;

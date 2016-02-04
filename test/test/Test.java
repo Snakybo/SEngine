@@ -1,5 +1,8 @@
 package test;
 
+import com.snakybo.sengine.components.Camera;
+import com.snakybo.sengine.components.FreeLook;
+import com.snakybo.sengine.components.FreeMove;
 import com.snakybo.sengine.core.Game;
 import com.snakybo.sengine.core.SEngine;
 import com.snakybo.sengine.lighting.AmbientLight;
@@ -7,11 +10,11 @@ import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.lighting.PointLight;
 import com.snakybo.sengine.lighting.SpotLight;
 import com.snakybo.sengine.lighting.utils.Attenuation;
+import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Quaternion;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.object.prefab.CubePrefab;
-import com.snakybo.sengine.object.prefab.FreeCameraPrefab;
 import com.snakybo.sengine.object.prefab.PlanePrefab;
 import com.snakybo.sengine.object.prefab.SpherePrefab;
 import com.snakybo.sengine.resource.material.Material;
@@ -39,7 +42,13 @@ public class Test extends Game
 		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
 		
-		new FreeCameraPrefab();
+		Matrix4f projection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
+		GameObject camera = new GameObject();
+		Camera cam = camera.addComponent(new Camera(projection));
+		camera.addComponent(new FreeLook());
+		camera.addComponent(new FreeMove());
+		Camera.setMainCamera(cam);
+		
 		new PlanePrefab(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
 		new PlanePrefab(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
 		new SpherePrefab(new Vector3f(-2, 0, -2), new Quaternion());
@@ -47,7 +56,7 @@ public class Test extends Game
 	}
 	
 	public static void main(String[] args)
-	{	
+	{
 		Window.setSamples(4);
 		Window.createWindowed("Test", 1280, 720);
 		

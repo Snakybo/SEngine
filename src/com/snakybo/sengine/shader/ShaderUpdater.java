@@ -1,5 +1,6 @@
 package com.snakybo.sengine.shader;
 
+import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.lighting.DirectionalLight;
 import com.snakybo.sengine.lighting.PointLight;
 import com.snakybo.sengine.lighting.SpotLight;
@@ -7,7 +8,6 @@ import com.snakybo.sengine.lighting.utils.LightUtils;
 import com.snakybo.sengine.math.Matrix4f;
 import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.Transform;
-import com.snakybo.sengine.rendering.Camera;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.texture.Texture;
 import com.snakybo.sengine.shader.ShaderUtils.ShaderUniform;
