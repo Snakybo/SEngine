@@ -40,15 +40,18 @@ public class Test extends SEngine
 		Material brickMaterial = Material.createDefault(new Texture("bricks.png"), 0.5f, 4, new Texture("bricks_normal.png"), new Texture("bricks_disp.png"), 0.03f, -0.5f);
 		Material brick2Material = Material.createDefault(new Texture("bricks2.jpg"), 1, 8, new Texture("bricks2_normal.png"), new Texture("bricks2_disp.jpg"), 0.04f, -1f);
 		
-		GameObject directionalLight = new GameObject(new Vector3f(), new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
+		GameObject directionalLight = new GameObject();
+		directionalLight.getTransform().setRotation(new Quaternion(new Vector3f(1, 0, 0), Math.toRadians(-45)));
 		directionalLight.addComponent(new DirectionalLight(new Color(1f, 1f, 1f), 0.4f, 10));
 		
-		GameObject spotLight = new GameObject(new Vector3f(-4, 1, 2));
+		GameObject spotLight = new GameObject();
+		spotLight.getTransform().setPosition(new Vector3f(-4, 1, 2));
 		spotLight.getTransform().rotate(new Vector3f(0, 1, 0), Math.toRadians(90));
 		spotLight.getTransform().rotate(new Vector3f(1, 0, 0), Math.toRadians(-60));
 		spotLight.addComponent(new SpotLight(new Color(0, 1, 1), 0.8f, new Attenuation(0, 0, 0.02f), (float)Math.toRadians(91.1f), 7, 1, 0.5f));
 		
-		GameObject pointLight = new GameObject(new Vector3f(12, 1, 12));
+		GameObject pointLight = new GameObject();
+		pointLight.getTransform().setPosition(new Vector3f(12, 1, 12));
 		pointLight.addComponent(new PointLight(new Color(1, 1, 0), 0.2f, new Attenuation(0, 0, 0.05f)));
 		
 		Matrix4f projection = Matrix4f.perspective(90, (float)Window.getWidth() / (float)Window.getHeight(), 0.01f, 1000);
@@ -58,10 +61,21 @@ public class Test extends SEngine
 		camera.addComponent(new FreeMove());
 		Camera.setMainCamera(cam);
 		
-		new Plane(new Vector3f(0, -1, 0), new Quaternion(), new Vector3f(20), brickMaterial);
-		new Plane(new Vector3f(-8, 2, 8), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)), new Vector3f(5), brick2Material);
-		new Sphere(new Vector3f(-2, 0, -2), new Quaternion());
-		new Cube(new Vector3f(2, 0, 2), new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
+		GameObject p1 = new Plane(brickMaterial);
+		p1.getTransform().setPosition(new Vector3f(0, -1, 0));
+		p1.getTransform().setScale(20);
+		
+		GameObject p2 = new Plane(brick2Material);
+		p2.getTransform().setPosition(new Vector3f(-8, 2, 8));
+		p2.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(45f)));
+		p2.getTransform().setScale(5);
+		
+		GameObject s = new Sphere();
+		s.getTransform().setPosition(new Vector3f(-2, 0, -2));
+		
+		GameObject c = new Cube();
+		c.getTransform().setPosition(new Vector3f(2, 0, 2));
+		c.getTransform().setRotation(new Quaternion(new Vector3f(0, 1, 0), Math.toRadians(30f)));
 	}
 	
 	public static void main(String[] args)

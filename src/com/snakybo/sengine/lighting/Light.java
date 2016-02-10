@@ -40,7 +40,7 @@ public abstract class Light extends Component
 	}
 
 	@Override
-	protected void onAddedToScene()
+	protected void onEnable()
 	{
 		lights.add(this);
 	}

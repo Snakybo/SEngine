@@ -25,14 +25,14 @@ public class FreeLook extends Component
 	}
 	
 	@Override
-	protected void onAddedToScene()
+	protected void onEnable()
 	{
 		Input.setMousePosition(Window.getCenter());
 		Input.setCursor(true);
 	}
 	
 	@Override
-	protected void onRemovedFromScene()
+	protected void onDisable()
 	{
 		Input.setCursor(false);
 	}

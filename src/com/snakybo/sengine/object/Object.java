@@ -10,7 +10,7 @@ public class Object
 	{
 		if(object instanceof GameObject)
 		{
-			GameObjectInternal.remove((GameObject)object);	
+			((GameObject)object).destroy();
 		}
 		else if(object instanceof Component)
 		{

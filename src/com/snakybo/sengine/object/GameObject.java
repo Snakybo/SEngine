@@ -1,11 +1,11 @@
 package com.snakybo.sengine.object;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.snakybo.sengine.components.Camera;
-import com.snakybo.sengine.math.Quaternion;
-import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.shader.Shader;
 
 /**
@@ -14,51 +14,24 @@ import com.snakybo.sengine.shader.Shader;
  */
 public class GameObject extends Object
 {
-	private List<Component> components;
-	private List<Component> componentsToAdd;
-	private List<Component> componentsToRemove;
+	private Set<Component> components;
+	private Set<Component> componentsToAdd;
 	
 	private Transform transform;
 	
-	private boolean destroyed;
+	boolean destroyed;
 	
 	public GameObject()
 	{
-		this(new Vector3f());
-	}
-	
-	public GameObject(Vector3f position)
-	{
-		this(position, new Quaternion());
-	}
-	
-	public GameObject(Vector3f position, Quaternion rotation)
-	{
-		this(position, rotation, new Vector3f(1, 1, 1));
-	}
-	
-	public GameObject(Vector3f position, Quaternion rotation, Vector3f scale)
-	{
-		components = new ArrayList<Component>();
-		componentsToAdd = new ArrayList<Component>();
-		componentsToRemove = new ArrayList<Component>();
-		
-		transform = new Transform(position, rotation, scale);
-		transform.setGameObject(this);
+		components = new HashSet<Component>();
+		componentsToAdd = new HashSet<Component>();
+		transform = new Transform(this);
 		
 		GameObjectInternal.add(this);
-	}
-	
-	@Override
-	protected final void finalize() throws Throwable
-	{
-		try
+		
+		for(Component component : components)
 		{
-			destroy();
-		}
-		finally
-		{
-			super.finalize();
+			component.onEnable();
 		}
 	}
 	
@@ -70,6 +43,7 @@ public class GameObject extends Object
 			
 			for(Component component : components)
 			{
+				component.onDisable();
 				component.onDestroy();
 			}
 		}
@@ -77,31 +51,35 @@ public class GameObject extends Object
 
 	final void update()
 	{
-		List<Component> componentsToAddCache = new ArrayList<Component>(componentsToAdd);
-		List<Component> componentsToRemoveCache = new ArrayList<Component>(componentsToRemove);
-		
-		componentsToAdd.clear();
-		componentsToRemove.clear();
-		
-		for(Component component : componentsToAddCache)
-		{
-			component.gameObject = this;
-			component.onAddedToScene();
-			components.add(component);
-		}
-		
-		for(Component component : componentsToRemoveCache)
-		{
-			component.onRemovedFromScene();
-			component.onDestroy();
-			component.gameObject = null;
-			components.remove(component);
-		}
+		List<Component> destroyed = new ArrayList<Component>();
 		
 		for(Component component : components)
 		{
+			if(!component.startCalled)
+			{
+				component.startCalled = true;
+				component.start();
+			}
+			
 			component.update();
+			
+			if(component.destroyed)
+			{
+				destroyed.add(component);
+			}
 		}
+		
+		for(Component component : componentsToAdd)
+		{
+			components.add(component);
+		}
+		
+		for(Component component : destroyed)
+		{
+			components.remove(component);
+		}		
+		
+		componentsToAdd.clear();
 	}
 	
 	final void render(Shader shader, Camera camera)
@@ -112,27 +90,14 @@ public class GameObject extends Object
 		}
 	}
 	
-	final void addToScene()
-	{
-		for(Component component : components)
-		{
-			component.onAddedToScene();
-		}
-	}
-	
-	final void removeFromScene()
-	{
-		for(Component component : components)
-		{
-			component.onRemovedFromScene();
-		}
-	}
-	
 	final void removeComponent(Component component)
 	{
-		if(components.contains(component) && !componentsToRemove.contains(component))
+		if(components.contains(component))
 		{
-			componentsToRemove.add(component);
+			component.destroyed = true;
+			
+			component.onDisable();
+			component.onDestroy();
 		}
 	}
 	
@@ -140,6 +105,9 @@ public class GameObject extends Object
 	public final <T extends Component> T addComponent(Component component)
 	{
 		componentsToAdd.add(component);
+		
+		component.gameObject = this;
+		component.onEnable();
 
 		return (T)component.getClass().cast(component);
 	}

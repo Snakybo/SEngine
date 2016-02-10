@@ -1,7 +1,7 @@
 package com.snakybo.sengine.object;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.snakybo.sengine.components.Camera;
 import com.snakybo.sengine.shader.Shader;
@@ -12,27 +12,32 @@ import com.snakybo.sengine.shader.Shader;
  */
 public abstract class GameObjectInternal
 {
-	private static List<GameObject> gameObjects = new ArrayList<GameObject>();
-	private static List<GameObject> gameObjectsToAdd = new ArrayList<GameObject>();
-	private static List<GameObject> gameObjectsToDestroy = new ArrayList<GameObject>();
+	private static Set<GameObject> gameObjects = new HashSet<GameObject>();
+	private static Set<GameObject> gameObjectsToAdd = new HashSet<GameObject>();
 	
 	public static void updateInternal()
 	{
+		Set<GameObject> destroyed = new HashSet<GameObject>();
+		
 		for(GameObject gameObject : gameObjectsToAdd)
 		{
-			gameObject.addToScene();
 			gameObjects.add(gameObject);
 		}
 		
-		for(GameObject gameObject : gameObjectsToDestroy)
+		for(GameObject gameObject : gameObjects)
 		{
-			gameObject.removeFromScene();
-			gameObject.destroy();
+			if(gameObject.destroyed)
+			{
+				destroyed.add(gameObject);
+			}
+		}
+		
+		for(GameObject gameObject : destroyed)
+		{
 			gameObjects.remove(gameObject);
 		}
 		
 		gameObjectsToAdd.clear();
-		gameObjectsToDestroy.clear();
 	}
 	
 	public static void updateGameObjects()
@@ -56,14 +61,6 @@ public abstract class GameObjectInternal
 		if(!gameObjectsToAdd.contains(gameObject))
 		{
 			gameObjectsToAdd.add(gameObject);
-		}
-	}
-	
-	static void remove(GameObject gameObject)
-	{
-		if(!gameObjectsToDestroy.contains(gameObject))
-		{
-			gameObjectsToDestroy.add(gameObject);
 		}
 	}
 }

@@ -19,6 +19,13 @@ public final class Transform
 	private Quaternion rotation;
 	private Vector3f scale;
 	
+	Transform(GameObject gameObject)
+	{
+		this();
+		
+		this.gameObject = gameObject;
+	}
+	
 	public Transform()
 	{
 		this(new Vector3f());
@@ -86,11 +93,6 @@ public final class Transform
 	public final void setScale(Vector3f scale)
 	{
 		this.scale = scale;
-	}
-	
-	final void setGameObject(GameObject object)
-	{
-		gameObject = object;
 	}
 
 	public final Matrix4f getTransformation()

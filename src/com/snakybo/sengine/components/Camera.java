@@ -34,13 +34,13 @@ public class Camera extends Component
 	}
 	
 	@Override
-	protected void onAddedToScene()
+	protected void onEnable()
 	{	
 		cameras.add(this);
 	}
 	
 	@Override
-	protected void onRemovedFromScene()
+	protected void onDisable()
 	{
 		mainCamera = mainCamera == this ? null : mainCamera;
 		cameras.remove(this);

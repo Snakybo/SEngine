@@ -1,8 +1,6 @@
 package com.snakybo.sengine.object.prefab;
 
 import com.snakybo.sengine.components.renderer.MeshRenderer;
-import com.snakybo.sengine.math.Quaternion;
-import com.snakybo.sengine.math.Vector3f;
 import com.snakybo.sengine.object.GameObject;
 import com.snakybo.sengine.resource.material.Material;
 import com.snakybo.sengine.resource.mesh.Mesh;
@@ -15,43 +13,11 @@ public class Plane extends GameObject
 {
 	public Plane()
 	{
-		this(new Vector3f());
-	}
-	
-	public Plane(Vector3f position)
-	{
-		this(position, new Quaternion());
-	}
-	
-	public Plane(Vector3f position, Quaternion rotation)
-	{
-		this(position, rotation, new Vector3f(1, 1, 1));
-	}
-	
-	public Plane(Vector3f position, Quaternion rotation, Vector3f scale)
-	{
-		this(position, rotation, scale, Material.createDefault());
+		this(Material.createDefault());
 	}
 	
 	public Plane(Material material)
 	{
-		this(new Vector3f(), material);
-	}
-	
-	public Plane(Vector3f position, Material material)
-	{
-		this(position, new Quaternion(), material);
-	}
-	
-	public Plane(Vector3f position, Quaternion rotation, Material material)
-	{
-		this(position, rotation, new Vector3f(1, 1, 1), material);
-	}
-	
-	public Plane(Vector3f position, Quaternion rotation, Vector3f scale, Material material)
-	{
-		super(position, rotation, scale);
-		
 		addComponent(new MeshRenderer(new Mesh("default/plane.obj"), material));
 	}
 }

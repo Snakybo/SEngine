@@ -11,11 +11,18 @@ public abstract class Component extends Object
 {
 	GameObject gameObject;
 	
-	protected void onAddedToScene()
+	boolean startCalled;
+	boolean destroyed;
+	
+	protected void start()
 	{
 	}
 	
-	protected void onRemovedFromScene()
+	protected void onEnable()
+	{
+	}
+	
+	protected void onDisable()
 	{
 	}
 	
