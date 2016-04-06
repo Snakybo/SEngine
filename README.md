@@ -1,6 +1,6 @@
 # SEngine [![Build Status](https://travis-ci.org/Snakybo/SEngine.svg?branch=master)](https://travis-ci.org/Snakybo/SEngine)
 
-A 3D game engine, made in Java using using LWJGL.
+A 3D game engine, made in Java using [LWJGL](https://www.lwjgl.org/).
 
 ## Core features:
 - [Component system](#component-system)
